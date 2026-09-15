@@ -59,25 +59,80 @@ $ python3 src/fetch_cfbd.py Miami --year 2026
 with a 403 — exactly the allowlist gap Section 7 flags as "the one
 non-obvious setup step." That's since been resolved for this environment.)
 
-**Not yet built (design-doc-only, Section 4b/4c/6):**
+- `src/fetch_roster.py` — Mass. CFBD's `/roster` carries player weight
+  directly (confirmed live, ~93-100% coverage across the three teams
+  checked). CFBD has **no depth-chart/starter endpoint anywhere** (checked
+  the full 84-endpoint API spec, not assumed) and `/player/usage` only
+  covers QB/RB/WR/TE, so starters still come from a human via
+  `config/rosters/{team}.yaml` (schema: `_template.yaml`); the module
+  cross-references that list against the live roster for current weights
+  and flags mismatches/staleness (>7 days) loudly. Also found CFBD's
+  position tags aren't standardized across teams (Miami/Wake Forest tag
+  the whole D-line generically `"DL"`; Toledo splits `"DE"`/`"DT"`) — the
+  matcher unions tag sets rather than trusting one string.
+- `src/fetch_talent.py` — Tier 2. `/talent` is a single team-wide
+  composite (no position-group breakdown exists in CFBD, confirmed live);
+  `/player/returning` is offense-only PPA (passing/rushing/receiving),
+  nothing for defense or line play. So "returning starters by position
+  group" reuses the same human-maintained roster file, now extended with
+  a once-per-season `prior_season_starters` block; returning-starter count
+  is the name-overlap between that and the current week's `starters`. The
+  talent-vs-scheme qualitative flag (Section 4c) is a plain human field
+  (`continuity_note`) — DESIGN.md never specifies a numeric discount for
+  it, so it's surfaced as a caveat, not silently applied.
+- `src/render_widget.py` + `templates/widget.html.jinja` — no reference
+  for "the visual style already established" was available in this
+  session, so this is a clean original design (dataviz-skill-compliant:
+  validated diverging blue/red palette, proper bar-mark spacing, light/dark
+  mode), not a match to anything existing. `build_context()` orchestrates
+  the three fetch modules into one `render()` call; **live-verified
+  end-to-end** (`output/latest.html` in this repo is real output from a
+  live run, screenshot-checked in a headless browser).
 
-- `src/fetch_roster.py` (Mass/roster weights)
-- `src/fetch_talent.py` (Tier 2 talent/continuity)
-- `src/render_widget.py` + `templates/widget.html.jinja` — the design doc
-  says the template should "match the visual style already established"
-  elsewhere in the broader project; that reference wasn't available in this
-  session, so building a template now would mean guessing at style rather
-  than matching it.
-- `config/rosters/{team}.yaml` cache files.
+**Known incomplete piece: Push has no real-data score, and the composite
+is not computed as a result.** Section 5 says Push should eventually use
+real Stuff Rate / Line Yards differentials instead of the SP+ placeholder,
+now that Tier 1 fetching is live and tested. But naively subtracting
+`team_a.offense.stuffRate` from `team_b.defense.stuffRate` doesn't actually
+answer who wins the matchup — both are season-long rates against a full
+schedule of different opponents, and combining them validly needs a
+league-average baseline to regress each team's effect against (what
+SP+-style models do). This repo has no such baseline, and inventing a
+formula that looks quantitative without one would violate Section 2's own
+non-goal ("not claiming precision beyond what the inputs support"). So the
+widget renders Push as explicitly unavailable and skips the composite
+rather than showing a number that isn't defensible. This needs either an
+SP+ input supplied externally (per Section 1, that already lives in the
+broader workflow) or a real decision on a Stuff-Rate/Line-Yards formula —
+open, not yet decided.
+
+No team roster files (`config/rosters/{team}.yaml`) are committed — I
+don't have real depth-chart knowledge of any team's actual current
+starters, and fabricating one would put false information about real
+players in the repo.
 
 ## Running the tests
 
 ```
 pip install -r requirements.txt pytest
-python3 -m pytest tests/ -v
+python3 -m pytest tests/ -v   # 32 tests, all passing
 ```
 
-## Running the pieces that exist
+## Weekly usage
+
+```
+# 1. For each team in this week's matchup, copy the template and fill in
+#    real starters from actual depth-chart reporting:
+cp config/rosters/_template.yaml "config/rosters/Miami.yaml"
+
+# 2. Set this week's matchup in config/teams.yaml (label/team_a/team_b/side).
+
+# 3. Render:
+python3 src/render_widget.py 2026-wk03-miami-wake
+# -> output/latest.html, plus any caveats printed to stderr
+```
+
+## Running the pieces individually
 
 ```
 # Composite scoring (no network needed):
@@ -85,4 +140,6 @@ python3 src/compute_composite.py --weight-diff-lbs 25 --sp-plus-gap 10 --net-ret
 
 # Live CFBD fetch (needs api.collegefootballdata.com allowlisted + CFBD_API_KEY set):
 python3 src/fetch_cfbd.py Miami --year 2026
+python3 src/fetch_roster.py Miami --year 2026
+python3 src/fetch_talent.py Miami --year 2026
 ```

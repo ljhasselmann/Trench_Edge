@@ -1,0 +1,178 @@
+
+
+<div class="trench-edge-widget">
+<style>
+.trench-edge-widget {
+  color-scheme: light;
+  --te-surface:      #fcfcfb;
+  --te-text-primary: #0b0b0b;
+  --te-text-secondary: #52514e;
+  --te-muted:        #898781;
+  --te-gridline:     #e1e0d9;
+  --te-baseline:     #c3c2b7;
+  --te-border:       rgba(11,11,11,0.10);
+  --te-blue:         #2a78d6;
+  --te-red:          #e34948;
+  --te-neutral:      #f0efec;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--te-text-primary);
+  background: var(--te-surface);
+  max-width: 640px;
+  padding: 20px;
+  border: 1px solid var(--te-border);
+  border-radius: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .trench-edge-widget {
+    color-scheme: dark;
+    --te-surface: #1a1a19;
+    --te-text-primary: #ffffff;
+    --te-text-secondary: #c3c2b7;
+    --te-muted: #898781;
+    --te-gridline: #2c2c2a;
+    --te-baseline: #383835;
+    --te-border: rgba(255,255,255,0.10);
+    --te-blue: #3987e5;
+    --te-red: #e66767;
+    --te-neutral: #383835;
+  }
+}
+:root[data-theme="dark"] .trench-edge-widget {
+  color-scheme: dark;
+  --te-surface: #1a1a19;
+  --te-text-primary: #ffffff;
+  --te-text-secondary: #c3c2b7;
+  --te-muted: #898781;
+  --te-gridline: #2c2c2a;
+  --te-baseline: #383835;
+  --te-border: rgba(255,255,255,0.10);
+  --te-blue: #3987e5;
+  --te-red: #e66767;
+  --te-neutral: #383835;
+}
+.trench-edge-widget h2, .trench-edge-widget h3 { margin: 0 0 4px 0; }
+.trench-edge-widget .te-subtitle { color: var(--te-text-secondary); font-size: 13px; margin: 0 0 20px 0; }
+.trench-edge-widget .te-muted { color: var(--te-muted); }
+.trench-edge-widget section { margin-bottom: 24px; }
+.trench-edge-widget .te-stat-tiles { display: flex; gap: 12px; flex-wrap: wrap; }
+.trench-edge-widget .te-stat-tile { flex: 1; min-width: 140px; padding: 12px; background: var(--te-neutral); border-radius: 6px; }
+.trench-edge-widget .te-stat-tile .te-label { font-size: 12px; color: var(--te-text-secondary); margin-bottom: 4px; }
+.trench-edge-widget .te-stat-tile .te-value { font-size: 24px; font-weight: 600; }
+.trench-edge-widget table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 12px; }
+.trench-edge-widget th { text-align: left; color: var(--te-text-secondary); font-weight: 500; font-size: 12px; border-bottom: 1px solid var(--te-gridline); padding: 4px 8px 4px 0; }
+.trench-edge-widget td { padding: 4px 8px 4px 0; border-bottom: 1px solid var(--te-gridline); font-variant-numeric: tabular-nums; }
+.trench-edge-widget .te-badge { font-size: 11px; color: var(--te-text-secondary); }
+.trench-edge-widget .te-legend { display: flex; gap: 16px; font-size: 12px; color: var(--te-text-secondary); margin-bottom: 12px; }
+.trench-edge-widget .te-legend-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+.trench-edge-widget .te-bar-row { display: grid; grid-template-columns: 100px 1fr 56px; align-items: center; gap: 8px; margin-bottom: 10px; }
+.trench-edge-widget .te-bar-label { font-size: 13px; }
+.trench-edge-widget .te-bar-track { display: flex; height: 16px; background: var(--te-gridline); border-radius: 4px; overflow: hidden; }
+.trench-edge-widget .te-bar-half { flex: 1; display: flex; }
+.trench-edge-widget .te-bar-half-left { justify-content: flex-end; }
+.trench-edge-widget .te-bar-half-right { justify-content: flex-start; }
+.trench-edge-widget .te-bar-center { width: 2px; background: var(--te-baseline); }
+.trench-edge-widget .te-bar-fill { height: 100%; }
+.trench-edge-widget .te-bar-fill-blue { background: var(--te-blue); border-radius: 0 4px 4px 0; }
+.trench-edge-widget .te-bar-fill-red { background: var(--te-red); border-radius: 4px 0 0 4px; }
+.trench-edge-widget .te-bar-value { font-size: 13px; font-variant-numeric: tabular-nums; text-align: right; }
+.trench-edge-widget .te-bar-unavailable { align-items: center; justify-content: center; }
+.trench-edge-widget .te-unavailable-text { font-size: 11px; color: var(--te-muted); }
+.trench-edge-widget .te-composite-verdict { font-size: 15px; margin-top: 4px; }
+.trench-edge-widget .te-caveats ul { margin: 4px 0 0 0; padding-left: 18px; font-size: 13px; color: var(--te-text-secondary); }
+.trench-edge-widget .te-caveats li { margin-bottom: 4px; }
+.trench-edge-widget footer { font-size: 11px; color: var(--te-muted); border-top: 1px solid var(--te-gridline); padding-top: 12px; }
+</style>
+
+<header>
+  <h2>Miami OL vs Wake Forest DL</h2>
+  <p class="te-subtitle">2026-wk03-miami-wake &middot; 2026 season &middot; generated 2026-09-15 22:17 UTC</p>
+</header>
+
+<section class="te-stat-tiles">
+  <div class="te-stat-tile">
+    <div class="te-label">Miami OL avg weight</div>
+    <div class="te-value"><span class="te-muted">&mdash;</span></div>
+  </div>
+  <div class="te-stat-tile">
+    <div class="te-label">Wake Forest DL avg weight</div>
+    <div class="te-value"><span class="te-muted">&mdash;</span></div>
+  </div>
+  <div class="te-stat-tile">
+    <div class="te-label">Weight differential</div>
+    <div class="te-value"><span class="te-muted">&mdash;</span></div>
+  </div>
+</section>
+
+<section class="te-starters">
+  <h3>Miami starting OL</h3>
+  
+  <p class="te-muted">No starters on record &mdash; see caveats.</p>
+  
+
+  <h3>Wake Forest starting DL</h3>
+  
+  <p class="te-muted">No starters on record &mdash; see caveats.</p>
+  
+</section>
+
+<section class="te-subscores">
+  <h3>Subscores</h3>
+  <div class="te-legend">
+    <span><span class="te-legend-swatch" style="background: var(--te-blue);"></span>Favors Miami</span>
+    <span><span class="te-legend-swatch" style="background: var(--te-red);"></span>Favors Wake Forest</span>
+  </div>
+  
+<div class="te-bar-row">
+  <div class="te-bar-label">Mass</div>
+  
+    <div class="te-bar-track te-bar-unavailable">
+      <span class="te-unavailable-text">data unavailable</span>
+    </div>
+    <div class="te-bar-value te-muted">&mdash;</div>
+  
+</div>
+
+  
+<div class="te-bar-row">
+  <div class="te-bar-label">Push</div>
+  
+    <div class="te-bar-track te-bar-unavailable">
+      <span class="te-unavailable-text">data unavailable</span>
+    </div>
+    <div class="te-bar-value te-muted">&mdash;</div>
+  
+</div>
+
+  
+<div class="te-bar-row">
+  <div class="te-bar-label">Continuity</div>
+  
+    <div class="te-bar-track te-bar-unavailable">
+      <span class="te-unavailable-text">data unavailable</span>
+    </div>
+    <div class="te-bar-value te-muted">&mdash;</div>
+  
+</div>
+
+</section>
+
+<section class="te-composite">
+  <h3>Composite</h3>
+  
+    <p class="te-muted">Not computed this run &mdash; Push has no validated real-data input yet. See caveats below.</p>
+  
+</section>
+
+
+<section class="te-caveats">
+  <h3>Caveats</h3>
+  <ul>
+    <li>[Miami Mass] config/rosters/Miami.yaml does not exist -- no human-confirmed starter list, Mass cannot be computed for this team. Copy _template.yaml and fill it in.</li><li>[Wake Forest Mass] config/rosters/Wake Forest.yaml does not exist -- no human-confirmed starter list, Mass cannot be computed for this team. Copy _template.yaml and fill it in.</li><li>[Miami Continuity] config/rosters/Miami.yaml does not exist -- returning-starter count unavailable</li><li>[Wake Forest Continuity] config/rosters/Wake Forest.yaml does not exist -- returning-starter count unavailable</li>
+  </ul>
+</section>
+
+
+<footer>
+  Source: collegefootballdata.com (Tier 1 stats, roster, talent) + human-maintained depth-chart config &middot; generated 2026-09-15 22:17 UTC
+</footer>
+</div>
