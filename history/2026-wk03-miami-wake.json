@@ -4,12 +4,12 @@
   "team_b": "Wake Forest",
   "side": "team_a_ol_vs_team_b_dl",
   "year": 2026,
-  "generated_at": "2026-09-15 22:47 UTC",
+  "generated_at": "2026-09-15 23:44 UTC",
   "mass": {
     "team_a_avg_weight": 311.0,
-    "team_b_avg_weight": 290.0,
-    "weight_diff_lbs": 21.0,
-    "score": 2.1,
+    "team_b_avg_weight": 268.75,
+    "weight_diff_lbs": 42.25,
+    "score": 4.225,
     "team_a_starters": [
       {
         "name": "Samson Okunlola",
@@ -44,20 +44,26 @@
     ],
     "team_b_starters": [
       {
+        "name": "Zach Lohavichan",
+        "weight_lbs": 285,
+        "confidence": "confirmed",
+        "source": "cfbd_roster"
+      },
+      {
+        "name": "Dallas Afalava",
+        "weight_lbs": 291,
+        "confidence": "confirmed",
+        "source": "cfbd_roster"
+      },
+      {
+        "name": "Gabe Kirschke",
+        "weight_lbs": 249,
+        "confidence": "confirmed",
+        "source": "cfbd_roster"
+      },
+      {
         "name": "Langston Hardy",
         "weight_lbs": 250,
-        "confidence": "confirmed",
-        "source": "cfbd_roster"
-      },
-      {
-        "name": "Tyler Walton",
-        "weight_lbs": 265,
-        "confidence": "confirmed",
-        "source": "cfbd_roster"
-      },
-      {
-        "name": "Sydir Mitchell",
-        "weight_lbs": 355,
         "confidence": "confirmed",
         "source": "cfbd_roster"
       }

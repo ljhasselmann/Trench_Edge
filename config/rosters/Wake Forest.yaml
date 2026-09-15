@@ -1,28 +1,32 @@
-# Researched by the Trench Edge weekly Routine, 2026-09-15 (manual test fire).
-# Source: "2026 Wake Forest Preview: Defensive Line" (Yahoo Sports / Blogger
-# So Dear), a preseason preview citing 2025 production to establish this
-# year's returning DL anchors -- not a current-week depth chart, flagged as
-# such. WebFetch to live depth-chart trackers was blocked by this
-# environment's network egress allowlist (same limitation as Miami's file).
+# Researched by the Trench Edge weekly Routine, 2026-09-15 (manual test fire,
+# CORRECTED after ourlads.com became reachable via plain requests -- see
+# fetch_ourlads.py). Source: https://www.ourlads.com/ncaa-football-depth-charts/depth-chart/wake-forest/92430,
+# a live-maintained depth chart.
 #
-# 3 names cross-checked against CFBD's live /roster (2026-09-15):
-#   - Langston Hardy: FOUND, DL, matches "redshirt senior" from the source.
-#   - Tyler Walton: FOUND, DL.
-#   - Sydir Mitchell: FOUND, DL, 355 lbs -- matches the source's "LSU
-#     transfer, 355 lbs" exactly.
-#   - Gabe Krischke, also named in the source as a returning DL anchor with
-#     2025 stats, is NOT on Wake Forest's current CFBD roster at all --
-#     likely departed since that source's cited season. Left out entirely
-#     rather than listed as a current starter on stale information.
+# This replaces an earlier, wrong version of this file based on WebSearch
+# snippets of a preview article. Real corrections, not just a refresh:
+#   - Wake Forest's D-line front is actually 4 starters (NT/DT/LDE/RDE),
+#     not the 3 names the earlier search-based research found.
+#   - Gabe Kirschke IS on the current roster and IS the starting LDE --
+#     the earlier version excluded him as "not on CFBD's roster," but that
+#     was a name-spelling mismatch: the preview article spelled it
+#     "Krischke", CFBD (and ourlads) spell it "Kirschke". Real lesson:
+#     an exact-name lookup miss can mean a misspelled source, not
+#     necessarily a departed player -- worth a second check before
+#     concluding someone's gone.
+#   - Tyler Walton and Sydir Mitchell, listed as starters in the earlier
+#     version, are both backups per the real depth chart (Walton is
+#     LDE's backup, Mitchell is NT's 4th-string).
 #
-# Wake Forest runs a 4-2-5 (4 down linemen); only 3 legitimately-sourced
-# names were found, so this list is probably incomplete, not a full front.
-# Left short rather than guessing a 4th.
+# All 4 names cross-checked against CFBD's live /roster (2026-09-15): all
+# present, tagged DL, weights come from fetch_roster.py's automatic CFBD
+# cross-reference (not hand-supplied here).
 team: Wake Forest
 updated_by_human_at: "2026-09-15"
 starters:
   OL: []
   DL:
+    - name: "Zach Lohavichan"
+    - name: "Dallas Afalava"
+    - name: "Gabe Kirschke"
     - name: "Langston Hardy"
-    - name: "Tyler Walton"
-    - name: "Sydir Mitchell"
