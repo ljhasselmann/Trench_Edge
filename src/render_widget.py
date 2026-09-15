@@ -5,29 +5,30 @@ fetch_talent for one matchup (as configured in config/teams.yaml) and
 assembles everything render() needs. render() itself is pure templating
 -- no network -- so it's testable without CFBD access.
 
-PUSH comes from `sp_plus_gap` in config/teams.yaml (or the --sp-plus-gap
-CLI override), not from a fetch_*.py module. This repo can't compute a
-defensible Push number from CFBD's Tier 1 stats alone: naively differencing
+PUSH comes from fetch_sp_plus.py when `week` is set on the matchup in
+config/teams.yaml -- a live fetch of Bill Connelly's weekly SP+ sheet via
+docs.google.com's gviz endpoint (no Drive connector needed; that was an
+earlier, now-obsolete limitation -- see fetch_sp_plus.py's docstring for
+why the sheet needed a specific endpoint and tab-naming discipline to
+fetch reliably as plain REST). This repo can't compute a defensible Push
+number from CFBD's Tier 1 stats alone: naively differencing
 team_a.offense.stuffRate against team_b.defense.stuffRate doesn't actually
 answer "who wins this matchup" -- both are season-long rates against a full
 schedule of different opponents, and validly combining them would need a
 league-average baseline to regress each team's effect against (what
 SP+-style models do internally), which CFBD doesn't provide. So Push uses
 DESIGN.md Section 5's resolved formula instead: overall SP+ differential
-(team_a.SP+ - team_b.SP+, from Bill Connelly's weekly SP+ sheet -- see
-README.md), divided by 5, capped at +/-10 -- see Section 5 for why the
-naive Off/Def-specific combination was rejected (it saturates the cap on
-nearly every real matchup; overall SP+ diff stays in the range the /5
-divisor was actually calibrated against).
+(team_a.SP+ - team_b.SP+), divided by 5, capped at +/-10 -- see Section 5
+for why the naive Off/Def-specific combination was rejected (it saturates
+the cap on nearly every real matchup; overall SP+ diff stays in the range
+the /5 divisor was actually calibrated against).
 
-Reading that sheet is a Claude Drive-connector call, not a REST API a
-script can hit -- so this module can't fetch it itself the way fetch_cfbd.py
-fetches CFBD. Whatever reads the sheet each week (a human, or the Routine's
-own session per DESIGN.md Section 7) has to write the resulting gap into
-config/teams.yaml before running this script.
+If the live fetch fails (network hiccup, that week's tab not published
+yet), this falls back to matchup["sp_plus_gap"] in config/teams.yaml if
+present, with a warning either way about which source was actually used.
 
-If sp_plus_gap is absent, Push (and the composite, which needs all three
-components per Section 5) render as explicitly unavailable -- never a
+If no gap is available at all, Push (and the composite, which needs all
+three components per Section 5) render as explicitly unavailable -- never a
 fabricated zero standing in for "unmeasured."
 """
 
@@ -42,6 +43,7 @@ from jinja2 import Environment, FileSystemLoader
 
 import yaml
 
+import fetch_sp_plus
 from fetch_cfbd import fetch_team_trench_stats
 from fetch_roster import compute_mass_inputs
 from fetch_talent import compute_continuity_inputs
@@ -111,14 +113,27 @@ def build_context(matchup: dict, year: int) -> WidgetContext:
         push_raw = {}
         warnings.append(f"Tier 1 fetch failed: {exc}")
 
-    sp_plus_gap = matchup.get("sp_plus_gap")
+    sp_plus_gap = None
+    week = matchup.get("week")
+    if week is not None:
+        try:
+            sp_plus_gap = fetch_sp_plus.compute_sp_plus_gap(team_a, team_b, week)
+        except Exception as exc:  # noqa: BLE001 -- fall back to config, never crash the render
+            fallback = matchup.get("sp_plus_gap")
+            warnings.append(f"Live SP+ fetch failed ({exc}); using config/teams.yaml's stored sp_plus_gap={fallback!r} instead")
+            sp_plus_gap = fallback
+    else:
+        sp_plus_gap = matchup.get("sp_plus_gap")
+        if sp_plus_gap is not None:
+            warnings.append("No 'week' set for this matchup -- used config/teams.yaml's static sp_plus_gap instead of a live SP+ fetch")
+
     push_score = None
     if sp_plus_gap is not None:
         push_score = normalize_push(sp_plus_gap)
     else:
         warnings.append(
-            "sp_plus_gap not set in config/teams.yaml for this matchup -- Push "
-            "unavailable (see README.md for the SP+ source and how to read it)"
+            "sp_plus_gap unavailable (no 'week' set for a live fetch and no fallback "
+            "value in config/teams.yaml) -- Push unavailable (see README.md's SP+ source)"
         )
 
     composite = None

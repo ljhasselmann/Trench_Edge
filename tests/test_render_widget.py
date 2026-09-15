@@ -102,7 +102,7 @@ def test_build_context_flags_missing_composite_without_sp_plus_gap(monkeypatch):
     assert ctx.continuity["score"] == 1.0  # 3-2
     assert ctx.push["score"] is None
     assert ctx.composite is None
-    assert any("sp_plus_gap not set" in w for w in ctx.warnings)
+    assert any("sp_plus_gap unavailable" in w for w in ctx.warnings)
     assert any("Composite not computed -- missing: Push" in w for w in ctx.warnings)
 
 
@@ -123,6 +123,44 @@ def test_build_context_computes_full_composite_with_sp_plus_gap(monkeypatch):
     # weights.yaml: mass .4, push .4, continuity .2 -> .4*3.0 + .4*4.44 + .2*1.0 = 3.176
     assert round(ctx.composite["value"], 3) == 3.176
     assert not any("Composite not computed" in w for w in ctx.warnings)
+    assert any("No 'week' set" in w for w in ctx.warnings)  # used the static fallback, not a live fetch
+
+
+def test_build_context_prefers_live_sp_plus_fetch_when_week_is_set(monkeypatch):
+    monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year: _FakeMass(avg_ol=320, avg_dl=290))
+    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year: _FakeContinuity(ol=3, dl=2))
+    monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year: TeamAdvancedStats(
+        team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}
+    ))
+    monkeypatch.setattr(render_widget.fetch_sp_plus, "compute_sp_plus_gap", lambda a, b, week: 30.0)
+
+    ctx = render_widget.build_context({
+        "label": "test", "team_a": "Miami", "team_b": "Wake Forest",
+        "side": "team_a_ol_vs_team_b_dl", "week": 3, "sp_plus_gap": 22.2,  # stale fallback, should be ignored
+    }, 2026)
+
+    assert ctx.push["sp_plus_gap"] == 30.0  # live value used, not the stale config fallback
+    assert not any("Live SP+ fetch failed" in w for w in ctx.warnings)
+
+
+def test_build_context_falls_back_to_config_when_live_sp_plus_fetch_fails(monkeypatch):
+    monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year: _FakeMass(avg_ol=320, avg_dl=290))
+    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year: _FakeContinuity(ol=3, dl=2))
+    monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year: TeamAdvancedStats(
+        team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}
+    ))
+
+    def _raise(a, b, week):
+        raise render_widget.fetch_sp_plus.SPPlusFetchError("tab not published yet")
+    monkeypatch.setattr(render_widget.fetch_sp_plus, "compute_sp_plus_gap", _raise)
+
+    ctx = render_widget.build_context({
+        "label": "test", "team_a": "Miami", "team_b": "Wake Forest",
+        "side": "team_a_ol_vs_team_b_dl", "week": 3, "sp_plus_gap": 22.2,
+    }, 2026)
+
+    assert ctx.push["sp_plus_gap"] == 22.2  # fell back to config's stored value
+    assert any("Live SP+ fetch failed" in w for w in ctx.warnings)
 
 
 def test_build_context_handles_tier1_fetch_failure_without_crashing(monkeypatch):

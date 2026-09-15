@@ -4,7 +4,7 @@
   "team_b": "Wake Forest",
   "side": "team_a_ol_vs_team_b_dl",
   "year": 2026,
-  "generated_at": "2026-09-15 22:30 UTC",
+  "generated_at": "2026-09-15 22:41 UTC",
   "mass": {
     "team_a_avg_weight": null,
     "team_b_avg_weight": null,
@@ -15,8 +15,8 @@
   },
   "push": {
     "available": true,
-    "score": 4.4399999999999995,
-    "sp_plus_gap": 22.2,
+    "score": 4.44,
+    "sp_plus_gap": 22.200000000000003,
     "raw": {
       "Miami_offense_stuff_rate": 0.1038961038961039,
       "Miami_offense_line_yards": 4.062337662337662,

@@ -89,16 +89,28 @@ non-obvious setup step." That's since been resolved for this environment.)
   end-to-end** (`output/latest.html` in this repo is real output from a
   live run, screenshot-checked in a headless browser).
 
-**Push — resolved.** Not wired to CFBD's Tier 1 stats: naively subtracting
-`team_a.offense.stuffRate` from `team_b.defense.stuffRate` doesn't actually
-answer who wins the matchup (both are season-long rates against different
-schedules; combining them validly needs a league-average baseline CFBD
-doesn't provide — inventing one would violate Section 2's own non-goal).
-Instead, Push uses **overall SP+ differential** (`team_a.SP+ - team_b.SP+`,
-`/5`, capped ±10 — DESIGN.md Section 5 has the full reasoning, including
-why the trench-specific Off/Def-SP+ combination was tried and rejected).
-Set per-matchup as `sp_plus_gap` in `config/teams.yaml`. **Live-verified**:
-Miami 77.7 SP+, Wake Forest 55.5 SP+ → gap 22.2 → Push score +4.4,
+**Push — resolved, now a real fetch script.** Not wired to CFBD's Tier 1
+stats: naively subtracting `team_a.offense.stuffRate` from
+`team_b.defense.stuffRate` doesn't actually answer who wins the matchup
+(both are season-long rates against different schedules; combining them
+validly needs a league-average baseline CFBD doesn't provide — inventing
+one would violate Section 2's own non-goal). Instead, Push uses **overall
+SP+ differential** (`team_a.SP+ - team_b.SP+`, `/5`, capped ±10 —
+DESIGN.md Section 5 has the full reasoning, including why the
+trench-specific Off/Def-SP+ combination was tried and rejected).
+
+`src/fetch_sp_plus.py` fetches this live, no Drive connector needed —
+once `docs.google.com` was added to this environment's network allowlist,
+a plain REST fetch became possible via Google's `gviz` query endpoint
+(see the module docstring for two real gotchas this hit: the plain
+`/export?format=csv` endpoint redirects to a *different*, dynamically-named
+`*.googleusercontent.com` host that isn't allowlisted, and requesting a
+tab name that doesn't exist returns HTTP 200 with the *wrong* tab's data
+instead of an error — both confirmed live, both handled). Set `week` on a
+matchup in `config/teams.yaml` and `render_widget.py` fetches the current
+gap automatically; `sp_plus_gap` in the same file is now only a fallback,
+used if the live fetch fails. **Live-verified**: Miami 25.6 SP+, Wake
+Forest 3.4 SP+ (FBS Week 3 tab) → gap 22.2 → Push score +4.4,
 screenshot-confirmed rendering as a real diverging bar. The composite now
 computes for real once Mass, Push, and Continuity are all present.
 
@@ -106,19 +118,34 @@ computes for real once Mass, Push, and Continuity are all present.
 
 Bill Connelly's own weekly SP+ ratings (Google Sheet, title "2026 SP+",
 owned by `billconnelly1@gmail.com`), fileId
-`1vwoVl-Dxy0es87Z9I1RTvFzr72Lb1fAkREfbLxbK-eg`. This is **not a REST API** —
-it's read via Claude's Google Drive connector
-(`mcp__Google_Drive__read_file_content`), so no `fetch_sp_plus.py` script
-exists; whoever runs this pipeline reads the sheet and fills in
-`sp_plus_gap` by hand (or the weekly Routine does it in its own session —
-see DESIGN.md Section 7).
+`1vwoVl-Dxy0es87Z9I1RTvFzr72Lb1fAkREfbLxbK-eg`.
 
-**The sheet has multiple undated snapshot tabs — do not trust tab order or
-gid.** Identify the current one by matching each team's win-loss record in
-the `Team | 2026 Conference | Record | SP+ | Rk | Off. SP+ | Rk | Def. SP+ | Rk`
-table against the actual current week (e.g. confirmed live 2026-09-15: the
-correct tab showed Miami/Wake Forest both at 2-0, matching that week's real
-CFBD game counts; three other tabs showed stale 1-0/0-0 snapshots).
+**Tab naming, not gid, is the reliable way to find the right week.** The
+workbook has parallel per-week tabs, e.g. `"FBS Week 3"`, `"TOP 772 WEEK 3"`
+(plus FCS/D2/D3/NAIA variants) — `fetch_sp_plus.py` uses `"FBS Week {N}"`.
+**`week` is not auto-detected** — requesting a tab that doesn't exist
+doesn't error, it silently returns the workbook's first (unrelated) tab
+with HTTP 200, so guessing the week and trusting whatever comes back would
+risk parsing the wrong table as current data. `fetch_sp_plus.py` instead
+validates the response's header shape and raises clearly if it doesn't
+match, but the week number itself still has to be set explicitly.
+
+**`"TOP 772 WEEK N"` and `"FBS Week N"` are the same underlying ratings,
+offset by a constant** — confirmed live across 7 teams: SP+ differs by
+~+52.1, Off SP+ by ~+26.1, Def SP+ by ~-26.1, every time. `"TOP 772"`
+covers all divisions (FBS down to NAIA) on one unified scale for
+cross-division ranking; it is *not* the commonly-published SP+ despite the
+identical column names — `"FBS Week N"`'s absolute values (e.g. Miami
+25.6) match the standard public SP+ scale, `"TOP 772"`'s (77.7) don't.
+Since Push only uses a *difference*, either tab gives the same gap, but
+`fetch_sp_plus.py` uses `"FBS Week N"` so a spot-checked number matches
+what a human would see cross-referencing another SP+ source.
+
+**Team names don't always match CFBD's.** Confirmed live: CFBD's `"Miami"`
+is `"Miami-FL"` in this sheet. `TEAM_NAME_ALIASES` in `fetch_sp_plus.py`
+maps repo-wide names to the sheet's; a lookup miss raises with the closest
+sheet names found, specifically so a new mismatch is easy to diagnose and
+add rather than silently guessed at.
 
 No team roster files (`config/rosters/{team}.yaml`) are committed — I
 don't have real depth-chart knowledge of any team's actual current
@@ -129,7 +156,7 @@ players in the repo.
 
 ```
 pip install -r requirements.txt pytest
-python3 -m pytest tests/ -v   # 34 tests, all passing
+python3 -m pytest tests/ -v   # 44 tests, all passing
 ```
 
 ## Weekly usage
@@ -139,12 +166,13 @@ python3 -m pytest tests/ -v   # 34 tests, all passing
 #    real starters from actual depth-chart reporting:
 cp config/rosters/_template.yaml "config/rosters/Miami.yaml"
 
-# 2. Set this week's matchup in config/teams.yaml (label/team_a/team_b/side),
-#    and set sp_plus_gap from the SP+ sheet (see above).
+# 2. Set this week's matchup in config/teams.yaml (label/team_a/team_b/side/
+#    week). `week` drives a live SP+ fetch automatically; sp_plus_gap is
+#    just the fallback if that fetch fails.
 
 # 3. Render:
 python3 src/render_widget.py 2026-wk03-miami-wake
-# -> output/latest.html, plus any caveats printed to stderr
+# -> output/latest.html, history/{label}.json, plus any caveats printed to stderr
 ```
 
 ## Running the pieces individually
@@ -157,4 +185,7 @@ python3 src/compute_composite.py --weight-diff-lbs 25 --sp-plus-gap 10 --net-ret
 python3 src/fetch_cfbd.py Miami --year 2026
 python3 src/fetch_roster.py Miami --year 2026
 python3 src/fetch_talent.py Miami --year 2026
+
+# Live SP+ fetch (needs docs.google.com allowlisted, no key required):
+python3 src/fetch_sp_plus.py Miami "Wake Forest" --week 3
 ```

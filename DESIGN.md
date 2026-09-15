@@ -143,10 +143,15 @@ guessing at a formula without it would misrepresent precision the data
 doesn't support — see Section 2).
 
 **SP+ source:** Bill Connelly's own weekly-refreshed SP+ spreadsheet
-(Google Sheet, not a REST API — see Section 7's routine notes). The sheet
-keeps multiple undated snapshot tabs; identify the current one by matching
-each team's win-loss record in the table against the actual current week,
-not by tab position or gid.
+(Google Sheet). Fetched live by `src/fetch_sp_plus.py` via Google's
+unauthenticated `gviz` query endpoint — see that module's docstring and
+README.md's "SP+ source" section for real gotchas this hit (a different,
+dynamically-named redirect host on the naive export endpoint; a
+nonexistent-tab request returning HTTP 200 with the wrong tab's data
+instead of erroring; a name mismatch against CFBD for at least one team).
+The sheet's per-week tabs are named `"FBS Week {N}"` — `N` isn't
+auto-detected (see above on why guessing it is unsafe), so it's set
+explicitly as `week` per matchup in `config/teams.yaml`.
 
 Default weights (`config/weights.yaml`), tunable, starting point:
 
@@ -184,46 +189,65 @@ per firing.
 
 - **Trigger:** weekly, **Thursday** (not Tuesday as originally drafted —
   depth charts publish later than assumed), 8am US Eastern. Self-bound to
-  a persistent session rather than a fresh one per firing, specifically
-  *because* the run needs a human confirmation step (see below) — a fresh
-  session can't pause mid-run for a reply.
-- **Confirm-then-run, one Routine, not two.** Earlier drafts of this
-  section considered a separate Sunday reminder plus a fresh-session
-  Tuesday run. Rejected: Mass and Continuity both depend on a human-updated
-  starter list (`config/rosters/{team}.yaml`, Section 4b/4c), which can't
-  be confirmed by an unattended fresh session anyway, so splitting the
-  steps added a second moving part for no gain. One Routine: check
-  matchup/roster-config staleness, confirm updates with the human, then run
-  the full pipeline in the same session.
+  a persistent session rather than a fresh one per firing, so a run can
+  still report back into the same conversation and (rarely) ask a
+  question — see below.
+- **Fully automatic roster research, not human confirmation.** An earlier
+  draft of this Routine blocked every run on a human confirming that
+  week's starters before proceeding. Superseded: the Routine now
+  web-searches for confirmed starters (depth charts, beat-writer previews)
+  itself, diffs the result against the most recent prior snapshot in
+  `history/*.json` (matched by team name, not matchup label, since
+  opponents change weekly), and writes `config/rosters/{team}.yaml`
+  directly — flagging any position change or new name explicitly in the
+  run summary and commit message rather than confirming before acting.
+  Weight confirmation still only ever comes from matching CFBD's live
+  `/roster` (Section 4b); the Routine never marks anything `confirmed`
+  itself.
+- **Push (SP+) is a live fetch too, not a manual paste.** Originally
+  thought to need Claude's Drive connector, which this org can't grant to
+  a Routine at all (`create_trigger`'s `connectors` parameter is rejected
+  org-wide, confirmed) — the intended workaround was having the Routine
+  ask a human to read the sheet and paste the number each week. Superseded
+  again once `docs.google.com` was added to this environment's network
+  allowlist: `fetch_sp_plus.py` reads the sheet as a plain REST call (see
+  Section 5 and its own docstring for the real gotchas that took — a
+  different, dynamically-named redirect host, and a nonexistent-tab
+  request that silently returns the wrong tab's data instead of erroring).
+  So the Routine no longer needs to interrupt for this either, as long as
+  `week` is kept current in `config/teams.yaml` for each matchup.
+- **What's left for a human, then:** effectively nothing on a normal week.
+  The Routine only surfaces something to the conversation when a roster
+  diff looks worth a second look, a live fetch fails and falls back to a
+  possibly-stale config value, or `config/teams.yaml` has no matchup
+  configured for the week at all.
 - **Repository:** this repo, on the environment's already-checked-out
   working copy — not a fresh clone per firing, since the Routine is
   session-bound rather than fresh-session. `history/` and `output/` still
   get committed every run regardless, so the record doesn't depend on
   session persistence either way.
 - **Network access:** confirmed resolved for this project's environment —
-  `api.collegefootballdata.com` is allowlisted and `CFBD_API_KEY` is set.
-  A Routine fired with no explicit `environment_id` inherits the calling
-  session's environment, so it reuses this config automatically; no
-  separate setup needed unless a new environment is created later.
+  `api.collegefootballdata.com` and `docs.google.com` are both allowlisted,
+  `CFBD_API_KEY` is set. A Routine fired with no explicit `environment_id`
+  inherits the calling session's environment, so it reuses this config
+  automatically; no separate setup needed unless a new environment is
+  created later.
 - **Secrets:** `CFBD_API_KEY` lives in the environment, never in the
-  Routine's prompt or committed to the repo.
-- **Push (SP+) needs the Google Drive connector, not a REST call.** Unlike
-  CFBD, the SP+ source (Section 5) is a Google Sheet, reachable only
-  through Claude's own Drive connector — a plain script (`fetch_*.py`)
-  can't call it directly the way `fetch_cfbd.py` calls CFBD. The Routine
-  must be created with `connectors: ["Google Drive"]`, and its prompt must
-  include the read-and-extract step explicitly (identify the current tab
-  by matching this week's actual win-loss records against the sheet, per
-  Section 5 — the sheet doesn't label which tab is current).
-- **Routine prompt (draft, updated):** "Check `config/rosters/*.yaml` for
-  matchups in `config/teams.yaml` — flag any starter list older than 7
-  days or any team missing a roster file entirely, and confirm updates
-  with the user before proceeding. Once confirmed: fetch Tier 1
-  (`fetch_cfbd.py`) and Tier 2 (`fetch_talent.py`) data, read this week's
-  SP+ gap from the Google Sheet (fileId in README.md) for Push, run
-  `render_widget.py` to produce `output/latest.html`, commit a snapshot to
-  `history/`, and flag in the commit message any input that fell back to a
-  cached or estimated value."
+  Routine's prompt or committed to the repo. `fetch_sp_plus.py` needs no
+  key at all — the sheet's `gviz` endpoint is unauthenticated.
+- **Routine prompt (current, not a draft):** "For each matchup in
+  `config/teams.yaml`: web-search for this week's confirmed starting
+  OL/DL, diff against the most recent prior `history/*.json` snapshot for
+  that team and flag any change, and update `config/rosters/{team}.yaml`
+  with sourced names only (never a fabricated one) — weight/`confirmed`
+  status still comes only from matching CFBD's live roster, never set by
+  the Routine itself. Then run `fetch_cfbd.py` / `fetch_roster.py` /
+  `fetch_talent.py` as needed and `render_widget.py` (which fetches Push
+  from `fetch_sp_plus.py` automatically) to produce `output/latest.html`
+  and a `history/` snapshot, commit and push, and call out in the commit
+  message any roster diff, fallback to a cached/estimated value, or
+  anything still missing. Stop and ask rather than push a broken or empty
+  report if CFBD is unreachable or no matchup is configured."
 
 ## 8. Open questions / future work
 
