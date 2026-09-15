@@ -171,6 +171,43 @@ def render(context: WidgetContext) -> str:
     return template.render(ctx=context)
 
 
+def _starters_to_dicts(starters: list) -> list:
+    return [vars(s) for s in starters]
+
+
+def context_to_history_dict(context: WidgetContext) -> dict:
+    """DESIGN.md Section 3/7: one JSON snapshot per matchup per week in
+    history/. This is the only reliable record of "who did we say was
+    starting last time" -- diffing against it (not re-deriving it ad hoc)
+    is what makes week-over-week starter-change detection trustworthy."""
+    return {
+        "matchup_label": context.matchup_label,
+        "team_a": context.team_a,
+        "team_b": context.team_b,
+        "side": context.side,
+        "year": context.year,
+        "generated_at": context.generated_at,
+        "mass": {
+            **{k: v for k, v in context.mass.items() if k not in ("team_a_starters", "team_b_starters")},
+            "team_a_starters": _starters_to_dicts(context.mass["team_a_starters"]),
+            "team_b_starters": _starters_to_dicts(context.mass["team_b_starters"]),
+        },
+        "push": context.push,
+        "continuity": context.continuity,
+        "composite": context.composite,
+        "warnings": context.warnings,
+    }
+
+
+def write_history_snapshot(context: WidgetContext, history_dir: Path) -> Path:
+    import json
+
+    history_dir.mkdir(parents=True, exist_ok=True)
+    path = history_dir / f"{context.matchup_label}.json"
+    path.write_text(json.dumps(context_to_history_dict(context), indent=2))
+    return path
+
+
 if __name__ == "__main__":
     import argparse
     import sys
@@ -179,6 +216,7 @@ if __name__ == "__main__":
     parser.add_argument("matchup_label", help="Must match a 'label' in config/teams.yaml")
     parser.add_argument("--teams-file", default="config/teams.yaml")
     parser.add_argument("--out", default="output/latest.html")
+    parser.add_argument("--history-dir", default="history")
     parser.add_argument("--sp-plus-gap", type=float, default=None, help="Override config/teams.yaml's sp_plus_gap for this run")
     args = parser.parse_args()
 
@@ -195,7 +233,9 @@ if __name__ == "__main__":
     ctx = build_context(matchup, teams_config["year"])
     html = render(ctx)
     Path(args.out).write_text(html)
+    snapshot_path = write_history_snapshot(ctx, Path(args.history_dir))
     print(f"wrote {args.out}")
+    print(f"wrote {snapshot_path}")
     if ctx.warnings:
         print(f"{len(ctx.warnings)} warning(s):", file=sys.stderr)
         for w in ctx.warnings:

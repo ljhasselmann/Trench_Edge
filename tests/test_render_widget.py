@@ -1,10 +1,11 @@
+import json
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import render_widget
-from render_widget import WidgetContext, render
+from render_widget import WidgetContext, render, write_history_snapshot
 from fetch_roster import StarterWeight, MassInputs
 from fetch_talent import TalentInputs
 from fetch_cfbd import TeamAdvancedStats, SideStats
@@ -136,3 +137,26 @@ def test_build_context_handles_tier1_fetch_failure_without_crashing(monkeypatch)
 
     assert any("Tier 1 fetch failed" in w for w in ctx.warnings)
     assert ctx.mass["score"] is None
+
+
+def test_write_history_snapshot_produces_readable_json_with_starter_detail(tmp_path):
+    ctx = _sample_context()
+    path = write_history_snapshot(ctx, tmp_path)
+
+    assert path == tmp_path / "2026-wk03-miami-wake.json"
+    data = json.loads(path.read_text())
+
+    assert data["team_a"] == "Miami"
+    assert data["team_b"] == "Wake Forest"
+    assert data["mass"]["team_a_starters"] == [
+        {"name": "Jacob Hawks", "weight_lbs": 330, "confidence": "confirmed", "source": "cfbd_roster"}
+    ]
+    assert data["mass"]["score"] == 3.0
+    assert data["composite"] is None
+
+
+def test_write_history_snapshot_creates_history_dir_if_missing(tmp_path):
+    ctx = _sample_context()
+    history_dir = tmp_path / "nested" / "history"
+    path = write_history_snapshot(ctx, history_dir)
+    assert path.exists()
