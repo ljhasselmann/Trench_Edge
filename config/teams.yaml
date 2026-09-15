@@ -1,0 +1,9 @@
+# This week's configured matchup(s). "team_a" is the reference side
+# (positive composite favors team_a); side is which trench matchup this row
+# scores: team_a's OFFENSIVE line vs team_b's DEFENSIVE line.
+year: 2025
+matchups:
+  - label: 2025-wk04-miami-wake
+    team_a: Miami
+    team_b: Wake Forest
+    side: team_a_ol_vs_team_b_dl

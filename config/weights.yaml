@@ -1,0 +1,5 @@
+# Trench Edge scoring weights (Section 5 of DESIGN.md).
+# Starting hunch, not a fitted model -- see DESIGN.md Section 8 (backtesting).
+mass: 0.4
+push: 0.4
+continuity: 0.2

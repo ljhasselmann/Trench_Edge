@@ -1,0 +1,193 @@
+# Trench Edge — Design Doc
+
+Status: draft v0.1
+Owner: (you)
+Automation target: Claude Code Routine (research preview)
+
+## 1. Purpose
+
+Trench Edge is a weekly, automatically-refreshed composite score comparing the
+offensive line of one college football team against the defensive line of
+another (and vice versa, once the four-corners version ships). It formalizes
+the "mass kicks ass" heuristic into three measurable, individually-labeled
+components — Mass, Push, and Continuity — instead of a single vibes-based
+gut call.
+
+It is explicitly **not** a standalone betting signal. It's a supplementary
+lens for evaluating one specific phase of a matchup (the trenches), meant to
+sit alongside — not replace — market-derived signals (spread, SP+ diffs)
+covered elsewhere in this project's broader workflow. Composite scores here
+should never be the sole input to a betting decision.
+
+## 2. Non-goals
+
+- Not a full-game prediction model. It scores one phase of the game.
+- Not a replacement for SP+, FPI, or market lines — a cross-check.
+- Not claiming precision beyond what the inputs support. Every number in the
+  output should be traceable to a source or flagged as estimated.
+- Not fully autonomous decision-making. The routine produces a report; a
+  human reads it before doing anything with it.
+
+## 3. Repo layout
+
+```
+trench-edge/
+  .env                        CFBD_API_KEY=... (gitignored, never committed)
+  .gitignore                  .env, /history/*.json (or keep history, TBD)
+  config/
+    weights.yaml               Mass/Push/Continuity weights, tunable
+    teams.yaml                 this week's matchup(s) to score
+  src/
+    fetch_cfbd.py               pulls Tier 1 advanced stats from CFBD
+    fetch_roster.py             pulls or reads cached OL/DL starter weights
+    fetch_talent.py             pulls Tier 2 talent/returning-production data
+    compute_composite.py        applies the scoring formula, normalizes inputs
+    render_widget.py            generates the HTML output from a template
+  templates/
+    widget.html.jinja           matches the visual style already established
+  history/
+    2026-wk03-miami-wake.json   one snapshot per matchup per week
+  output/
+    latest.html                 most recent rendered widget
+  DESIGN.md                     this file
+  README.md                     quickstart for a human picking this up cold
+```
+
+## 4. Data pipeline
+
+Three fetch stages, run in sequence, each producing a JSON blob that gets
+merged before scoring:
+
+### 4a. Tier 1 — CFBD advanced stats (`fetch_cfbd.py`)
+
+Endpoint: `/stats/season/advanced?year={year}&team={team}`
+
+Pulls, per team, per side of the ball:
+- Stuff rate (run stopped at or behind LOS)
+- Line yards / opportunity rate
+- Front-seven havoc rate (TFL + forced fumbles, front seven only — explicitly
+  excludes DB havoc, which is a different skill and shouldn't leak into a
+  trenches score)
+- Adjusted sack rate (sacks per dropback, not raw counts)
+
+Auth via `Authorization: Bearer $CFBD_API_KEY`, key read from environment,
+never hardcoded or logged.
+
+**Known limitation:** CFBD's advanced stats are season-cumulative, not
+opponent-specific. Early season (weeks 1-3), these numbers still carry real
+small-sample noise and garbage-time contamination from lopsided games,
+same caveat that applied to the SP+ diffs earlier in this project. Weight
+this component's confidence down accordingly until ~5-6 games of data exist.
+
+### 4b. Mass — roster weights (`fetch_roster.py`)
+
+This is the piece that's currently hand-scraped (see the Miami/Wake Forest
+worked example — it took a dozen manual searches). Options, in order of
+preference:
+
+1. Check if CFBD's `/roster` endpoint returns listed weights — if yes, this
+   whole stage becomes one API call instead of manual research.
+2. If not, maintain a small cached YAML per team (`config/rosters/{team}.yaml`)
+   that a human updates once per week from depth-chart reporting, with a
+   `source` and `confidence` field per player (`confirmed` vs `estimated`).
+   Carry forward the exact convention used in the worked example: unlisted
+   weights get flagged with an asterisk and a note, never silently guessed
+   into a "confirmed" number.
+3. Depth charts change (injuries, suspensions, true freshmen beating out
+   incumbents mid-season, as happened with Cantwell/McCoy). The routine
+   should flag when it's using a roster snapshot older than 7 days rather
+   than silently using stale starters.
+
+### 4c. Tier 2 — talent and continuity (`fetch_talent.py`)
+
+- Returning production / returning starts, by position group (OL, DL)
+- 247/On3 team talent composite or blue-chip ratio, position-group-specific
+  where available, team-wide as fallback
+- A qualitative flag, set manually per team per season: is this unit's
+  performance level talent-driven or coaching/scheme-driven? (E.g., Wake
+  Forest's 2025 defensive turnaround was explicitly coaching-driven per beat
+  reporting — that's a real signal about year-over-year stability that a
+  bare "returning starters" count won't capture on its own.)
+
+## 5. Scoring model
+
+`compute_composite.py` implements:
+
+```
+Trench Edge = w_mass * Mass + w_push * Push + w_continuity * Continuity
+```
+
+Each subscore is normalized to a **-10 (favors Team B) to +10 (favors Team A)**
+scale before weighting:
+
+| Component | Normalization | Notes |
+|---|---|---|
+| Mass | 1 point per 10 lbs of average weight differential, capped at ±10 | Simplest, most reliable input — pure roster data, no adjustment needed |
+| Push | 1 point per 5 SP+ points of off-vs-def gap (placeholder), to be replaced with real Stuff Rate / Line Yards differential once Tier 1 wiring is live | Confidence should scale with games played this season |
+| Continuity | 1 point per net returning-starter differential | Discount further if either side's improvement looks scheme-driven per the qualitative flag above |
+
+Default weights (`config/weights.yaml`), tunable, starting point:
+
+```yaml
+mass: 0.4
+push: 0.4
+continuity: 0.2
+```
+
+These are a starting hunch, not a fitted model. See Section 8 for the
+backtesting plan that should eventually replace hand-picked weights with
+something empirically justified.
+
+## 6. Output
+
+`render_widget.py` produces a self-contained HTML fragment matching the
+style already established: metric cards for average weight, a player-level
+weight comparison list with confirmed/estimated flags, three diverging bars
+for the subscores, and a final composite bar with a plain-language verdict
+band (negligible / slight-to-moderate / significant / dominant edge, keyed
+off `|composite|` thresholds — e.g. 0-2 / 2-5 / 5-8 / 8-10).
+
+Every rendered number must be traceable: the widget (or an adjacent data
+file) should carry the source and fetch timestamp for each input, not just
+the final score. If Section 4b falls back to a cached/estimated roster
+weight, that should visibly propagate as a caveat in the rendered output,
+not get silently absorbed into a clean-looking number.
+
+## 7. Automation — Claude Code Routine
+
+- **Trigger:** scheduled, weekly, targeting Tuesday morning (after the
+  weekend's games post, ahead of the next slate's roster news settling).
+- **Repository:** this repo, checked out fresh each run (cloud routines run
+  against a fresh clone — no persistent local state between runs, so
+  `history/` must be committed each run, not assumed to persist otherwise).
+- **Network access:** default routine environment only allowlists package
+  registries and common dev domains. `api.collegefootballdata.com` must be
+  explicitly added to the environment's network configuration before the
+  routine will be able to reach it — this is the one non-obvious setup step.
+- **Secrets:** `CFBD_API_KEY` stored in the routine's secret config, never in
+  the prompt or committed to the repo.
+- **Routine prompt (draft):** "Run the Trench Edge pipeline for this week's
+  configured matchup(s) in `config/teams.yaml`. Fetch Tier 1 and Tier 2 data,
+  compute the composite, render the widget to `output/latest.html`, commit a
+  snapshot to `history/`, and flag in the commit message any input that fell
+  back to a cached or estimated value."
+
+## 8. Open questions / future work
+
+- **Four corners.** Current worked example only did Team A's OL vs Team B's
+  DL. The reverse side (Team B's OL vs Team A's DL) needs the same treatment
+  before any matchup is "fully scored."
+- **Backtesting.** Once a few weeks of history accumulate, check whether the
+  composite (or any single component) actually correlates with something —
+  ATS results, rushing success rate in the actual game, sacks allowed. If it
+  doesn't beat a naive baseline, that's a real finding, not a failure —
+  report it honestly rather than tuning weights until it looks predictive.
+- **CFBD roster weights.** If the API turns out to carry listed weights
+  directly, Section 4b's manual-research stage disappears entirely. Worth
+  checking early — it's the most labor-intensive part of the pipeline today.
+- **PFF grades.** Tier 3, paywalled, inconsistent public availability. Not
+  wired into v1. Revisit if a subscription or a reliably-quoted public proxy
+  turns up.
+- **Alerting.** Cowork-style "notify me when done" isn't native to routines
+  yet per current docs — for now, check `output/latest.html` or the routine's
+  run history manually rather than expecting a push notification.
