@@ -5,22 +5,30 @@ fetch_talent for one matchup (as configured in config/teams.yaml) and
 assembles everything render() needs. render() itself is pure templating
 -- no network -- so it's testable without CFBD access.
 
-PUSH IS NOT WIRED TO REAL NUMBERS. Section 5 says Push should eventually
-use real Stuff Rate / Line Yards differentials instead of the SP+
-placeholder, now that Tier 1 fetching is live. But naively differencing
+PUSH comes from `sp_plus_gap` in config/teams.yaml (or the --sp-plus-gap
+CLI override), not from a fetch_*.py module. This repo can't compute a
+defensible Push number from CFBD's Tier 1 stats alone: naively differencing
 team_a.offense.stuffRate against team_b.defense.stuffRate doesn't actually
 answer "who wins this matchup" -- both are season-long rates against a full
-schedule of opponents, and validly combining them needs a league-average
-baseline to regress each team's effect against (the thing SP+-style models
-actually do). This repo has no such baseline. Inventing a formula that
-*looks* quantitative without one would violate DESIGN.md Section 2's own
-non-goal: "not claiming precision beyond what the inputs support."
+schedule of different opponents, and validly combining them would need a
+league-average baseline to regress each team's effect against (what
+SP+-style models do internally), which CFBD doesn't provide. So Push uses
+DESIGN.md Section 5's resolved formula instead: overall SP+ differential
+(team_a.SP+ - team_b.SP+, from Bill Connelly's weekly SP+ sheet -- see
+README.md), divided by 5, capped at +/-10 -- see Section 5 for why the
+naive Off/Def-specific combination was rejected (it saturates the cap on
+nearly every real matchup; overall SP+ diff stays in the range the /5
+divisor was actually calibrated against).
 
-So: Push renders as explicitly unavailable, and the composite is NOT
-computed until Push has a real input (either wired to a defensible
-Stuff-Rate/Line-Yards formula, once one exists, or supplied externally as
-an SP+ gap from the broader workflow DESIGN.md Section 1 references).
-Showing nothing beats showing a wrong number labeled as final.
+Reading that sheet is a Claude Drive-connector call, not a REST API a
+script can hit -- so this module can't fetch it itself the way fetch_cfbd.py
+fetches CFBD. Whatever reads the sheet each week (a human, or the Routine's
+own session per DESIGN.md Section 7) has to write the resulting gap into
+config/teams.yaml before running this script.
+
+If sp_plus_gap is absent, Push (and the composite, which needs all three
+components per Section 5) render as explicitly unavailable -- never a
+fabricated zero standing in for "unmeasured."
 """
 
 from __future__ import annotations
@@ -32,10 +40,14 @@ from typing import Optional
 
 from jinja2 import Environment, FileSystemLoader
 
+import yaml
+
 from fetch_cfbd import fetch_team_trench_stats
 from fetch_roster import compute_mass_inputs
 from fetch_talent import compute_continuity_inputs
-from compute_composite import normalize_mass, normalize_continuity
+from compute_composite import compute_composite, normalize_mass, normalize_continuity, normalize_push
+
+WEIGHTS_FILE = Path(__file__).resolve().parents[1] / "config" / "weights.yaml"
 
 TEMPLATES_DIR = Path(__file__).resolve().parents[1] / "templates"
 
@@ -82,8 +94,8 @@ def build_context(matchup: dict, year: int) -> WidgetContext:
         net_returning = continuity_a.returning_ol_starters - continuity_b.returning_dl_starters
         continuity_score = normalize_continuity(net_returning)
 
-    # Tier 1 fetch runs regardless, so its numbers are visible even though
-    # Push isn't scored yet -- see module docstring.
+    # Tier 1 fetch is still pulled for the record even though Push doesn't
+    # use it (see module docstring) -- these numbers stay useful context.
     try:
         stats_a = fetch_team_trench_stats(team_a, year)
         stats_b = fetch_team_trench_stats(team_b, year)
@@ -99,13 +111,28 @@ def build_context(matchup: dict, year: int) -> WidgetContext:
         push_raw = {}
         warnings.append(f"Tier 1 fetch failed: {exc}")
 
-    composite = None
-    if mass_score is not None and continuity_score is not None:
+    sp_plus_gap = matchup.get("sp_plus_gap")
+    push_score = None
+    if sp_plus_gap is not None:
+        push_score = normalize_push(sp_plus_gap)
+    else:
         warnings.append(
-            "Composite not computed -- Push has no validated real-data formula yet "
-            "(see render_widget.py module docstring); DESIGN.md Section 5's formula "
-            "needs all three components."
+            "sp_plus_gap not set in config/teams.yaml for this matchup -- Push "
+            "unavailable (see README.md for the SP+ source and how to read it)"
         )
+
+    composite = None
+    if mass_score is not None and push_score is not None and continuity_score is not None:
+        with open(WEIGHTS_FILE) as f:
+            weights = yaml.safe_load(f)
+        result = compute_composite(weight_diff, sp_plus_gap, net_returning, weights)
+        composite = {"value": result.composite, "verdict": result.verdict}
+    else:
+        missing = [
+            name for name, val in (("Mass", mass_score), ("Push", push_score), ("Continuity", continuity_score))
+            if val is None
+        ]
+        warnings.append(f"Composite not computed -- missing: {', '.join(missing)}")
 
     return WidgetContext(
         matchup_label=matchup["label"],
@@ -122,7 +149,7 @@ def build_context(matchup: dict, year: int) -> WidgetContext:
             "team_a_starters": mass_a.ol_starters,
             "team_b_starters": mass_b.dl_starters,
         },
-        push={"available": False, "raw": push_raw},
+        push={"available": push_score is not None, "score": push_score, "sp_plus_gap": sp_plus_gap, "raw": push_raw},
         continuity={
             "team_a_returning": continuity_a.returning_ol_starters,
             "team_b_returning": continuity_b.returning_dl_starters,
@@ -148,12 +175,11 @@ if __name__ == "__main__":
     import argparse
     import sys
 
-    import yaml
-
     parser = argparse.ArgumentParser(description="Render the Trench Edge widget for one configured matchup.")
     parser.add_argument("matchup_label", help="Must match a 'label' in config/teams.yaml")
     parser.add_argument("--teams-file", default="config/teams.yaml")
     parser.add_argument("--out", default="output/latest.html")
+    parser.add_argument("--sp-plus-gap", type=float, default=None, help="Override config/teams.yaml's sp_plus_gap for this run")
     args = parser.parse_args()
 
     with open(args.teams_file) as f:
@@ -163,6 +189,8 @@ if __name__ == "__main__":
     if matchup is None:
         print(f"No matchup labeled {args.matchup_label!r} in {args.teams_file}", file=sys.stderr)
         sys.exit(1)
+    if args.sp_plus_gap is not None:
+        matchup = {**matchup, "sp_plus_gap": args.sp_plus_gap}
 
     ctx = build_context(matchup, teams_config["year"])
     html = render(ctx)

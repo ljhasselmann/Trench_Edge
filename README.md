@@ -89,22 +89,36 @@ non-obvious setup step." That's since been resolved for this environment.)
   end-to-end** (`output/latest.html` in this repo is real output from a
   live run, screenshot-checked in a headless browser).
 
-**Known incomplete piece: Push has no real-data score, and the composite
-is not computed as a result.** Section 5 says Push should eventually use
-real Stuff Rate / Line Yards differentials instead of the SP+ placeholder,
-now that Tier 1 fetching is live and tested. But naively subtracting
+**Push — resolved.** Not wired to CFBD's Tier 1 stats: naively subtracting
 `team_a.offense.stuffRate` from `team_b.defense.stuffRate` doesn't actually
-answer who wins the matchup — both are season-long rates against a full
-schedule of different opponents, and combining them validly needs a
-league-average baseline to regress each team's effect against (what
-SP+-style models do). This repo has no such baseline, and inventing a
-formula that looks quantitative without one would violate Section 2's own
-non-goal ("not claiming precision beyond what the inputs support"). So the
-widget renders Push as explicitly unavailable and skips the composite
-rather than showing a number that isn't defensible. This needs either an
-SP+ input supplied externally (per Section 1, that already lives in the
-broader workflow) or a real decision on a Stuff-Rate/Line-Yards formula —
-open, not yet decided.
+answer who wins the matchup (both are season-long rates against different
+schedules; combining them validly needs a league-average baseline CFBD
+doesn't provide — inventing one would violate Section 2's own non-goal).
+Instead, Push uses **overall SP+ differential** (`team_a.SP+ - team_b.SP+`,
+`/5`, capped ±10 — DESIGN.md Section 5 has the full reasoning, including
+why the trench-specific Off/Def-SP+ combination was tried and rejected).
+Set per-matchup as `sp_plus_gap` in `config/teams.yaml`. **Live-verified**:
+Miami 77.7 SP+, Wake Forest 55.5 SP+ → gap 22.2 → Push score +4.4,
+screenshot-confirmed rendering as a real diverging bar. The composite now
+computes for real once Mass, Push, and Continuity are all present.
+
+### SP+ source
+
+Bill Connelly's own weekly SP+ ratings (Google Sheet, title "2026 SP+",
+owned by `billconnelly1@gmail.com`), fileId
+`1vwoVl-Dxy0es87Z9I1RTvFzr72Lb1fAkREfbLxbK-eg`. This is **not a REST API** —
+it's read via Claude's Google Drive connector
+(`mcp__Google_Drive__read_file_content`), so no `fetch_sp_plus.py` script
+exists; whoever runs this pipeline reads the sheet and fills in
+`sp_plus_gap` by hand (or the weekly Routine does it in its own session —
+see DESIGN.md Section 7).
+
+**The sheet has multiple undated snapshot tabs — do not trust tab order or
+gid.** Identify the current one by matching each team's win-loss record in
+the `Team | 2026 Conference | Record | SP+ | Rk | Off. SP+ | Rk | Def. SP+ | Rk`
+table against the actual current week (e.g. confirmed live 2026-09-15: the
+correct tab showed Miami/Wake Forest both at 2-0, matching that week's real
+CFBD game counts; three other tabs showed stale 1-0/0-0 snapshots).
 
 No team roster files (`config/rosters/{team}.yaml`) are committed — I
 don't have real depth-chart knowledge of any team's actual current
@@ -115,7 +129,7 @@ players in the repo.
 
 ```
 pip install -r requirements.txt pytest
-python3 -m pytest tests/ -v   # 32 tests, all passing
+python3 -m pytest tests/ -v   # 34 tests, all passing
 ```
 
 ## Weekly usage
@@ -125,7 +139,8 @@ python3 -m pytest tests/ -v   # 32 tests, all passing
 #    real starters from actual depth-chart reporting:
 cp config/rosters/_template.yaml "config/rosters/Miami.yaml"
 
-# 2. Set this week's matchup in config/teams.yaml (label/team_a/team_b/side).
+# 2. Set this week's matchup in config/teams.yaml (label/team_a/team_b/side),
+#    and set sp_plus_gap from the SP+ sheet (see above).
 
 # 3. Render:
 python3 src/render_widget.py 2026-wk03-miami-wake

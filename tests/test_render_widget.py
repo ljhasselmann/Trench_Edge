@@ -26,13 +26,13 @@ def _sample_context(**overrides):
             "team_a_starters": [StarterWeight(name="Jacob Hawks", weight_lbs=330, confidence="confirmed", source="cfbd_roster")],
             "team_b_starters": [],
         },
-        push={"available": False, "raw": {}},
+        push={"available": False, "score": None, "sp_plus_gap": None, "raw": {}},
         continuity={
             "team_a_returning": 3, "team_b_returning": 2, "net_returning": 1, "score": 1.0,
             "team_a_driver": None, "team_a_note": None, "team_b_driver": None, "team_b_note": None,
         },
         composite=None,
-        warnings=["Composite not computed -- Push has no validated real-data formula yet"],
+        warnings=["Composite not computed -- missing: Push"],
     )
     defaults.update(overrides)
     return WidgetContext(**defaults)
@@ -46,7 +46,14 @@ def test_render_is_pure_and_produces_html():
     assert "Jacob Hawks" in html
     assert "data unavailable" in html  # Push bar
     assert "Not computed this run" in html  # composite section
-    assert "Push has no validated real-data formula yet" in html  # caveat
+    assert "Composite not computed -- missing: Push" in html  # caveat
+
+
+def test_render_shows_push_score_when_available():
+    ctx = _sample_context(push={"available": True, "score": 4.4, "sp_plus_gap": 22.2, "raw": {}})
+    html = render(ctx)
+    assert "data unavailable" not in html
+    assert "+4.4" in html
 
 
 def test_render_shows_composite_when_present():
@@ -81,7 +88,7 @@ class _FakeContinuity:
         self.warnings = warnings or []
 
 
-def test_build_context_flags_missing_composite_when_mass_and_continuity_present(monkeypatch):
+def test_build_context_flags_missing_composite_without_sp_plus_gap(monkeypatch):
     monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year: _FakeMass(avg_ol=320, avg_dl=290))
     monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year: _FakeContinuity(ol=3, dl=2))
     monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year: TeamAdvancedStats(
@@ -92,8 +99,29 @@ def test_build_context_flags_missing_composite_when_mass_and_continuity_present(
 
     assert ctx.mass["score"] == 3.0  # (320-290)/10
     assert ctx.continuity["score"] == 1.0  # 3-2
+    assert ctx.push["score"] is None
     assert ctx.composite is None
-    assert any("Push has no validated real-data formula" in w for w in ctx.warnings)
+    assert any("sp_plus_gap not set" in w for w in ctx.warnings)
+    assert any("Composite not computed -- missing: Push" in w for w in ctx.warnings)
+
+
+def test_build_context_computes_full_composite_with_sp_plus_gap(monkeypatch):
+    monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year: _FakeMass(avg_ol=320, avg_dl=290))
+    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year: _FakeContinuity(ol=3, dl=2))
+    monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year: TeamAdvancedStats(
+        team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}
+    ))
+
+    ctx = render_widget.build_context({
+        "label": "test", "team_a": "Miami", "team_b": "Wake Forest",
+        "side": "team_a_ol_vs_team_b_dl", "sp_plus_gap": 22.2,
+    }, 2026)
+
+    assert round(ctx.push["score"], 4) == 4.44  # 22.2 / 5
+    assert ctx.composite is not None
+    # weights.yaml: mass .4, push .4, continuity .2 -> .4*3.0 + .4*4.44 + .2*1.0 = 3.176
+    assert round(ctx.composite["value"], 3) == 3.176
+    assert not any("Composite not computed" in w for w in ctx.warnings)
 
 
 def test_build_context_handles_tier1_fetch_failure_without_crashing(monkeypatch):

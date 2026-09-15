@@ -123,8 +123,30 @@ scale before weighting:
 | Component | Normalization | Notes |
 |---|---|---|
 | Mass | 1 point per 10 lbs of average weight differential, capped at ±10 | Simplest, most reliable input — pure roster data, no adjustment needed |
-| Push | 1 point per 5 SP+ points of off-vs-def gap (placeholder), to be replaced with real Stuff Rate / Line Yards differential once Tier 1 wiring is live | Confidence should scale with games played this season |
+| Push | 1 point per 5 points of **overall** SP+ differential (`team_a.SP+ - team_b.SP+`), capped at ±10 | See below — resolved decision, not the original placeholder |
 | Continuity | 1 point per net returning-starter differential | Discount further if either side's improvement looks scheme-driven per the qualitative flag above |
+
+**Push, resolved:** an earlier draft of this formula tried an "off-vs-def"
+combination — `team_a`'s Off. SP+ plus `team_b`'s Def. SP+ (their Def. SP+
+is already negative-signed when good, so this adds correctly) — to keep it
+trench-specific. Rejected: those combined values run ~40-70 for almost any
+real matchup, so `/5` saturates the ±10 cap on nearly every game and the
+component stops discriminating. **Overall SP+ diff instead** — plain
+`team_a.SP+ - team_b.SP+` — stays inside the scale the `/5` divisor was
+actually calibrated against (the typical range analysts already discuss as
+an SP+-implied point spread), at the cost of not being trench-specific (it's
+whole-team, same tradeoff CFBD's Tier 1 stats were brought in to fix for
+Mass — Push just isn't there yet). Replacing this with a real Stuff
+Rate/Line Yards-based formula remains open (needs a league-average baseline
+to regress each team's effect against; CFBD doesn't provide one, and
+guessing at a formula without it would misrepresent precision the data
+doesn't support — see Section 2).
+
+**SP+ source:** Bill Connelly's own weekly-refreshed SP+ spreadsheet
+(Google Sheet, not a REST API — see Section 7's routine notes). The sheet
+keeps multiple undated snapshot tabs; identify the current one by matching
+each team's win-loss record in the table against the actual current week,
+not by tab position or gid.
 
 Default weights (`config/weights.yaml`), tunable, starting point:
 
@@ -155,22 +177,53 @@ not get silently absorbed into a clean-looking number.
 
 ## 7. Automation — Claude Code Routine
 
-- **Trigger:** scheduled, weekly, targeting Tuesday morning (after the
-  weekend's games post, ahead of the next slate's roster news settling).
-- **Repository:** this repo, checked out fresh each run (cloud routines run
-  against a fresh clone — no persistent local state between runs, so
-  `history/` must be committed each run, not assumed to persist otherwise).
-- **Network access:** default routine environment only allowlists package
-  registries and common dev domains. `api.collegefootballdata.com` must be
-  explicitly added to the environment's network configuration before the
-  routine will be able to reach it — this is the one non-obvious setup step.
-- **Secrets:** `CFBD_API_KEY` stored in the routine's secret config, never in
-  the prompt or committed to the repo.
-- **Routine prompt (draft):** "Run the Trench Edge pipeline for this week's
-  configured matchup(s) in `config/teams.yaml`. Fetch Tier 1 and Tier 2 data,
-  compute the composite, render the widget to `output/latest.html`, commit a
-  snapshot to `history/`, and flag in the commit message any input that fell
-  back to a cached or estimated value."
+Real mechanism, not the "research preview" placeholder this section
+originally assumed: a **Routine** (`create_trigger`), a cron-scheduled
+trigger that can either resume a persistent session or spawn a fresh one
+per firing.
+
+- **Trigger:** weekly, **Thursday** (not Tuesday as originally drafted —
+  depth charts publish later than assumed), 8am US Eastern. Self-bound to
+  a persistent session rather than a fresh one per firing, specifically
+  *because* the run needs a human confirmation step (see below) — a fresh
+  session can't pause mid-run for a reply.
+- **Confirm-then-run, one Routine, not two.** Earlier drafts of this
+  section considered a separate Sunday reminder plus a fresh-session
+  Tuesday run. Rejected: Mass and Continuity both depend on a human-updated
+  starter list (`config/rosters/{team}.yaml`, Section 4b/4c), which can't
+  be confirmed by an unattended fresh session anyway, so splitting the
+  steps added a second moving part for no gain. One Routine: check
+  matchup/roster-config staleness, confirm updates with the human, then run
+  the full pipeline in the same session.
+- **Repository:** this repo, on the environment's already-checked-out
+  working copy — not a fresh clone per firing, since the Routine is
+  session-bound rather than fresh-session. `history/` and `output/` still
+  get committed every run regardless, so the record doesn't depend on
+  session persistence either way.
+- **Network access:** confirmed resolved for this project's environment —
+  `api.collegefootballdata.com` is allowlisted and `CFBD_API_KEY` is set.
+  A Routine fired with no explicit `environment_id` inherits the calling
+  session's environment, so it reuses this config automatically; no
+  separate setup needed unless a new environment is created later.
+- **Secrets:** `CFBD_API_KEY` lives in the environment, never in the
+  Routine's prompt or committed to the repo.
+- **Push (SP+) needs the Google Drive connector, not a REST call.** Unlike
+  CFBD, the SP+ source (Section 5) is a Google Sheet, reachable only
+  through Claude's own Drive connector — a plain script (`fetch_*.py`)
+  can't call it directly the way `fetch_cfbd.py` calls CFBD. The Routine
+  must be created with `connectors: ["Google Drive"]`, and its prompt must
+  include the read-and-extract step explicitly (identify the current tab
+  by matching this week's actual win-loss records against the sheet, per
+  Section 5 — the sheet doesn't label which tab is current).
+- **Routine prompt (draft, updated):** "Check `config/rosters/*.yaml` for
+  matchups in `config/teams.yaml` — flag any starter list older than 7
+  days or any team missing a roster file entirely, and confirm updates
+  with the user before proceeding. Once confirmed: fetch Tier 1
+  (`fetch_cfbd.py`) and Tier 2 (`fetch_talent.py`) data, read this week's
+  SP+ gap from the Google Sheet (fileId in README.md) for Push, run
+  `render_widget.py` to produce `output/latest.html`, commit a snapshot to
+  `history/`, and flag in the commit message any input that fell back to a
+  cached or estimated value."
 
 ## 8. Open questions / future work
 
@@ -182,12 +235,18 @@ not get silently absorbed into a clean-looking number.
   ATS results, rushing success rate in the actual game, sacks allowed. If it
   doesn't beat a naive baseline, that's a real finding, not a failure —
   report it honestly rather than tuning weights until it looks predictive.
-- **CFBD roster weights.** If the API turns out to carry listed weights
-  directly, Section 4b's manual-research stage disappears entirely. Worth
-  checking early — it's the most labor-intensive part of the pipeline today.
+- **CFBD roster weights — resolved.** `/roster` does carry listed weight
+  directly, confirmed live (~93-100% coverage across three teams checked).
+  Section 4b's manual-research stage for raw weights is gone; a human still
+  has to say *who's starting* (CFBD has no depth-chart data anywhere in its
+  API), but that's a much smaller weekly task than sourcing every weight.
 - **PFF grades.** Tier 3, paywalled, inconsistent public availability. Not
   wired into v1. Revisit if a subscription or a reliably-quoted public proxy
   turns up.
-- **Alerting.** Cowork-style "notify me when done" isn't native to routines
-  yet per current docs — for now, check `output/latest.html` or the routine's
-  run history manually rather than expecting a push notification.
+- **Alerting — resolved, this assumption was wrong.** Routines fired as a
+  fresh session per firing *do* support push and email completion
+  notifications directly (`notifications: {push, email}` on
+  `create_trigger`). Not relevant to this project's Routine as designed
+  (self-bound to a persistent session for the confirm step, which doesn't
+  take that parameter), but the underlying capability exists now, contrary
+  to what this section originally assumed.

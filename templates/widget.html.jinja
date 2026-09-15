@@ -166,7 +166,7 @@
     <span><span class="te-legend-swatch" style="background: var(--te-red);"></span>Favors {{ ctx.team_b }}</span>
   </div>
   {{ diverging_bar("Mass", ctx.mass.score) }}
-  {{ diverging_bar("Push", none) }}
+  {{ diverging_bar("Push", ctx.push.score) }}
   {{ diverging_bar("Continuity", ctx.continuity.score) }}
 </section>
 
@@ -176,7 +176,7 @@
     {{ diverging_bar("Trench Edge", ctx.composite.value) }}
     <p class="te-composite-verdict">{{ ctx.composite.verdict }}</p>
   {% else %}
-    <p class="te-muted">Not computed this run &mdash; Push has no validated real-data input yet. See caveats below.</p>
+    <p class="te-muted">Not computed this run &mdash; see caveats below.</p>
   {% endif %}
 </section>
 
