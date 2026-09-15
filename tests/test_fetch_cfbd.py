@@ -102,3 +102,42 @@ def test_fetch_advanced_stats_raises_without_key(monkeypatch):
     session = _FakeSession(_FakeResponse(200, [{}]))
     with pytest.raises(fetch_cfbd.CFBDAuthError):
         fetch_cfbd.fetch_advanced_stats("Miami", 2025, session=session)
+
+
+def test_fetch_season_stat_map_flattens_rows(monkeypatch):
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    rows = [
+        {"season": 2025, "team": "Miami", "statName": "sacks", "statValue": 50},
+        {"season": 2025, "team": "Miami", "statName": "passAttempts", "statValue": 496},
+    ]
+    session = _FakeSession(_FakeResponse(200, rows))
+    stat_map = fetch_cfbd.fetch_season_stat_map("Miami", 2025, session=session)
+    assert stat_map == {"sacks": 50, "passAttempts": 496}
+
+
+def test_apply_sack_rates_matches_worked_example():
+    # Real values pulled live for Miami, 2025 season (see fetch_cfbd.py
+    # module docstring for the offense/defense naming convention).
+    stat_map = {
+        "passAttempts": 496,
+        "sacksOpponent": 20,
+        "passAttemptsOpponent": 521,
+        "sacks": 50,
+    }
+    offense, defense = fetch_cfbd.SideStats(), fetch_cfbd.SideStats()
+    fetch_cfbd._apply_sack_rates(offense, defense, stat_map)
+
+    assert round(offense.adjusted_sack_rate, 4) == round(20 / (496 + 20), 4)
+    assert round(defense.adjusted_sack_rate, 4) == round(50 / (521 + 50), 4)
+    assert offense.warnings == []
+    assert defense.warnings == []
+
+
+def test_apply_sack_rates_flags_missing_inputs():
+    offense, defense = fetch_cfbd.SideStats(), fetch_cfbd.SideStats()
+    fetch_cfbd._apply_sack_rates(offense, defense, {})
+
+    assert offense.adjusted_sack_rate is None
+    assert defense.adjusted_sack_rate is None
+    assert "adjusted sack rate unavailable" in offense.warnings[0]
+    assert "adjusted sack rate unavailable" in defense.warnings[0]

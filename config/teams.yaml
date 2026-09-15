@@ -1,7 +1,11 @@
 # This week's configured matchup(s). "team_a" is the reference side
 # (positive composite favors team_a); side is which trench matchup this row
 # scores: team_a's OFFENSIVE line vs team_b's DEFENSIVE line.
-year: 2025
+#
+# year: current in-progress season, not last season's final numbers.
+# Confirmed live 2026-09-15: 2025 is a completed 16-game season, 2026 is
+# in progress (2 games played) -- this is the actual current slate.
+year: 2026
 matchups:
   - label: 2025-wk04-miami-wake
     team_a: Miami
