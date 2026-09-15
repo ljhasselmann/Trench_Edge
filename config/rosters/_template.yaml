@@ -1,0 +1,29 @@
+# Copy this file to config/rosters/{Team Name}.yaml (match the exact team
+# name CFBD uses, e.g. "Miami", "Wake Forest") and fill in this week's
+# starting offensive and defensive line, by name, from real depth-chart
+# reporting. `name` must match the player's name in CFBD's /roster response
+# closely enough for fetch_roster.py's case-insensitive lookup to find them
+# (it flags a mismatch loudly rather than silently dropping the player, so
+# a near-miss is safe to leave and fix next run).
+#
+# `weight` here is optional and only used as a fallback estimate if CFBD's
+# live roster can't find the player (transfer, walk-on not yet listed,
+# name spelled differently). When present, source/confidence must be set
+# and the composite output will visibly flag it as estimated, per
+# DESIGN.md Section 6 -- never let an estimate pass as a confirmed number.
+#
+# updated_by_human_at: ISO 8601 date. fetch_roster.py flags this list as
+# stale after 7 days (DESIGN.md Section 4b point 3) -- depth charts change
+# from injuries, suspensions, and true freshmen beating out incumbents
+# mid-season.
+
+team: TEMPLATE
+updated_by_human_at: "2026-01-01"
+starters:
+  OL:
+    - name: "First Last"
+      # weight: 315          # only needed if CFBD's live roster won't have them
+      # source: "beat-reporter depth chart, <outlet>, <date>"
+      # confidence: "estimated"
+  DL:
+    - name: "First Last"
