@@ -16,6 +16,20 @@
 # stale after 7 days (DESIGN.md Section 4b point 3) -- depth charts change
 # from injuries, suspensions, and true freshmen beating out incumbents
 # mid-season.
+#
+# prior_season_starters: set ONCE PER SEASON (not weekly) -- last season's
+# starting OL/DL by name, same format as `starters` below. fetch_talent.py
+# computes "returning starters" (DESIGN.md Section 4c/5) as the name-overlap
+# between this and `starters`. CFBD has no API for this at all (checked:
+# /player/returning only scores individually-charted plays -- passing,
+# rushing, receiving -- nothing for line play or defense), so this is the
+# only source for it.
+#
+# continuity_note: also set once per season. DESIGN.md Section 4c's
+# qualitative flag -- is this unit's level talent-driven or coaching/
+# scheme-driven, per beat reporting. driver is "talent" | "scheme" | "mixed".
+# There's no specified numeric discount for this in DESIGN.md -- it's
+# surfaced as a caveat on the rendered output, not auto-applied to the score.
 
 team: TEMPLATE
 updated_by_human_at: "2026-01-01"
@@ -27,3 +41,11 @@ starters:
       # confidence: "estimated"
   DL:
     - name: "First Last"
+prior_season_starters:
+  OL:
+    - name: "First Last"
+  DL:
+    - name: "First Last"
+continuity_note:
+  driver: "scheme"  # "talent" | "scheme" | "mixed"
+  note: "One sentence citing the beat reporting this is based on."
