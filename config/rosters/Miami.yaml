@@ -1,0 +1,30 @@
+# Researched by the Trench Edge weekly Routine, 2026-09-15 (manual test fire).
+# Source: SI.com/Yahoo Sports 2026 OL position preview + 247sports "No. 7
+# Miami unveils new offensive line in opener against Stanford" (post-Week-1
+# piece). Both predate this run by more than 7 days (opener was ~2026-08-29,
+# ~17 days old) -- flagged per the routine's freshness instruction, not
+# silently treated as current. WebFetch to live depth-chart trackers
+# (cfbdepth.com, ourlads.com, on3.com) was blocked by this environment's
+# network egress allowlist, so this is the best available source; a live
+# tracker would be preferable once one of those domains is allowlisted.
+#
+# All 5 names cross-checked against CFBD's live /roster (2026-09-15): all
+# present, tagged OL, weights match what fetch_roster.py will pull
+# automatically (not hand-supplied here -- see fetch_roster.py's
+# architecture note on why not).
+#
+# NOT included: Jackson Cantwell (true freshman OL, on the live roster,
+# 330 lbs) -- the search source called him only a "projected" starter, and
+# DESIGN.md's own worked example already flags a Cantwell/McCoy depth-chart
+# question as a live one. Worth a real depth-chart check next run rather
+# than guessing either way here.
+team: Miami
+updated_by_human_at: "2026-09-15"
+starters:
+  OL:
+    - name: "Samson Okunlola"
+    - name: "Seuseu Alofaituli"
+    - name: "Ryan Rodriguez"
+    - name: "Max Buchanan"
+    - name: "Matthew McCoy"
+  DL: []

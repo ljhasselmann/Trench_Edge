@@ -85,33 +85,87 @@
 
 <header>
   <h2>Miami OL vs Wake Forest DL</h2>
-  <p class="te-subtitle">2026-wk03-miami-wake &middot; 2026 season &middot; generated 2026-09-15 22:41 UTC</p>
+  <p class="te-subtitle">2026-wk03-miami-wake &middot; 2026 season &middot; generated 2026-09-15 22:47 UTC</p>
 </header>
 
 <section class="te-stat-tiles">
   <div class="te-stat-tile">
     <div class="te-label">Miami OL avg weight</div>
-    <div class="te-value"><span class="te-muted">&mdash;</span></div>
+    <div class="te-value">311 lbs</div>
   </div>
   <div class="te-stat-tile">
     <div class="te-label">Wake Forest DL avg weight</div>
-    <div class="te-value"><span class="te-muted">&mdash;</span></div>
+    <div class="te-value">290 lbs</div>
   </div>
   <div class="te-stat-tile">
     <div class="te-label">Weight differential</div>
-    <div class="te-value"><span class="te-muted">&mdash;</span></div>
+    <div class="te-value">+21 lbs</div>
   </div>
 </section>
 
 <section class="te-starters">
   <h3>Miami starting OL</h3>
   
-  <p class="te-muted">No starters on record &mdash; see caveats.</p>
+  <table>
+    <tr><th>Player</th><th>Weight</th><th>Confidence</th></tr>
+    
+    <tr>
+      <td>Samson Okunlola</td>
+      <td>330 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Seuseu Alofaituli</td>
+      <td>290 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Ryan Rodriguez</td>
+      <td>300 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Max Buchanan</td>
+      <td>310 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Matthew McCoy</td>
+      <td>325 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+  </table>
   
 
   <h3>Wake Forest starting DL</h3>
   
-  <p class="te-muted">No starters on record &mdash; see caveats.</p>
+  <table>
+    <tr><th>Player</th><th>Weight</th><th>Confidence</th></tr>
+    
+    <tr>
+      <td>Langston Hardy</td>
+      <td>250 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Tyler Walton</td>
+      <td>265 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Sydir Mitchell</td>
+      <td>355 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+  </table>
   
 </section>
 
@@ -125,10 +179,17 @@
 <div class="te-bar-row">
   <div class="te-bar-label">Mass</div>
   
-    <div class="te-bar-track te-bar-unavailable">
-      <span class="te-unavailable-text">data unavailable</span>
+    
+    <div class="te-bar-track">
+      <div class="te-bar-half te-bar-half-left">
+        
+      </div>
+      <div class="te-bar-center"></div>
+      <div class="te-bar-half te-bar-half-right">
+        <div class="te-bar-fill te-bar-fill-blue" style="width: 21.0%;"></div>
+      </div>
     </div>
-    <div class="te-bar-value te-muted">&mdash;</div>
+    <div class="te-bar-value">+2.1</div>
   
 </div>
 
@@ -174,12 +235,12 @@
 <section class="te-caveats">
   <h3>Caveats</h3>
   <ul>
-    <li>[Miami Mass] config/rosters/Miami.yaml does not exist -- no human-confirmed starter list, Mass cannot be computed for this team. Copy _template.yaml and fill it in.</li><li>[Wake Forest Mass] config/rosters/Wake Forest.yaml does not exist -- no human-confirmed starter list, Mass cannot be computed for this team. Copy _template.yaml and fill it in.</li><li>[Miami Continuity] config/rosters/Miami.yaml does not exist -- returning-starter count unavailable</li><li>[Wake Forest Continuity] config/rosters/Wake Forest.yaml does not exist -- returning-starter count unavailable</li><li>Composite not computed -- missing: Mass, Continuity</li>
+    <li>[Miami Continuity] config/rosters/Miami.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it</li><li>[Miami Continuity] config/rosters/Miami.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season</li><li>[Wake Forest Continuity] config/rosters/Wake Forest.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it</li><li>[Wake Forest Continuity] config/rosters/Wake Forest.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season</li><li>Composite not computed -- missing: Continuity</li>
   </ul>
 </section>
 
 
 <footer>
-  Source: collegefootballdata.com (Tier 1 stats, roster, talent) + human-maintained depth-chart config &middot; generated 2026-09-15 22:41 UTC
+  Source: collegefootballdata.com (Tier 1 stats, roster, talent) + human-maintained depth-chart config &middot; generated 2026-09-15 22:47 UTC
 </footer>
 </div>
