@@ -1,10 +1,11 @@
 import json
 import sys
+from contextlib import contextmanager
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-import fetch_ourlads
+import fetch_puntandrally
 import render_widget
 import run_week
 
@@ -18,14 +19,32 @@ SAMPLE_GAMES = [
 SAMPLE_TOP25 = {"Miami", "Texas", "Ohio State", "BadTeamA"}
 
 
-def _fake_chart(team: str) -> dict:
-    return {"LT": [f"{team} LT1"], "RT": [f"{team} RT1"], "DT": [f"{team} DT1"], "NT": [f"{team} NT1"]}
+def _p(name, tag, snaps):
+    return fetch_puntandrally.PlayerSnaps(name=name, position_tag=tag, snaps=snaps, snap_share_pct=None)
 
 
-def _fake_fetch_depth_chart(team, index=None, session=None):
+def _fake_roster_sections(team: str):
+    ol_section = fetch_puntandrally.RosterSection(players=[
+        _p(f"{team} T1", "T", 90), _p(f"{team} T2", "T", 80),
+        _p(f"{team} G1", "G", 70), _p(f"{team} G2", "G", 60),
+        _p(f"{team} C1", "C", 90),
+    ])
+    dl_section = fetch_puntandrally.RosterSection(players=[
+        _p(f"{team} DT1", "DT", 90), _p(f"{team} DT2", "DT", 80),
+        _p(f"{team} DE1", "DE", 70), _p(f"{team} DE2", "DE", 60),
+    ])
+    return ol_section, dl_section
+
+
+def _fake_fetch_roster(team, browser_fetch=None):
     if team == "Ohio State":
-        raise fetch_ourlads.OurladsFetchError(f"mock failure for {team}")
-    return _fake_chart(team)
+        raise fetch_puntandrally.PuntAndRallyFetchError(f"mock failure for {team}")
+    return _fake_roster_sections(team)
+
+
+@contextmanager
+def _fake_browser_session():
+    yield None  # _fake_fetch_roster ignores browser_fetch entirely
 
 
 def _fake_ctx(label: str, side: str) -> render_widget.WidgetContext:
@@ -66,11 +85,10 @@ def _patch_dirs(monkeypatch, tmp_path):
 
 
 def _patch_network(monkeypatch):
-    monkeypatch.setattr(run_week.time, "sleep", lambda seconds: None)  # skip the real courtesy delay in tests
     monkeypatch.setattr(run_week.fetch_matchups, "fetch_fbs_schedule", lambda year, week, **kw: SAMPLE_GAMES)
     monkeypatch.setattr(run_week.fetch_matchups, "fetch_ap_top25", lambda year, week, **kw: SAMPLE_TOP25)
-    monkeypatch.setattr(run_week.fetch_ourlads, "fetch_team_index", lambda **kw: {"dummy": ("dummy", "0")})
-    monkeypatch.setattr(run_week.fetch_ourlads, "fetch_depth_chart", _fake_fetch_depth_chart)
+    monkeypatch.setattr(run_week.fetch_puntandrally, "browser_session", _fake_browser_session)
+    monkeypatch.setattr(run_week.fetch_puntandrally, "fetch_roster", _fake_fetch_roster)
     monkeypatch.setattr(run_week.fetch_sp_plus, "fetch_fbs_week_table", lambda week, **kw: {})
     monkeypatch.setattr(run_week.fetch_talent, "fetch_talent_table", lambda year, **kw: {})
     monkeypatch.setattr(run_week.render_widget, "build_both_directions", _fake_build_both_directions)
@@ -125,7 +143,7 @@ def test_run_week_output_and_history_land_in_week_namespaced_paths(monkeypatch, 
     assert "2026-wk01-texas-ohio-state.html" in index_html
 
 
-def test_run_week_reports_ourlads_failures_without_aborting(monkeypatch, tmp_path):
+def test_run_week_reports_puntandrally_failures_without_aborting(monkeypatch, tmp_path):
     _patch_dirs(monkeypatch, tmp_path)
     _patch_network(monkeypatch)
 
@@ -152,10 +170,10 @@ def test_run_week_roster_diff_compares_against_teams_own_prior_config(monkeypatc
     result = run_week.run_week(2026, 1, today="2026-09-16")
 
     miami_change = next(r for r in result["roster_changes"] if r["team"] == "Miami")
-    assert any("Old Starter" in c and "Miami LT1" in c for c in miami_change["changes"])
+    assert any("Old Starter" in c and "Miami T1" in c for c in miami_change["changes"])
 
     written = (rosters_dir / "Miami.yaml").read_text()
-    assert "Miami LT1" in written
+    assert "Miami T1" in written
     assert "2026-09-16" in written
 
 

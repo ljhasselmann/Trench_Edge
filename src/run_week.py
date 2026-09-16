@@ -9,13 +9,17 @@ corners" plan:
    week (a human's pinned matchup wins on a label collision -- they set
    fields like sp_plus_gap deliberately).
 2. Populate every matchup team's config/rosters/{team}.yaml `starters`
-   block live from ourlads.com (fetch_ourlads.py), deterministic-first.
-   `prior_season_starters` / `continuity_note` are untouched -- those stay
-   human-curated once per season, per _template.yaml. A team ourlads
-   can't resolve (name miss, parse error) is reported, not guessed at --
-   this plain script has no WebSearch/WebFetch access itself; a human or
-   the wrapping Routine session does that fallback research for exactly
-   the teams this run reports as failed, per DESIGN.md Section 7.
+   block live from puntandrally.com (fetch_puntandrally.py), deterministic-
+   first. puntandrally replaced ourlads.com as of this integration --
+   confirmed live to resolve all 138 CFBD FBS teams with zero aliases
+   needed, and it additionally carries real snap counts ourlads never had
+   (see fetch_puntandrally.py's docstring). `prior_season_starters` /
+   `continuity_note` are untouched -- those stay human-curated once per
+   season, per _template.yaml. A team puntandrally can't resolve (name
+   miss, page-structure change) is reported, not guessed at -- this plain
+   script has no WebSearch/WebFetch access itself; a human or the wrapping
+   Routine session does that fallback research for exactly the teams this
+   run reports as failed, per DESIGN.md Section 7.
 3. Fetch SP+ and talent tables once for the whole run (fetch_sp_plus.py,
    fetch_talent.py already support this), not once per matchup.
 4. Render every matchup in both trench directions (render_widget.py's
@@ -35,7 +39,6 @@ from __future__ import annotations
 import argparse
 import datetime as _dt
 import sys
-import time
 from pathlib import Path
 from typing import Optional
 
@@ -44,7 +47,7 @@ import yaml
 
 import fetch_cfbd
 import fetch_matchups
-import fetch_ourlads
+import fetch_puntandrally
 import fetch_sp_plus
 import fetch_talent
 import render_widget
@@ -57,10 +60,22 @@ ROSTERS_DIR = CONFIG_DIR / "rosters"
 OUTPUT_DIR = REPO_ROOT / "output"
 HISTORY_DIR = REPO_ROOT / "history"
 
-# Only ~2-3 ourlads fetches had been load-tested live before this script;
-# a full week is ~45. A small courtesy delay between calls, not a rate
-# limit ourlads has confirmed -- just a margin against one.
-OURLADS_DELAY_SECONDS = 0.75
+# Live-fetched starters now come from puntandrally.com (fetch_puntandrally.py),
+# not ourlads.com -- puntandrally is a strict superset (starters + real
+# snap counts; ourlads only ever had starters), and its team-name index
+# resolves all 138 CFBD FBS teams with zero aliases needed (confirmed live,
+# scripts/check_team_name_coverage.py). fetch_ourlads.py itself is left in
+# the repo unremoved, per that module's own docstring, but is no longer
+# called from this orchestrator.
+#
+# No artificial courtesy delay between teams here (unlike the old ourlads
+# path's OURLADS_DELAY_SECONDS): each puntandrally fetch is a real browser
+# navigation through Cloudflare's challenge and page hydration, which
+# already takes several seconds on its own -- there's no plain-HTTP burst
+# to throttle. populate_all_rosters reuses ONE browser process for the
+# whole week's teams (fetch_puntandrally.browser_session()) rather than
+# launching Chromium per team, which is the actual cost that mattered.
+DL_STARTER_COUNT = 4
 
 
 def load_hand_curated_matchups(year: int, week: int, path: Optional[Path] = None) -> list[dict]:
@@ -118,21 +133,36 @@ def _diff_starters(old_starters: Optional[dict], new_starters: dict) -> list[str
     return changes
 
 
+def _dl_starters(players: list, count: int = DL_STARTER_COUNT) -> list[str]:
+    """Top `count` DL players by snap count, regardless of tag.
+    puntandrally's DL tags (DE/DT/DL) are too coarse to split by slot the
+    way fetch_puntandrally.OL_STARTER_COUNTS does for OL -- front size
+    genuinely varies by scheme (a 4-3's 4 down linemen vs. a 3-4's 3), and
+    that module's own docstring deliberately declines to guess a fixed
+    split. Taking a flat top-N by usage is this orchestrator's own
+    simplification, not fetch_puntandrally's -- a real per-team front-size
+    read is follow-up work, not something to fake here."""
+    ranked = sorted(players, key=lambda p: p.snaps if p.snaps is not None else -1, reverse=True)
+    return [p.name for p in ranked[:count]]
+
+
 def populate_roster(
-    team: str, index: dict, today: str, session: Optional[requests.Session] = None
+    team: str, today: str, browser_fetch=None
 ) -> dict:
-    """Fetch one team's live depth chart from ourlads and update
-    config/rosters/{team}.yaml's `starters` block in place. Returns
+    """Fetch one team's live roster + snap counts from puntandrally and
+    update config/rosters/{team}.yaml's `starters` block in place. Returns
     {"team", "status": "ok"|"failed", "changes": [...], "error": str|None}.
     On failure, the existing file (if any) is left untouched -- never
-    overwritten with a guess."""
+    overwritten with a guess. `browser_fetch` should be a
+    fetch_puntandrally.browser_session() fetch when populating many teams
+    (see populate_all_rosters), so they share one browser process."""
     try:
-        chart = fetch_ourlads.fetch_depth_chart(team, index=index, session=session)
-    except fetch_ourlads.OurladsFetchError as exc:
+        ol_section, dl_section = fetch_puntandrally.fetch_roster(team, browser_fetch=browser_fetch)
+    except fetch_puntandrally.PuntAndRallyFetchError as exc:
         return {"team": team, "status": "failed", "changes": [], "error": str(exc)}
 
-    ol_names = fetch_ourlads.starters_for_group(chart, fetch_ourlads.OL_ROW_LABELS)
-    dl_names = fetch_ourlads.starters_for_group(chart, fetch_ourlads.DL_ROW_LABELS)
+    ol_names = fetch_puntandrally.starters_for_group(ol_section.players, fetch_puntandrally.OL_STARTER_COUNTS)
+    dl_names = _dl_starters(dl_section.players)
     new_starters = {"OL": [{"name": n} for n in ol_names], "DL": [{"name": n} for n in dl_names]}
 
     existing = _load_roster_yaml(team) or {}
@@ -142,7 +172,7 @@ def populate_roster(
     updated["team"] = team
     updated["starters"] = new_starters
     updated["updated_by_human_at"] = today
-    updated["roster_source"] = "ourlads.com (live fetch via run_week.py)"
+    updated["roster_source"] = "puntandrally.com (live fetch via run_week.py)"
     # prior_season_starters / continuity_note (if present) pass through
     # unchanged -- those stay human-curated once per season.
 
@@ -152,19 +182,14 @@ def populate_roster(
     return {"team": team, "status": "ok", "changes": changes, "error": None}
 
 
-def populate_all_rosters(
-    teams: list[str], today: str, session: Optional[requests.Session] = None
-) -> list[dict]:
-    try:
-        index = fetch_ourlads.fetch_team_index(session=session)
-    except fetch_ourlads.OurladsFetchError as exc:
-        return [{"team": t, "status": "failed", "changes": [], "error": f"ourlads team index fetch failed: {exc}"} for t in teams]
-
+def populate_all_rosters(teams: list[str], today: str) -> list[dict]:
+    """One shared browser process for the whole batch (see
+    fetch_puntandrally.browser_session()) -- not a fresh Chromium launch
+    per team."""
     results = []
-    for i, team in enumerate(teams):
-        results.append(populate_roster(team, index, today, session=session))
-        if i < len(teams) - 1:
-            time.sleep(OURLADS_DELAY_SECONDS)
+    with fetch_puntandrally.browser_session() as fetch:
+        for team in teams:
+            results.append(populate_roster(team, today, browser_fetch=fetch))
     return results
 
 
@@ -197,7 +222,7 @@ def render_all_games(
     reported -- never aborts rendering the rest of the week.
 
     active_labels: when given, only matchups whose label is in this set
-    are actually re-rendered (fresh CFBD/ourlads-derived data); every
+    are actually re-rendered (fresh CFBD/puntandrally-derived data); every
     other matchup reuses its existing history/{label}.json snapshot for
     the index instead of being re-fetched -- see _reuse_from_history().
     A matchup with no prior snapshot is always rendered fresh regardless
@@ -283,7 +308,7 @@ def run_week(
 
     roster_results: list[dict] = []
     if not skip_roster:
-        roster_results = populate_all_rosters(roster_teams, today, session=session)
+        roster_results = populate_all_rosters(roster_teams, today)
 
     try:
         sp_plus_table = fetch_sp_plus.fetch_fbs_week_table(week, session=session)
@@ -324,7 +349,7 @@ def print_summary(summary: dict) -> None:
         for f in summary["failures"]:
             print(f"    - {f['label']}: {f['error']}")
     if summary["roster_failures"]:
-        print(f"  {len(summary['roster_failures'])} team(s) need manual roster research (ourlads lookup failed):")
+        print(f"  {len(summary['roster_failures'])} team(s) need manual roster research (puntandrally lookup failed):")
         for r in summary["roster_failures"]:
             print(f"    - {r['team']}: {r['error']}")
     if summary["roster_changes"]:
@@ -338,7 +363,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run a full Trench Edge week: discover matchups, populate rosters, render.")
     parser.add_argument("--year", type=int, default=None, help="Defaults to the current UTC calendar year")
     parser.add_argument("--week", type=int, default=None, help="Defaults to CFBD's current week for --year, via GET /calendar")
-    parser.add_argument("--skip-roster", action="store_true", help="Skip live ourlads roster population (use existing config/rosters/*.yaml as-is)")
+    parser.add_argument("--skip-roster", action="store_true", help="Skip live puntandrally roster population (use existing config/rosters/*.yaml as-is)")
     parser.add_argument("--teams", default=None, help="Comma-separated team names -- only populate rosters for and re-render matchups touching these teams; every other matchup reuses its existing history snapshot for the index. For a fix-up pass after manual roster research, not a first run.")
     parser.add_argument("--matchups", default=None, help="Comma-separated matchup labels -- same restriction as --teams, by label instead of team name.")
     args = parser.parse_args()

@@ -2,14 +2,14 @@ team: Miami
 updated_by_human_at: '2026-09-16'
 starters:
   OL:
-  - name: Samson Okunlola
-  - name: Seuseu Alofaituli
-  - name: Ryan Rodriguez
-  - name: Max Buchanan
   - name: Matthew McCoy
+  - name: Samson Okunlola
+  - name: Max Buchanan
+  - name: Jackson Cantwell
+  - name: Ryan Rodriguez
   DL:
-  - name: Damon Wilson II
-  - name: Justin Scott
-  - name: Ahmad Moten Sr.
   - name: Marquise Lightfoot
-roster_source: ourlads.com (live fetch via run_week.py)
+  - name: Ahmad Moten Sr.
+  - name: Justin Scott
+  - name: Damon Wilson II
+roster_source: puntandrally.com (live fetch via run_week.py)

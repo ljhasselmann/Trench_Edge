@@ -3,13 +3,13 @@ updated_by_human_at: '2026-09-16'
 starters:
   OL:
   - name: Tolu Olajide
-  - name: Ryan Berger
-  - name: John Ohnegian
-  - name: Jack Hines
   - name: Aidan Martin
+  - name: Ryan Berger
+  - name: Jack Hines
+  - name: Will Way
   DL:
-  - name: Gabe Kirschke
-  - name: Zach Lohavichan
-  - name: Dallas Afalava
   - name: Langston Hardy
-roster_source: ourlads.com (live fetch via run_week.py)
+  - name: Gabe Kirschke
+  - name: Dallas Afalava
+  - name: Zach Lohavichan
+roster_source: puntandrally.com (live fetch via run_week.py)

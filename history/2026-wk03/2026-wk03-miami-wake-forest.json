@@ -3,35 +3,29 @@
   "team_a": "Miami",
   "team_b": "Wake Forest",
   "year": 2026,
-  "generated_at": "2026-09-16 03:57 UTC",
+  "generated_at": "2026-09-16 14:04 UTC",
   "direction_a": {
     "matchup_label": "2026-wk03-miami-wake-forest-a",
     "team_a": "Miami",
     "team_b": "Wake Forest",
     "side": "team_a_ol_vs_team_b_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 03:57 UTC",
+    "generated_at": "2026-09-16 14:04 UTC",
     "mass": {
-      "team_a_avg_weight": 311.0,
+      "team_a_avg_weight": 319.0,
       "team_b_avg_weight": 268.75,
-      "weight_diff_lbs": 42.25,
-      "score": 4.225,
+      "weight_diff_lbs": 50.25,
+      "score": 5.025,
       "team_a_starters": [
+        {
+          "name": "Matthew McCoy",
+          "weight_lbs": 325,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
         {
           "name": "Samson Okunlola",
           "weight_lbs": 330,
-          "confidence": "confirmed",
-          "source": "cfbd_roster"
-        },
-        {
-          "name": "Seuseu Alofaituli",
-          "weight_lbs": 290,
-          "confidence": "confirmed",
-          "source": "cfbd_roster"
-        },
-        {
-          "name": "Ryan Rodriguez",
-          "weight_lbs": 300,
           "confidence": "confirmed",
           "source": "cfbd_roster"
         },
@@ -42,22 +36,28 @@
           "source": "cfbd_roster"
         },
         {
-          "name": "Matthew McCoy",
-          "weight_lbs": 325,
+          "name": "Jackson Cantwell",
+          "weight_lbs": 330,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Ryan Rodriguez",
+          "weight_lbs": 300,
           "confidence": "confirmed",
           "source": "cfbd_roster"
         }
       ],
       "team_b_starters": [
         {
-          "name": "Gabe Kirschke",
-          "weight_lbs": 249,
+          "name": "Langston Hardy",
+          "weight_lbs": 250,
           "confidence": "confirmed",
           "source": "cfbd_roster"
         },
         {
-          "name": "Zach Lohavichan",
-          "weight_lbs": 285,
+          "name": "Gabe Kirschke",
+          "weight_lbs": 249,
           "confidence": "confirmed",
           "source": "cfbd_roster"
         },
@@ -68,8 +68,8 @@
           "source": "cfbd_roster"
         },
         {
-          "name": "Langston Hardy",
-          "weight_lbs": 250,
+          "name": "Zach Lohavichan",
+          "weight_lbs": 285,
           "confidence": "confirmed",
           "source": "cfbd_roster"
         }
@@ -111,16 +111,22 @@
     "team_b": "Miami",
     "side": "team_b_ol_vs_team_a_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 03:57 UTC",
+    "generated_at": "2026-09-16 14:04 UTC",
     "mass": {
-      "team_a_avg_weight": 299.6,
+      "team_a_avg_weight": 296.8,
       "team_b_avg_weight": 270.75,
-      "weight_diff_lbs": 28.850000000000023,
-      "score": 2.8850000000000025,
+      "weight_diff_lbs": 26.05000000000001,
+      "score": 2.6050000000000013,
       "team_a_starters": [
         {
           "name": "Tolu Olajide",
           "weight_lbs": 300,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Aidan Martin",
+          "weight_lbs": 265,
           "confidence": "confirmed",
           "source": "cfbd_roster"
         },
@@ -131,34 +137,22 @@
           "source": "cfbd_roster"
         },
         {
-          "name": "John Ohnegian",
-          "weight_lbs": 304,
-          "confidence": "confirmed",
-          "source": "cfbd_roster"
-        },
-        {
           "name": "Jack Hines",
           "weight_lbs": 311,
           "confidence": "confirmed",
           "source": "cfbd_roster"
         },
         {
-          "name": "Aidan Martin",
-          "weight_lbs": 265,
+          "name": "Will Way",
+          "weight_lbs": 290,
           "confidence": "confirmed",
           "source": "cfbd_roster"
         }
       ],
       "team_b_starters": [
         {
-          "name": "Damon Wilson II",
-          "weight_lbs": 250,
-          "confidence": "confirmed",
-          "source": "cfbd_roster"
-        },
-        {
-          "name": "Justin Scott",
-          "weight_lbs": 303,
+          "name": "Marquise Lightfoot",
+          "weight_lbs": 230,
           "confidence": "confirmed",
           "source": "cfbd_roster"
         },
@@ -169,8 +163,14 @@
           "source": "cfbd_roster"
         },
         {
-          "name": "Marquise Lightfoot",
-          "weight_lbs": 230,
+          "name": "Justin Scott",
+          "weight_lbs": 303,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Damon Wilson II",
+          "weight_lbs": 250,
           "confidence": "confirmed",
           "source": "cfbd_roster"
         }
