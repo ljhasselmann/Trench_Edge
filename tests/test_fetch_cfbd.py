@@ -141,3 +141,25 @@ def test_apply_sack_rates_flags_missing_inputs():
     assert defense.adjusted_sack_rate is None
     assert "adjusted sack rate unavailable" in offense.warnings[0]
     assert "adjusted sack rate unavailable" in defense.warnings[0]
+
+
+def test_fetch_fbs_teams_returns_school_and_alternate_names(monkeypatch):
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    payload = [
+        {"school": "Miami", "alternateNames": ["Miami (FL)", "MIA", "Miami"]},
+        {"school": "Miami (OH)", "alternateNames": ["M-OH", "Miami OH"]},
+    ]
+    session = _FakeSession(_FakeResponse(200, payload))
+
+    teams = fetch_cfbd.fetch_fbs_teams(2026, session=session)
+
+    assert len(teams) == 2
+    assert teams[0]["school"] == "Miami"
+    assert "Miami (FL)" in teams[0]["alternateNames"]
+
+
+def test_fetch_fbs_teams_raises_on_non_200(monkeypatch):
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    session = _FakeSession(_FakeResponse(500, []))
+    with pytest.raises(fetch_cfbd.CFBDRequestError):
+        fetch_cfbd.fetch_fbs_teams(2026, session=session)

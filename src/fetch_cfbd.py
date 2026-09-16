@@ -223,6 +223,36 @@ def fetch_team_trench_stats(team: str, year: int, session: Optional[requests.Ses
     return stats
 
 
+FBS_TEAMS_ENDPOINT = "/teams/fbs"
+
+
+def fetch_fbs_teams(year: int, session: Optional[requests.Session] = None) -> list[dict]:
+    """GET /teams/fbs -- confirmed live to return, per team, `school` (CFBD's
+    canonical name) and `alternateNames` (e.g. Miami: ["Miami (FL)", "MIA",
+    "Miami"]). This is the authoritative source for reconciling team names
+    across the other external sources this repo uses (the SP+ sheet,
+    ourlads) -- see scripts/check_team_name_coverage.py, which is where
+    this actually gets used; the production render path doesn't do live
+    name resolution (too much risk of silently picking the wrong alternate
+    name on every run for a rare problem)."""
+    api_key = get_api_key()
+    http = session or requests
+    try:
+        response = http.get(
+            f"{CFBD_BASE_URL}{FBS_TEAMS_ENDPOINT}",
+            params={"year": year},
+            headers={"Authorization": f"Bearer {api_key}"},
+            timeout=REQUEST_TIMEOUT_SECONDS,
+        )
+    except requests.RequestException as exc:
+        raise CFBDRequestError(f"request to CFBD failed for /teams/fbs year={year}: {exc}") from exc
+
+    if response.status_code != 200:
+        raise CFBDRequestError(f"CFBD returned HTTP {response.status_code} for /teams/fbs year={year}: {response.text[:500]}")
+
+    return response.json() or []
+
+
 if __name__ == "__main__":
     import argparse
     import json
