@@ -1,3 +1,7 @@
 requests>=2.31
 PyYAML>=6.0
 Jinja2>=3.1
+# playwright: fetch_puntandrally.py only. puntandrally.com sits behind a
+# Cloudflare JS challenge plain `requests` can't solve -- see that
+# module's docstring. Also run `playwright install chromium` once.
+playwright>=1.40
