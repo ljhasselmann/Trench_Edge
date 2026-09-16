@@ -37,6 +37,7 @@ season stats don't expose dropbacks directly.
 
 from __future__ import annotations
 
+import datetime as _dt
 import os
 from dataclasses import dataclass, field
 from typing import Optional
@@ -221,6 +222,62 @@ def fetch_team_trench_stats(team: str, year: int, session: Optional[requests.Ses
     stat_map = fetch_season_stat_map(team, year, session=session)
     _apply_sack_rates(stats.offense, stats.defense, stat_map)
     return stats
+
+
+CALENDAR_ENDPOINT = "/calendar"
+
+
+def fetch_calendar(year: int, session: Optional[requests.Session] = None) -> list[dict]:
+    """GET /calendar -- per-week date ranges for a season (confirmed live:
+    {season, week, seasonType, startDate, endDate, firstGameStart,
+    lastGameStart}), one row per week across every seasonType (regular,
+    postseason, ...). Used by detect_current_week() so a fired Routine can
+    determine "this week" itself instead of needing a human to keep a week
+    number current somewhere."""
+    api_key = get_api_key()
+    http = session or requests
+    try:
+        response = http.get(
+            f"{CFBD_BASE_URL}{CALENDAR_ENDPOINT}",
+            params={"year": year},
+            headers={"Authorization": f"Bearer {api_key}"},
+            timeout=REQUEST_TIMEOUT_SECONDS,
+        )
+    except requests.RequestException as exc:
+        raise CFBDRequestError(f"request to CFBD failed for /calendar year={year}: {exc}") from exc
+
+    if response.status_code != 200:
+        raise CFBDRequestError(f"CFBD returned HTTP {response.status_code} for /calendar year={year}: {response.text[:500]}")
+
+    return response.json() or []
+
+
+def _parse_iso(raw: str) -> _dt.datetime:
+    return _dt.datetime.fromisoformat(raw.replace("Z", "+00:00"))
+
+
+def detect_current_week(year: int, session: Optional[requests.Session] = None, now: Optional[_dt.datetime] = None) -> int:
+    """The regular-season week whose [startDate, endDate] range contains
+    `now` (UTC). If `now` is before the season starts, returns week 1; if
+    after the season's last regular-season week ends (postseason/off-season),
+    returns that last week -- a fired Routine calling this needs some answer,
+    not a crash, and Top-25-involving-game discovery naturally yields zero
+    matchups for a bye/off week rather than erroring."""
+    calendar = fetch_calendar(year, session=session)
+    regular = [row for row in calendar if row.get("seasonType") == "regular"]
+    if not regular:
+        raise CFBDRequestError(f"/calendar returned no regular-season weeks for year={year}")
+
+    now = now or _dt.datetime.now(_dt.timezone.utc)
+    for row in regular:
+        if _parse_iso(row["startDate"]) <= now <= _parse_iso(row["endDate"]):
+            return row["week"]
+
+    first = min(regular, key=lambda r: r["week"])
+    last = max(regular, key=lambda r: r["week"])
+    if now < _parse_iso(first["startDate"]):
+        return first["week"]
+    return last["week"]
 
 
 FBS_TEAMS_ENDPOINT = "/teams/fbs"

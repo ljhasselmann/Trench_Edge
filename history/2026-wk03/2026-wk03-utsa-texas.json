@@ -3,14 +3,14 @@
   "team_a": "UTSA",
   "team_b": "Texas",
   "year": 2026,
-  "generated_at": "2026-09-16 03:50 UTC",
+  "generated_at": "2026-09-16 03:58 UTC",
   "direction_a": {
     "matchup_label": "2026-wk03-utsa-texas-a",
     "team_a": "UTSA",
     "team_b": "Texas",
     "side": "team_a_ol_vs_team_b_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 03:50 UTC",
+    "generated_at": "2026-09-16 03:58 UTC",
     "mass": {
       "team_a_avg_weight": 311.0,
       "team_b_avg_weight": 342.0,
@@ -99,7 +99,7 @@
     "team_b": "UTSA",
     "side": "team_b_ol_vs_team_a_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 03:50 UTC",
+    "generated_at": "2026-09-16 03:58 UTC",
     "mass": {
       "team_a_avg_weight": 317.8,
       "team_b_avg_weight": 286.6666666666667,

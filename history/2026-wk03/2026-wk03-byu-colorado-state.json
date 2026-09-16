@@ -3,14 +3,14 @@
   "team_a": "BYU",
   "team_b": "Colorado State",
   "year": 2026,
-  "generated_at": "2026-09-16 03:48 UTC",
+  "generated_at": "2026-09-16 03:56 UTC",
   "direction_a": {
     "matchup_label": "2026-wk03-byu-colorado-state-a",
     "team_a": "BYU",
     "team_b": "Colorado State",
     "side": "team_a_ol_vs_team_b_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 03:48 UTC",
+    "generated_at": "2026-09-16 03:56 UTC",
     "mass": {
       "team_a_avg_weight": 309.0,
       "team_b_avg_weight": 287.5,
@@ -99,7 +99,7 @@
     "team_b": "BYU",
     "side": "team_b_ol_vs_team_a_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 03:48 UTC",
+    "generated_at": "2026-09-16 03:56 UTC",
     "mass": {
       "team_a_avg_weight": 304.0,
       "team_b_avg_weight": 280.0,

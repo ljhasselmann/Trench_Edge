@@ -163,3 +163,54 @@ def test_fetch_fbs_teams_raises_on_non_200(monkeypatch):
     session = _FakeSession(_FakeResponse(500, []))
     with pytest.raises(fetch_cfbd.CFBDRequestError):
         fetch_cfbd.fetch_fbs_teams(2026, session=session)
+
+
+SAMPLE_CALENDAR = [
+    {"season": 2026, "week": 1, "seasonType": "regular", "startDate": "2026-08-29T07:00:00.000Z", "endDate": "2026-09-08T06:59:00.000Z"},
+    {"season": 2026, "week": 2, "seasonType": "regular", "startDate": "2026-09-08T07:00:00.000Z", "endDate": "2026-09-14T06:59:00.000Z"},
+    {"season": 2026, "week": 3, "seasonType": "regular", "startDate": "2026-09-14T07:00:00.000Z", "endDate": "2026-09-21T06:59:00.000Z"},
+    {"season": 2026, "week": 1, "seasonType": "postseason", "startDate": "2027-01-01T00:00:00.000Z", "endDate": "2027-01-20T06:59:00.000Z"},
+]
+
+
+def test_detect_current_week_finds_the_week_containing_now(monkeypatch):
+    import datetime as _dt
+
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    session = _FakeSession(_FakeResponse(200, SAMPLE_CALENDAR))
+    now = _dt.datetime(2026, 9, 16, tzinfo=_dt.timezone.utc)
+
+    week = fetch_cfbd.detect_current_week(2026, session=session, now=now)
+
+    assert week == 3
+
+
+def test_detect_current_week_before_season_returns_week_one(monkeypatch):
+    import datetime as _dt
+
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    session = _FakeSession(_FakeResponse(200, SAMPLE_CALENDAR))
+    now = _dt.datetime(2026, 8, 1, tzinfo=_dt.timezone.utc)
+
+    week = fetch_cfbd.detect_current_week(2026, session=session, now=now)
+
+    assert week == 1
+
+
+def test_detect_current_week_after_regular_season_returns_last_week(monkeypatch):
+    import datetime as _dt
+
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    session = _FakeSession(_FakeResponse(200, SAMPLE_CALENDAR))
+    now = _dt.datetime(2026, 12, 1, tzinfo=_dt.timezone.utc)
+
+    week = fetch_cfbd.detect_current_week(2026, session=session, now=now)
+
+    assert week == 3  # last regular-season week in the fixture, postseason row ignored
+
+
+def test_detect_current_week_raises_when_no_regular_season_rows(monkeypatch):
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    session = _FakeSession(_FakeResponse(200, [SAMPLE_CALENDAR[-1]]))  # only the postseason row
+    with pytest.raises(fetch_cfbd.CFBDRequestError):
+        fetch_cfbd.detect_current_week(2026, session=session)

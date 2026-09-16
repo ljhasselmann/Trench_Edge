@@ -3,14 +3,14 @@
   "team_a": "Utah State",
   "team_b": "Utah",
   "year": 2026,
-  "generated_at": "2026-09-16 03:49 UTC",
+  "generated_at": "2026-09-16 03:58 UTC",
   "direction_a": {
     "matchup_label": "2026-wk03-utah-state-utah-a",
     "team_a": "Utah State",
     "team_b": "Utah",
     "side": "team_a_ol_vs_team_b_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 03:49 UTC",
+    "generated_at": "2026-09-16 03:58 UTC",
     "mass": {
       "team_a_avg_weight": null,
       "team_b_avg_weight": 270.0,
@@ -89,7 +89,7 @@
     "team_b": "Utah State",
     "side": "team_b_ol_vs_team_a_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 03:49 UTC",
+    "generated_at": "2026-09-16 03:58 UTC",
     "mass": {
       "team_a_avg_weight": 309.2,
       "team_b_avg_weight": null,

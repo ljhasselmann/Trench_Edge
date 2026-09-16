@@ -42,6 +42,7 @@ from typing import Optional
 import requests
 import yaml
 
+import fetch_cfbd
 import fetch_matchups
 import fetch_ourlads
 import fetch_sp_plus
@@ -272,11 +273,16 @@ def print_summary(summary: dict) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run a full Trench Edge week: discover matchups, populate rosters, render.")
-    parser.add_argument("--year", type=int, default=2026)
-    parser.add_argument("--week", type=int, required=True)
+    parser.add_argument("--year", type=int, default=None, help="Defaults to the current UTC calendar year")
+    parser.add_argument("--week", type=int, default=None, help="Defaults to CFBD's current week for --year, via GET /calendar")
     parser.add_argument("--skip-roster", action="store_true", help="Skip live ourlads roster population (use existing config/rosters/*.yaml as-is)")
     args = parser.parse_args()
 
-    result = run_week(args.year, args.week, skip_roster=args.skip_roster)
+    year = args.year if args.year is not None else _dt.datetime.now(_dt.timezone.utc).year
+    week = args.week if args.week is not None else fetch_cfbd.detect_current_week(year)
+    if args.week is None:
+        print(f"--week not given -- auto-detected week {week} for {year} via CFBD's /calendar")
+
+    result = run_week(year, week, skip_roster=args.skip_roster)
     print_summary(result)
     sys.exit(1 if result["rendered_count"] == 0 and result["matchup_count"] > 0 else 0)

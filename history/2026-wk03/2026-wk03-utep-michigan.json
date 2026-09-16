@@ -3,14 +3,14 @@
   "team_a": "UTEP",
   "team_b": "Michigan",
   "year": 2026,
-  "generated_at": "2026-09-16 03:50 UTC",
+  "generated_at": "2026-09-16 03:58 UTC",
   "direction_a": {
     "matchup_label": "2026-wk03-utep-michigan-a",
     "team_a": "UTEP",
     "team_b": "Michigan",
     "side": "team_a_ol_vs_team_b_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 03:50 UTC",
+    "generated_at": "2026-09-16 03:58 UTC",
     "mass": {
       "team_a_avg_weight": 312.4,
       "team_b_avg_weight": 315.0,
@@ -101,7 +101,7 @@
     "team_b": "UTEP",
     "side": "team_b_ol_vs_team_a_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 03:50 UTC",
+    "generated_at": "2026-09-16 03:58 UTC",
     "mass": {
       "team_a_avg_weight": 311.4,
       "team_b_avg_weight": 287.5,
