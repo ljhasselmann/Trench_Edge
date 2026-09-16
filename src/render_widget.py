@@ -3,9 +3,9 @@
 Split into a fetch layer and a combine layer, specifically so four-corners
 scoring (both OL-vs-DL directions for one game) doesn't double the
 network cost. `fetch_team_data(team, year, ...)` fetches everything Mass/
-Continuity/Tier1 need for one team -- and it already fetches BOTH sides
+Experience/Tier1 need for one team -- and it already fetches BOTH sides
 (OL and DL weight, offense and defense stats) for that team, since
-compute_mass_inputs/compute_continuity_inputs/fetch_team_trench_stats all
+compute_mass_inputs/compute_experience_inputs/fetch_team_trench_stats all
 do that regardless of which "side" of a matchup the team plays. So
 scoring both directions of a game only means calling fetch_team_data once
 per team (twice total) and combining that same data twice, not fetching
@@ -64,8 +64,8 @@ import requests
 import fetch_sp_plus
 from fetch_cfbd import fetch_team_trench_stats
 from fetch_roster import compute_mass_inputs
-from fetch_talent import compute_continuity_inputs
-from compute_composite import compute_composite, normalize_mass, normalize_continuity, normalize_push
+from fetch_talent import compute_experience_inputs
+from compute_composite import compute_composite, normalize_mass, normalize_experience, normalize_push
 
 WEIGHTS_FILE = Path(__file__).resolve().parents[1] / "config" / "weights.yaml"
 
@@ -82,16 +82,16 @@ class WidgetContext:
     generated_at: str
     mass: dict
     push: dict
-    continuity: dict
+    experience: dict
     composite: Optional[dict]
     warnings: list[str] = field(default_factory=list)
 
 
 @dataclass
 class TeamData:
-    """Everything Mass/Continuity/Tier1 need for one team -- both sides
+    """Everything Mass/Experience/Tier1 need for one team -- both sides
     (OL and DL weight, offense and defense stats), since the underlying
-    fetches (compute_mass_inputs, compute_continuity_inputs,
+    fetches (compute_mass_inputs, compute_experience_inputs,
     fetch_team_trench_stats) all compute both regardless of which side of
     a matchup this team plays. Fetching this once per team (not once per
     matchup direction) is what makes four-corners scoring not double the
@@ -99,21 +99,30 @@ class TeamData:
 
     team: str
     mass: object  # fetch_roster.MassInputs
-    continuity: object  # fetch_talent.TalentInputs
+    experience: object  # fetch_talent.ExperienceInputs
     tier1: Optional[object]  # fetch_cfbd.TeamAdvancedStats, None if the fetch failed
     warnings: list[str] = field(default_factory=list)
 
 
 def fetch_team_data(
-    team: str, year: int, talent_table: Optional[dict] = None, session: Optional[requests.Session] = None
+    team: str,
+    year: int,
+    talent_table: Optional[dict] = None,
+    session: Optional[requests.Session] = None,
+    browser_fetch=None,
 ) -> TeamData:
+    """`browser_fetch` is fetch_puntandrally's pluggable browser-fetch
+    callable, passed through to compute_experience_inputs's year-1 snap
+    lookup -- pass a browser_session() fetch when scoring a whole week's
+    matchups so every team's Experience lookup shares one browser process
+    instead of each launching its own (see fetch_puntandrally.py)."""
     warnings: list[str] = []
 
     mass = compute_mass_inputs(team, year, session=session)
     warnings += [f"[{team} Mass] {w}" for w in mass.warnings]
 
-    continuity = compute_continuity_inputs(team, year, talent_table=talent_table, session=session)
-    warnings += [f"[{team} Continuity] {w}" for w in continuity.warnings]
+    experience = compute_experience_inputs(team, year, talent_table=talent_table, session=session, browser_fetch=browser_fetch)
+    warnings += [f"[{team} Experience] {w}" for w in experience.warnings]
 
     try:
         tier1 = fetch_team_trench_stats(team, year, session=session)
@@ -123,7 +132,7 @@ def fetch_team_data(
         tier1 = None
         warnings.append(f"[{team} Tier1] fetch failed: {exc}")
 
-    return TeamData(team=team, mass=mass, continuity=continuity, tier1=tier1, warnings=warnings)
+    return TeamData(team=team, mass=mass, experience=experience, tier1=tier1, warnings=warnings)
 
 
 def _resolve_sp_plus_gap(
@@ -183,11 +192,11 @@ def combine_context(
         weight_diff = ol_data.mass.avg_ol_weight - dl_data.mass.avg_dl_weight
         mass_score = normalize_mass(weight_diff)
 
-    continuity_score = None
-    net_returning = None
-    if ol_data.continuity.returning_ol_starters is not None and dl_data.continuity.returning_dl_starters is not None:
-        net_returning = ol_data.continuity.returning_ol_starters - dl_data.continuity.returning_dl_starters
-        continuity_score = normalize_continuity(net_returning)
+    experience_score = None
+    experience_diff_pct = None
+    if ol_data.experience.returning_ol_snap_pct is not None and dl_data.experience.returning_dl_snap_pct is not None:
+        experience_diff_pct = ol_data.experience.returning_ol_snap_pct - dl_data.experience.returning_dl_snap_pct
+        experience_score = normalize_experience(experience_diff_pct)
 
     push_score = normalize_push(gap) if gap is not None else None
     if push_score is None:
@@ -205,12 +214,12 @@ def combine_context(
         push_raw[f"{dl_label}_defense_line_yards"] = dl_data.tier1.defense.line_yards
 
     composite = None
-    if mass_score is not None and push_score is not None and continuity_score is not None:
-        result = compute_composite(weight_diff, gap, net_returning, weights)
+    if mass_score is not None and push_score is not None and experience_score is not None:
+        result = compute_composite(weight_diff, gap, experience_diff_pct, weights)
         composite = {"value": result.composite, "verdict": result.verdict}
     else:
         missing = [
-            name for name, val in (("Mass", mass_score), ("Push", push_score), ("Continuity", continuity_score))
+            name for name, val in (("Mass", mass_score), ("Push", push_score), ("Experience", experience_score))
             if val is None
         ]
         warnings.append(f"Composite not computed -- missing: {', '.join(missing)}")
@@ -231,15 +240,15 @@ def combine_context(
             "team_b_starters": dl_data.mass.dl_starters,
         },
         push={"available": push_score is not None, "score": push_score, "sp_plus_gap": gap, "raw": push_raw},
-        continuity={
-            "team_a_returning": ol_data.continuity.returning_ol_starters,
-            "team_b_returning": dl_data.continuity.returning_dl_starters,
-            "net_returning": net_returning,
-            "score": continuity_score,
-            "team_a_driver": ol_data.continuity.continuity_driver,
-            "team_a_note": ol_data.continuity.continuity_note,
-            "team_b_driver": dl_data.continuity.continuity_driver,
-            "team_b_note": dl_data.continuity.continuity_note,
+        experience={
+            "team_a_returning_pct": ol_data.experience.returning_ol_snap_pct,
+            "team_b_returning_pct": dl_data.experience.returning_dl_snap_pct,
+            "experience_diff_pct": experience_diff_pct,
+            "score": experience_score,
+            "team_a_driver": ol_data.experience.continuity_driver,
+            "team_a_note": ol_data.experience.continuity_note,
+            "team_b_driver": dl_data.experience.continuity_driver,
+            "team_b_note": dl_data.experience.continuity_note,
         },
         composite=composite,
         warnings=warnings,
@@ -247,16 +256,22 @@ def combine_context(
 
 
 def build_context(
-    matchup: dict, year: int, sp_plus_table: Optional[dict] = None, talent_table: Optional[dict] = None
+    matchup: dict,
+    year: int,
+    sp_plus_table: Optional[dict] = None,
+    talent_table: Optional[dict] = None,
+    browser_fetch=None,
 ) -> WidgetContext:
     """Single direction -- this module's original contract, unchanged for
-    the existing CLI and any caller that only wants one side scored."""
+    the existing CLI and any caller that only wants one side scored.
+    `browser_fetch` passes through to fetch_team_data's Experience lookup
+    -- see that function's docstring."""
     team_a = matchup["team_a"]
     team_b = matchup["team_b"]
     side = matchup.get("side", "team_a_ol_vs_team_b_dl")
 
-    team_a_data = fetch_team_data(team_a, year, talent_table=talent_table)
-    team_b_data = fetch_team_data(team_b, year, talent_table=talent_table)
+    team_a_data = fetch_team_data(team_a, year, talent_table=talent_table, browser_fetch=browser_fetch)
+    team_b_data = fetch_team_data(team_b, year, talent_table=talent_table, browser_fetch=browser_fetch)
     sp_plus_gap, sp_warnings = _resolve_sp_plus_gap(matchup, team_a, team_b, sp_plus_table=sp_plus_table)
 
     with open(WEIGHTS_FILE) as f:
@@ -268,17 +283,24 @@ def build_context(
 
 
 def build_both_directions(
-    matchup: dict, year: int, sp_plus_table: Optional[dict] = None, talent_table: Optional[dict] = None
+    matchup: dict,
+    year: int,
+    sp_plus_table: Optional[dict] = None,
+    talent_table: Optional[dict] = None,
+    browser_fetch=None,
 ) -> tuple[WidgetContext, WidgetContext]:
     """Four corners: both OL-vs-DL directions for one game. Fetches each
     team's data exactly once (not once per direction) -- see module
-    docstring."""
+    docstring. `browser_fetch` passes through to fetch_team_data's
+    Experience lookup -- pass a browser_session() fetch when rendering a
+    whole week's matchups so every team's year-1 snap lookup shares one
+    browser process."""
     team_a = matchup["team_a"]
     team_b = matchup["team_b"]
     label = matchup["label"]
 
-    team_a_data = fetch_team_data(team_a, year, talent_table=talent_table)
-    team_b_data = fetch_team_data(team_b, year, talent_table=talent_table)
+    team_a_data = fetch_team_data(team_a, year, talent_table=talent_table, browser_fetch=browser_fetch)
+    team_b_data = fetch_team_data(team_b, year, talent_table=talent_table, browser_fetch=browser_fetch)
     sp_plus_gap, sp_warnings = _resolve_sp_plus_gap(matchup, team_a, team_b, sp_plus_table=sp_plus_table)
 
     with open(WEIGHTS_FILE) as f:
@@ -321,7 +343,7 @@ def context_to_history_dict(context: WidgetContext) -> dict:
             "team_b_starters": _starters_to_dicts(context.mass["team_b_starters"]),
         },
         "push": context.push,
-        "continuity": context.continuity,
+        "experience": context.experience,
         "composite": context.composite,
         "warnings": context.warnings,
     }

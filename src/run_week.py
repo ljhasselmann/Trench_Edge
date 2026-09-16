@@ -72,10 +72,11 @@ HISTORY_DIR = REPO_ROOT / "history"
 # path's OURLADS_DELAY_SECONDS): each puntandrally fetch is a real browser
 # navigation through Cloudflare's challenge and page hydration, which
 # already takes several seconds on its own -- there's no plain-HTTP burst
-# to throttle. populate_all_rosters reuses ONE browser process for the
-# whole week's teams (fetch_puntandrally.browser_session()) rather than
-# launching Chromium per team, which is the actual cost that mattered.
-DL_STARTER_COUNT = 4
+# to throttle. run_week() opens ONE fetch_puntandrally.browser_session()
+# for the whole run and shares it across BOTH roster population (this
+# year's starters) and rendering (fetch_talent's Experience metric needs a
+# live year-1 snap-count lookup per team too) -- not a fresh Chromium
+# launch per team or per phase.
 
 
 def load_hand_curated_matchups(year: int, week: int, path: Optional[Path] = None) -> list[dict]:
@@ -133,21 +134,8 @@ def _diff_starters(old_starters: Optional[dict], new_starters: dict) -> list[str
     return changes
 
 
-def _dl_starters(players: list, count: int = DL_STARTER_COUNT) -> list[str]:
-    """Top `count` DL players by snap count, regardless of tag.
-    puntandrally's DL tags (DE/DT/DL) are too coarse to split by slot the
-    way fetch_puntandrally.OL_STARTER_COUNTS does for OL -- front size
-    genuinely varies by scheme (a 4-3's 4 down linemen vs. a 3-4's 3), and
-    that module's own docstring deliberately declines to guess a fixed
-    split. Taking a flat top-N by usage is this orchestrator's own
-    simplification, not fetch_puntandrally's -- a real per-team front-size
-    read is follow-up work, not something to fake here."""
-    ranked = sorted(players, key=lambda p: p.snaps if p.snaps is not None else -1, reverse=True)
-    return [p.name for p in ranked[:count]]
-
-
 def populate_roster(
-    team: str, today: str, browser_fetch=None
+    team: str, year: int, today: str, browser_fetch=None
 ) -> dict:
     """Fetch one team's live roster + snap counts from puntandrally and
     update config/rosters/{team}.yaml's `starters` block in place. Returns
@@ -157,12 +145,12 @@ def populate_roster(
     fetch_puntandrally.browser_session() fetch when populating many teams
     (see populate_all_rosters), so they share one browser process."""
     try:
-        ol_section, dl_section = fetch_puntandrally.fetch_roster(team, browser_fetch=browser_fetch)
+        ol_section, dl_section = fetch_puntandrally.fetch_roster(team, year, browser_fetch=browser_fetch)
     except fetch_puntandrally.PuntAndRallyFetchError as exc:
         return {"team": team, "status": "failed", "changes": [], "error": str(exc)}
 
     ol_names = fetch_puntandrally.starters_for_group(ol_section.players, fetch_puntandrally.OL_STARTER_COUNTS)
-    dl_names = _dl_starters(dl_section.players)
+    dl_names = fetch_puntandrally.dl_starters_for_group(dl_section.players)
     new_starters = {"OL": [{"name": n} for n in ol_names], "DL": [{"name": n} for n in dl_names]}
 
     existing = _load_roster_yaml(team) or {}
@@ -182,15 +170,11 @@ def populate_roster(
     return {"team": team, "status": "ok", "changes": changes, "error": None}
 
 
-def populate_all_rosters(teams: list[str], today: str) -> list[dict]:
-    """One shared browser process for the whole batch (see
-    fetch_puntandrally.browser_session()) -- not a fresh Chromium launch
-    per team."""
-    results = []
-    with fetch_puntandrally.browser_session() as fetch:
-        for team in teams:
-            results.append(populate_roster(team, today, browser_fetch=fetch))
-    return results
+def populate_all_rosters(teams: list[str], year: int, today: str, browser_fetch=None) -> list[dict]:
+    """`browser_fetch` should be a fetch_puntandrally.browser_session()
+    fetch shared across the whole run (roster population AND rendering,
+    see run_week()) -- not a fresh Chromium launch per team or per phase."""
+    return [populate_roster(team, year, today, browser_fetch=browser_fetch) for team in teams]
 
 
 def _reuse_from_history(label: str, hist_dir: Path, top25: set) -> Optional[dict]:
@@ -217,6 +201,7 @@ def render_all_games(
     talent_table: Optional[dict],
     top25: set,
     active_labels: Optional[set] = None,
+    browser_fetch=None,
 ) -> tuple[list[dict], list[dict]]:
     """Returns (index_entries, failures). One bad matchup is caught and
     reported -- never aborts rendering the rest of the week.
@@ -247,7 +232,7 @@ def render_all_games(
 
         try:
             ctx_a, ctx_b = render_widget.build_both_directions(
-                m, year, sp_plus_table=sp_plus_table, talent_table=talent_table
+                m, year, sp_plus_table=sp_plus_table, talent_table=talent_table, browser_fetch=browser_fetch
             )
             html = render_widget.render_game(label, m["team_a"], m["team_b"], ctx_a, ctx_b)
             (out_dir / f"{label}.html").write_text(html)
@@ -306,10 +291,6 @@ def run_week(
         [m for m in matchups if m["label"] in active_labels]
     )
 
-    roster_results: list[dict] = []
-    if not skip_roster:
-        roster_results = populate_all_rosters(roster_teams, today)
-
     try:
         sp_plus_table = fetch_sp_plus.fetch_fbs_week_table(week, session=session)
     except fetch_sp_plus.SPPlusFetchError:
@@ -320,7 +301,20 @@ def run_week(
     except Exception:  # noqa: BLE001 -- each matchup's own talent fetch will warn per-team
         talent_table = None
 
-    index_entries, failures = render_all_games(matchups, year, week, sp_plus_table, talent_table, top25, active_labels=active_labels)
+    # One browser process for the whole run -- roster population (this
+    # year's starters) AND rendering (Experience's live year-1 snap-count
+    # lookup, see fetch_talent.compute_experience_inputs) both drive
+    # puntandrally.com and share this same fetch, rather than each
+    # launching its own Chromium instance.
+    with fetch_puntandrally.browser_session() as browser_fetch:
+        roster_results: list[dict] = []
+        if not skip_roster:
+            roster_results = populate_all_rosters(roster_teams, year, today, browser_fetch=browser_fetch)
+
+        index_entries, failures = render_all_games(
+            matchups, year, week, sp_plus_table, talent_table, top25,
+            active_labels=active_labels, browser_fetch=browser_fetch,
+        )
 
     week_label = f"{year}, Week {week}"
     index_html = render_widget.render_index(week_label, index_entries)

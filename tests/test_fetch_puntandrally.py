@@ -165,9 +165,37 @@ def test_fetch_roster_uses_injected_browser_fetch_not_real_playwright():
         assert "Miami" in url
         return combined_html
 
-    ol_section, dl_section = fetch_puntandrally.fetch_roster("Miami", browser_fetch=fake_fetch)
+    ol_section, dl_section = fetch_puntandrally.fetch_roster("Miami", 2026, browser_fetch=fake_fetch)
     assert [p.name for p in ol_section.players][:2] == ["Matthew McCoy", "Samson Okunlola"]
     assert [p.name for p in dl_section.players] == ["Marquise Lightfoot", "Ahmad Moten Sr.", "Justin Scott"]
+
+
+def test_fetch_roster_puts_year_in_the_url():
+    seen_urls = []
+
+    def fake_fetch(url):
+        seen_urls.append(url)
+        return SAMPLE_MIAMI_OL_HTML + SAMPLE_MIAMI_DL_HTML
+
+    fetch_puntandrally.fetch_roster("Miami", 2025, browser_fetch=fake_fetch)
+    assert "year=2025" in seen_urls[0]
+
+    fetch_puntandrally.fetch_roster("Miami", 2026, browser_fetch=fake_fetch)
+    assert "year=2026" in seen_urls[1]
+
+
+def test_dl_starters_for_group_picks_top_n_by_snaps_regardless_of_tag():
+    section = fetch_puntandrally.parse_position_section(SAMPLE_MIAMI_DL_HTML, "Defensive Line", fetch_puntandrally.KNOWN_DL_TAGS)
+    starters = fetch_puntandrally.dl_starters_for_group(section.players, count=2)
+    # Marquise Lightfoot (DE, 69 snaps) and Ahmad Moten Sr. (DT, 64 snaps)
+    # outrank Justin Scott (DT, 62 snaps) -- ranked by snaps, not grouped by tag.
+    assert starters == ["Marquise Lightfoot", "Ahmad Moten Sr."]
+
+
+def test_dl_starters_for_group_default_count_matches_module_constant():
+    section = fetch_puntandrally.parse_position_section(SAMPLE_MIAMI_DL_HTML, "Defensive Line", fetch_puntandrally.KNOWN_DL_TAGS)
+    starters = fetch_puntandrally.dl_starters_for_group(section.players)
+    assert starters == [p.name for p in section.players][:fetch_puntandrally.DL_STARTER_COUNT]
 
 
 def test_browser_session_reuses_one_browser_across_multiple_fetches(monkeypatch):
@@ -214,7 +242,7 @@ def test_fetch_roster_raises_typed_error_when_browser_fetch_fails():
         raise fetch_puntandrally.PuntAndRallyFetchError("browser navigation failed: timeout")
 
     with pytest.raises(fetch_puntandrally.PuntAndRallyFetchError, match="timeout"):
-        fetch_puntandrally.fetch_roster("Miami", browser_fetch=failing_fetch)
+        fetch_puntandrally.fetch_roster("Miami", 2026, browser_fetch=failing_fetch)
 
 
 # Real captured fragment from puntandrally.com's teamsgrid.php?geturl=roster,

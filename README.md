@@ -16,7 +16,7 @@ export CFBD_API_KEY=...   # or put it in a local .env (gitignored)
 **Built and live-tested against the real CFBD API key:**
 
 - `src/compute_composite.py` — the Section 5 scoring model (Mass/Push/
-  Continuity normalization, weighting, verdict bands). Pure computation,
+  Experience normalization, weighting, verdict bands). Pure computation,
   no network dependency. Unit-tested (`tests/test_compute_composite.py`).
 - `src/fetch_cfbd.py` — full Section 4a fetch: stuff rate, line yards,
   front-seven-only havoc, and adjusted sack rate. Call
@@ -112,7 +112,7 @@ gap automatically; `sp_plus_gap` in the same file is now only a fallback,
 used if the live fetch fails. **Live-verified**: Miami 25.6 SP+, Wake
 Forest 3.4 SP+ (FBS Week 3 tab) → gap 22.2 → Push score +4.4,
 screenshot-confirmed rendering as a real diverging bar. The composite now
-computes for real once Mass, Push, and Continuity are all present.
+computes for real once Mass, Push, and Experience are all present.
 
 ### SP+ source
 
@@ -148,11 +148,13 @@ sheet names found, specifically so a new mismatch is easy to diagnose and
 add rather than silently guessed at.
 
 `config/rosters/{team}.yaml` files for a real week's slate are now
-populated automatically from live ourlads.com depth charts by
-`src/run_week.py` (see below) — no hand-fabricated starters. The two
-exceptions this session found (Northern Iowa, Portland State — both FCS
-opponents of a ranked team, genuinely outside ourlads's FBS-only index)
-need a human or WebSearch fallback, same as any other ourlads miss.
+populated automatically by `src/run_week.py` (see below) — no
+hand-fabricated starters. As of this entry the source was live
+ourlads.com depth charts; it's since been replaced by puntandrally.com
+(`src/fetch_puntandrally.py`) — see the "Experience replaces Continuity"
+entry near the end of this file. A team a source's index genuinely
+doesn't cover (e.g. an FCS opponent of a ranked team) still needs a human
+or WebSearch fallback, same idea either way.
 
 ## Scaling to a full week — `src/run_week.py`
 
@@ -200,18 +202,17 @@ python3 src/run_week.py --year 2026 --week 3
 **Live-verified at full week-3 2026 scale**: 22/22 matchups rendered, 0
 failed; 2 teams (both FCS opponents of a ranked team) flagged for manual
 roster research; roster-diff correctly caught a real depth-chart change
-(Wake Forest's DL order shifted since the prior run). Composite renders
-as `None` with explicit caveats for every game so far, not a fabricated
-number — every newly-populated team is still missing the once-per-season
-`prior_season_starters`/`continuity_note` fields a human has to set (see
-`_template.yaml`); Mass and Push both compute and render correctly in
-the meantime.
+(Wake Forest's DL order shifted since the prior run). At the time this
+entry was written, Composite rendered as `None` with explicit caveats for
+every game, since Continuity (the metric Experience has since replaced --
+see the "Experience replaces Continuity" entry below) depended on a
+once-per-season `prior_season_starters` field no team had filled in yet.
 
 ## Running the tests
 
 ```
 pip install -r requirements.txt pytest
-python3 -m pytest tests/ -v   # 87 tests, all passing
+python3 -m pytest tests/ -v   # 118 tests, all passing
 ```
 
 ## Weekly usage
@@ -242,7 +243,7 @@ python3 src/render_widget.py 2026-wk03-miami-wake-forest
 
 ```
 # Composite scoring (no network needed):
-python3 src/compute_composite.py --weight-diff-lbs 25 --sp-plus-gap 10 --net-returning-starters 2
+python3 src/compute_composite.py --weight-diff-lbs 25 --sp-plus-gap 10 --experience-diff-pct 20
 
 # Live CFBD fetch (needs api.collegefootballdata.com allowlisted + CFBD_API_KEY set):
 python3 src/fetch_cfbd.py Miami --year 2026
@@ -251,4 +252,69 @@ python3 src/fetch_talent.py Miami --year 2026
 
 # Live SP+ fetch (needs docs.google.com allowlisted, no key required):
 python3 src/fetch_sp_plus.py Miami "Wake Forest" --week 3
+
+# Live puntandrally roster + snap-count fetch (drives a real headless
+# Chromium browser via Playwright -- see fetch_puntandrally.py's docstring
+# for why; `playwright install chromium` needed once):
+python3 src/fetch_puntandrally.py Miami --year 2026
 ```
+
+## puntandrally.com replaces ourlads.com as the roster source
+
+`src/fetch_puntandrally.py` is now what `src/run_week.py` calls for live
+roster population, not `src/fetch_ourlads.py` (still in the repo,
+unused, as a fallback path). puntandrally is a strict superset — real
+per-player snap counts, not just starter names — and its team-name index
+resolves all 138 CFBD FBS teams with zero aliases needed (confirmed live,
+`scripts/check_team_name_coverage.py`). It sits behind a Cloudflare JS
+challenge plain `requests` can't solve, so this module drives headless
+Chromium via Playwright instead — confirmed live this needs no
+stealth/anti-detection trickery, just a normal `headless=True` launch.
+`fetch_puntandrally.browser_session()` shares one browser process across
+a whole run (roster population + rendering) rather than relaunching
+Chromium per team.
+
+**Cloud-Routine caveat:** confirmed live that a cloud-sandboxed Routine
+environment's egress proxy hard-denies `puntandrally.com:443` — this
+module was built and validated from a local machine session instead,
+which has no such restriction. A Routine-fired cloud run should expect
+puntandrally calls to fail there and needs ourlads as its fallback until
+that's resolved (see DESIGN.md Section 7).
+
+## Experience replaces Continuity
+
+`src/fetch_talent.py`'s Continuity metric used to be a human hand-typing
+`prior_season_starters` into each team's YAML once a season, then a bare
+name-overlap count against the current starters. That dependency was a
+real gap: the first live end-to-end `run_week.py` run for Miami vs Wake
+Forest (2026 Week 3) rendered `composite: None` for both directions
+because neither team had that field filled in yet.
+
+puntandrally's `year=` query param (confirmed live to return real,
+accurate full-season snap counts for prior seasons, back to at least
+2022) made that field obsolete as the primary source: `fetch_talent.py`
+now computes **Experience** automatically — what share of this year's
+starters' snaps, at their own team, were played by the same players last
+season. A transfer-in or true freshman scores 0% (never excluded, so it
+correctly drags the average down); a transfer's snaps at their OLD school
+are never counted, since the lookup only ever fetches one team's own
+page. `prior_season_starters` is kept as an optional fallback only, used
+if the live year-over-year fetch fails for a team.
+
+`compute_composite.py`'s formula, `config/weights.yaml`, `render_widget.py`,
+and `templates/widget.html.jinja` were all updated to match (`continuity`
+→ `experience` throughout) — see DESIGN.md Sections 4c/5 for the exact
+formula (1 point per 10 percentage-points of returning-snap-share
+differential, capped ±10, a starting hunch like Mass's and Push's own
+constants). Live-verified: re-running `run_week.py` for Miami vs Wake
+Forest after this change produced real starter lists sourced from
+puntandrally and a `roster_source: puntandrally.com` field in both teams'
+YAML files.
+
+A related idea from this session — using historical game outcomes (ATS
+performance specifically, plus real advanced OL/DL metrics already
+pulled from SP+/CFBD as an "expected vs. actual" check) to backtest which
+scoring components actually predict anything — was discussed but
+deliberately **not built yet**; it needs more design work (a betting-line
+data source hasn't been investigated at all) before it's buildable. See
+DESIGN.md Section 8.

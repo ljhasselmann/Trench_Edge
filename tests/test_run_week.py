@@ -36,7 +36,7 @@ def _fake_roster_sections(team: str):
     return ol_section, dl_section
 
 
-def _fake_fetch_roster(team, browser_fetch=None):
+def _fake_fetch_roster(team, year, browser_fetch=None):
     if team == "Ohio State":
         raise fetch_puntandrally.PuntAndRallyFetchError(f"mock failure for {team}")
     return _fake_roster_sections(team)
@@ -60,8 +60,8 @@ def _fake_ctx(label: str, side: str) -> render_widget.WidgetContext:
             "score": 1.0, "team_a_starters": [], "team_b_starters": [],
         },
         push={"available": True, "score": 1.0, "sp_plus_gap": 5.0, "raw": {}},
-        continuity={
-            "team_a_returning": 3, "team_b_returning": 2, "net_returning": 1, "score": 1.0,
+        experience={
+            "team_a_returning_pct": 70.0, "team_b_returning_pct": 60.0, "experience_diff_pct": 10.0, "score": 1.0,
             "team_a_driver": None, "team_a_note": None, "team_b_driver": None, "team_b_note": None,
         },
         composite={"value": 1.5, "verdict": "test verdict"},
@@ -69,7 +69,7 @@ def _fake_ctx(label: str, side: str) -> render_widget.WidgetContext:
     )
 
 
-def _fake_build_both_directions(matchup, year, sp_plus_table=None, talent_table=None):
+def _fake_build_both_directions(matchup, year, sp_plus_table=None, talent_table=None, browser_fetch=None):
     if "badteama" in matchup["label"]:
         raise RuntimeError(f"mock render failure for {matchup['label']}")
     label = matchup["label"]
@@ -217,7 +217,7 @@ def test_run_week_teams_filter_only_renders_filtered_matchups_on_second_pass(mon
 
     call_labels = []
 
-    def _counting_build_both_directions(matchup, year, sp_plus_table=None, talent_table=None):
+    def _counting_build_both_directions(matchup, year, sp_plus_table=None, talent_table=None, browser_fetch=None):
         call_labels.append(matchup["label"])
         return _fake_build_both_directions(matchup, year, sp_plus_table=sp_plus_table, talent_table=talent_table)
 
@@ -266,7 +266,7 @@ def test_run_week_teams_filter_falls_back_to_fresh_render_without_prior_history(
 
     call_labels = []
 
-    def _counting_build_both_directions(matchup, year, sp_plus_table=None, talent_table=None):
+    def _counting_build_both_directions(matchup, year, sp_plus_table=None, talent_table=None, browser_fetch=None):
         call_labels.append(matchup["label"])
         return _fake_build_both_directions(matchup, year, sp_plus_table=sp_plus_table, talent_table=talent_table)
 

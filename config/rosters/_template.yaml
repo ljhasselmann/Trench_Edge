@@ -17,13 +17,18 @@
 # from injuries, suspensions, and true freshmen beating out incumbents
 # mid-season.
 #
-# prior_season_starters: set ONCE PER SEASON (not weekly) -- last season's
-# starting OL/DL by name, same format as `starters` below. fetch_talent.py
-# computes "returning starters" (DESIGN.md Section 4c/5) as the name-overlap
-# between this and `starters`. CFBD has no API for this at all (checked:
-# /player/returning only scores individually-charted plays -- passing,
-# rushing, receiving -- nothing for line play or defense), so this is the
-# only source for it.
+# prior_season_starters: OPTIONAL FALLBACK ONLY, not required. Returning
+# experience (DESIGN.md Section 4c/5) is now computed automatically --
+# fetch_talent.py matches this year's `starters` (above) against real
+# per-player snap counts from puntandrally.com's prior-season roster page
+# (fetch_puntandrally.py's `year=` param), no human data entry needed. This
+# block is only used as a fallback if that live year-over-year fetch fails
+# for a team (site issue, or a team predating puntandrally's ~2022
+# reliability floor) -- in that case fetch_talent.py falls back to a
+# coarser, non-snap-weighted name-overlap against whatever's typed here. A
+# stale or empty block here is harmless as long as the live fetch is
+# working; only fill it in if you've seen a warning that the live fetch
+# failed for a specific team.
 #
 # continuity_note: also set once per season. DESIGN.md Section 4c's
 # qualitative flag -- is this unit's level talent-driven or coaching/

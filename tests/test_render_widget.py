@@ -7,7 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 import render_widget
 from render_widget import WidgetContext, render, write_history_snapshot
 from fetch_roster import StarterWeight, MassInputs
-from fetch_talent import TalentInputs
+from fetch_talent import ExperienceInputs
 from fetch_cfbd import TeamAdvancedStats, SideStats
 
 
@@ -28,8 +28,8 @@ def _sample_context(**overrides):
             "team_b_starters": [],
         },
         push={"available": False, "score": None, "sp_plus_gap": None, "raw": {}},
-        continuity={
-            "team_a_returning": 3, "team_b_returning": 2, "net_returning": 1, "score": 1.0,
+        experience={
+            "team_a_returning_pct": 70.0, "team_b_returning_pct": 60.0, "experience_diff_pct": 10.0, "score": 1.0,
             "team_a_driver": None, "team_a_note": None, "team_b_driver": None, "team_b_note": None,
         },
         composite=None,
@@ -80,10 +80,10 @@ class _FakeMass:
         self.warnings = warnings or []
 
 
-class _FakeContinuity:
-    def __init__(self, ol=None, dl=None, driver=None, note=None, warnings=None):
-        self.returning_ol_starters = ol
-        self.returning_dl_starters = dl
+class _FakeExperience:
+    def __init__(self, ol_pct=None, dl_pct=None, driver=None, note=None, warnings=None):
+        self.returning_ol_snap_pct = ol_pct
+        self.returning_dl_snap_pct = dl_pct
         self.continuity_driver = driver
         self.continuity_note = note
         self.warnings = warnings or []
@@ -91,7 +91,7 @@ class _FakeContinuity:
 
 def test_build_context_flags_missing_composite_without_sp_plus_gap(monkeypatch):
     monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year, **kw: _FakeMass(avg_ol=320, avg_dl=290))
-    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year, **kw: _FakeContinuity(ol=3, dl=2))
+    monkeypatch.setattr(render_widget, "compute_experience_inputs", lambda team, year, **kw: _FakeExperience(ol_pct=70, dl_pct=60))
     monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year, **kw: TeamAdvancedStats(
         team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}
     ))
@@ -99,7 +99,7 @@ def test_build_context_flags_missing_composite_without_sp_plus_gap(monkeypatch):
     ctx = render_widget.build_context({"label": "test", "team_a": "Miami", "team_b": "Wake Forest", "side": "team_a_ol_vs_team_b_dl"}, 2026)
 
     assert ctx.mass["score"] == 3.0  # (320-290)/10
-    assert ctx.continuity["score"] == 1.0  # 3-2
+    assert ctx.experience["score"] == 1.0  # (70-60)/10
     assert ctx.push["score"] is None
     assert ctx.composite is None
     assert any("sp_plus_gap unavailable" in w for w in ctx.warnings)
@@ -108,7 +108,7 @@ def test_build_context_flags_missing_composite_without_sp_plus_gap(monkeypatch):
 
 def test_build_context_computes_full_composite_with_sp_plus_gap(monkeypatch):
     monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year, **kw: _FakeMass(avg_ol=320, avg_dl=290))
-    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year, **kw: _FakeContinuity(ol=3, dl=2))
+    monkeypatch.setattr(render_widget, "compute_experience_inputs", lambda team, year, **kw: _FakeExperience(ol_pct=70, dl_pct=60))
     monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year, **kw: TeamAdvancedStats(
         team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}
     ))
@@ -120,7 +120,7 @@ def test_build_context_computes_full_composite_with_sp_plus_gap(monkeypatch):
 
     assert round(ctx.push["score"], 4) == 4.44  # 22.2 / 5
     assert ctx.composite is not None
-    # weights.yaml: mass .4, push .4, continuity .2 -> .4*3.0 + .4*4.44 + .2*1.0 = 3.176
+    # weights.yaml: mass .4, push .4, experience .2 -> .4*3.0 + .4*4.44 + .2*1.0 = 3.176
     assert round(ctx.composite["value"], 3) == 3.176
     assert not any("Composite not computed" in w for w in ctx.warnings)
     assert any("No 'week' set" in w for w in ctx.warnings)  # used the static fallback, not a live fetch
@@ -128,7 +128,7 @@ def test_build_context_computes_full_composite_with_sp_plus_gap(monkeypatch):
 
 def test_build_context_prefers_live_sp_plus_fetch_when_week_is_set(monkeypatch):
     monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year, **kw: _FakeMass(avg_ol=320, avg_dl=290))
-    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year, **kw: _FakeContinuity(ol=3, dl=2))
+    monkeypatch.setattr(render_widget, "compute_experience_inputs", lambda team, year, **kw: _FakeExperience(ol_pct=70, dl_pct=60))
     monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year, **kw: TeamAdvancedStats(
         team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}
     ))
@@ -145,7 +145,7 @@ def test_build_context_prefers_live_sp_plus_fetch_when_week_is_set(monkeypatch):
 
 def test_build_context_falls_back_to_config_when_live_sp_plus_fetch_fails(monkeypatch):
     monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year, **kw: _FakeMass(avg_ol=320, avg_dl=290))
-    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year, **kw: _FakeContinuity(ol=3, dl=2))
+    monkeypatch.setattr(render_widget, "compute_experience_inputs", lambda team, year, **kw: _FakeExperience(ol_pct=70, dl_pct=60))
     monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year, **kw: TeamAdvancedStats(
         team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}
     ))
@@ -165,7 +165,7 @@ def test_build_context_falls_back_to_config_when_live_sp_plus_fetch_fails(monkey
 
 def test_build_context_handles_tier1_fetch_failure_without_crashing(monkeypatch):
     monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year, **kw: _FakeMass())
-    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year, **kw: _FakeContinuity())
+    monkeypatch.setattr(render_widget, "compute_experience_inputs", lambda team, year, **kw: _FakeExperience())
 
     def _raise(team, year, **kw):
         raise RuntimeError("network down")
@@ -208,7 +208,7 @@ def test_build_both_directions_fetches_each_team_exactly_once(monkeypatch):
         return _FakeMass(avg_ol=320, avg_dl=290)
 
     monkeypatch.setattr(render_widget, "compute_mass_inputs", _fake_mass)
-    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year, **kw: _FakeContinuity(ol=3, dl=2))
+    monkeypatch.setattr(render_widget, "compute_experience_inputs", lambda team, year, **kw: _FakeExperience(ol_pct=70, dl_pct=60))
     monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year, **kw: TeamAdvancedStats(
         team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}
     ))
@@ -227,7 +227,7 @@ def test_build_both_directions_fetches_each_team_exactly_once(monkeypatch):
 
 def test_build_both_directions_reverse_push_is_negation_and_teams_swap(monkeypatch):
     monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year, **kw: _FakeMass(avg_ol=320, avg_dl=290))
-    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year, **kw: _FakeContinuity(ol=3, dl=2))
+    monkeypatch.setattr(render_widget, "compute_experience_inputs", lambda team, year, **kw: _FakeExperience(ol_pct=70, dl_pct=60))
     monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year, **kw: TeamAdvancedStats(
         team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}
     ))

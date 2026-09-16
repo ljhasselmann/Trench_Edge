@@ -10,7 +10,7 @@ Trench Edge is a weekly, automatically-refreshed composite score comparing the
 offensive line of one college football team against the defensive line of
 another (and vice versa, once the four-corners version ships). It formalizes
 the "mass kicks ass" heuristic into three measurable, individually-labeled
-components — Mass, Push, and Continuity — instead of a single vibes-based
+components — Mass, Push, and Experience — instead of a single vibes-based
 gut call.
 
 It is explicitly **not** a standalone betting signal. It's a supplementary
@@ -35,14 +35,14 @@ trench-edge/
   .env                        CFBD_API_KEY=... (gitignored, never committed)
   .gitignore                  .env, /history/*.json (or keep history, TBD)
   config/
-    weights.yaml               Mass/Push/Continuity weights, tunable
+    weights.yaml               Mass/Push/Experience weights, tunable
     teams.yaml                 hand-curated matchup(s) to score/override
     matchups/
       2026-wk03.yaml            this week's discovered + merged matchups
     rosters/
       _template.yaml            schema for a per-team roster file
-      {team}.yaml                starters (weekly) + prior_season_starters/
-                                  continuity_note (once per season, human-set)
+      {team}.yaml                starters (weekly) + optional prior_season_starters
+                                  fallback + continuity_note (once per season, human-set)
   src/
     fetch_cfbd.py               pulls Tier 1 advanced stats from CFBD
     fetch_roster.py             pulls or reads cached OL/DL starter weights
@@ -119,23 +119,39 @@ preference:
    should flag when it's using a roster snapshot older than 7 days rather
    than silently using stale starters.
 
-### 4c. Tier 2 — talent and continuity (`fetch_talent.py`)
+### 4c. Tier 2 — talent and experience (`fetch_talent.py`)
 
-- Returning production / returning starts, by position group (OL, DL)
+- **Returning experience, by position group (OL, DL) — automated, not
+  human-typed.** `fetch_puntandrally.py`'s `year=` query param gives real,
+  accurate full-season snap counts for prior seasons (confirmed live back
+  to at least 2022). `compute_experience_inputs` matches this year's
+  starters (from `config/rosters/{team}.yaml`, already staged by
+  `run_week.py`) against THAT SAME TEAM's snap shares last season: what
+  share of this year's starters' snaps, at their own team, were played by
+  the same players last year. A transfer-in or true freshman contributes
+  0% (never excluded), and a transfer's snaps at their OLD school never
+  count, since the lookup only ever fetches one team's own page. The old
+  approach — a human hand-typing `prior_season_starters` into YAML once a
+  season, then counting bare name-overlap — is kept only as a fallback for
+  when the live year-over-year fetch fails for a team (site issue, or a
+  team predating puntandrally's reliability floor); it's a coarser,
+  non-snap-weighted proxy when used.
 - 247/On3 team talent composite or blue-chip ratio, position-group-specific
   where available, team-wide as fallback
 - A qualitative flag, set manually per team per season: is this unit's
   performance level talent-driven or coaching/scheme-driven? (E.g., Wake
   Forest's 2025 defensive turnaround was explicitly coaching-driven per beat
   reporting — that's a real signal about year-over-year stability that a
-  bare "returning starters" count won't capture on its own.)
+  bare "returning starters" count won't capture on its own.) This flag has
+  no automated equivalent and isn't part of the numeric score — it's
+  surfaced as a caveat only, same as before.
 
 ## 5. Scoring model
 
 `compute_composite.py` implements:
 
 ```
-Trench Edge = w_mass * Mass + w_push * Push + w_continuity * Continuity
+Trench Edge = w_mass * Mass + w_push * Push + w_experience * Experience
 ```
 
 Each subscore is normalized to a **-10 (favors Team B) to +10 (favors Team A)**
@@ -145,7 +161,7 @@ scale before weighting:
 |---|---|---|
 | Mass | 1 point per 10 lbs of average weight differential, capped at ±10 | Simplest, most reliable input — pure roster data, no adjustment needed |
 | Push | 1 point per 5 points of **overall** SP+ differential (`team_a.SP+ - team_b.SP+`), capped at ±10 | See below — resolved decision, not the original placeholder |
-| Continuity | 1 point per net returning-starter differential | Discount further if either side's improvement looks scheme-driven per the qualitative flag above |
+| Experience | 1 point per 10 percentage-points of returning-snap-share differential, capped at ±10 | Replaced Continuity's bare returning-starter count — see Section 4c. A starting hunch, same spirit as Mass's and Push's constants above, not fitted to anything yet |
 
 **Push, resolved:** an earlier draft of this formula tried an "off-vs-def"
 combination — `team_a`'s Off. SP+ plus `team_b`'s Def. SP+ (their Def. SP+
@@ -179,7 +195,7 @@ Default weights (`config/weights.yaml`), tunable, starting point:
 ```yaml
 mass: 0.4
 push: 0.4
-continuity: 0.2
+experience: 0.2
 ```
 
 These are a starting hunch, not a fitted model. See Section 8 for the
@@ -221,24 +237,34 @@ per firing.
 - **Deterministic roster research first, WebSearch only as a bounded
   fallback — not WebSearch-first for every team.** An earlier draft of
   this section had the Routine web-search every team's starters itself
-  each week. Superseded: `src/fetch_ourlads.py` fetches live depth charts
-  directly from ourlads.com (confirmed live, covers 137 of 138 FBS teams
-  under `fetch_ourlads.TEAM_NAME_ALIASES`; only Washington State is
-  genuinely absent from ourlads's index, not just misnamed) via plain
-  `requests` — reachable that way even though this environment's
-  `WebFetch` tool has an independent egress gate that doesn't pick up a
-  domain allowlist change. `src/run_week.py` calls this for every unique
-  team across the week's matchups (deterministic, ~45 teams/week, a
-  0.75s courtesy delay between calls) and writes
-  `config/rosters/{team}.yaml`'s `starters` block directly. Only a team
-  ourlads can't resolve (name miss, page-structure change) falls back to
-  the Routine doing WebSearch/WebFetch research itself — bounded to an
-  explicit short list `run_week.py` reports, not agentic judgment across
-  every team every week.
+  each week. Superseded twice now:
+  - First by `src/fetch_ourlads.py` (plain `requests`, covers 137 of 138
+    FBS teams — only Washington State is genuinely absent from its index).
+  - Then, for **local/manual runs**, by `src/fetch_puntandrally.py` —
+    confirmed live to resolve all 138 FBS teams with zero name aliases,
+    and it also carries real per-player snap counts ourlads never had
+    (see Section 4c's Experience metric). puntandrally.com sits behind a
+    Cloudflare JS challenge plain `requests` can't solve, so this module
+    drives headless Chromium via Playwright instead — a real browser
+    process, not just an HTTP call, and confirmed live to need no
+    stealth/anti-detection trickery to get through. `src/run_week.py`
+    opens ONE shared browser session for the whole run (roster population
+    AND rendering's Experience lookups both use it) rather than launching
+    Chromium per team.
+
+  `fetch_ourlads.py` is left in the repo, unused by `run_week.py` now, as
+  a fallback path if puntandrally ever becomes unreachable from wherever
+  a run executes (see the cloud-Routine caveat under Network access,
+  below) — that's a per-failure fallback, never a per-team double-fetch.
+  Only a team neither source can resolve falls back to the Routine doing
+  WebSearch/WebFetch research itself — bounded to an explicit short list
+  `run_week.py` reports, not agentic judgment across every team every week.
   `prior_season_starters` / `continuity_note` are **not** touched by this
   automatic path — those stay a once-per-season human field, per
-  `_template.yaml`; weight/`confirmed` status still only ever comes from
-  matching CFBD's live `/roster` (Section 4b).
+  `_template.yaml` (`prior_season_starters` is now an optional fallback
+  only, used if puntandrally's own live year-over-year snap match fails
+  for a team — see Section 4c); weight/`confirmed` status still only ever
+  comes from matching CFBD's live `/roster` (Section 4b).
 - **Roster-diff simplification: compare against the team's own current
   config file, not a `history/*.json` search.** The original design
   described diffing against "the most recent prior snapshot in
@@ -278,14 +304,24 @@ per firing.
   all allowlisted for plain `requests` calls, `CFBD_API_KEY` is set. A
   Routine fired with no explicit `environment_id` inherits the calling
   session's environment, so it reuses this config automatically; no
-  separate setup needed unless a new environment is created later. (A
-  third candidate roster source, puntandrally.com, was checked live and
-  is **not** currently reachable — a hard proxy-level policy denial, not
-  a code-side problem — so it isn't wired in; ourlads alone is the
-  roster source until/unless that's resolved in a future environment.)
+  separate setup needed unless a new environment is created later.
+  **puntandrally.com is a different story per environment class:**
+  confirmed live that a cloud-sandboxed Routine environment's egress proxy
+  hard-denies `puntandrally.com:443` (a policy decision, not a code-side
+  problem) — so `fetch_puntandrally.py` was built and wired in from a
+  local machine session instead, which has no such restriction and can
+  run the Playwright/Chromium browser this module needs anyway (a cloud
+  sandbox may not have a usable display/browser runtime for that even if
+  the network egress were allowed). Until that's resolved for the cloud
+  Routine specifically, a Routine-fired run should expect puntandrally
+  calls to fail there and fall back to ourlads for roster population — the
+  local/manual `run_week.py` invocation this was validated against
+  (2026 Week 3, Miami vs Wake Forest) is the one puntandrally actually
+  works end-to-end for today.
 - **Secrets:** `CFBD_API_KEY` lives in the environment, never in the
-  Routine's prompt or committed to the repo. `fetch_sp_plus.py` and
-  `fetch_ourlads.py` need no key at all — both are unauthenticated.
+  Routine's prompt or committed to the repo. `fetch_sp_plus.py`,
+  `fetch_ourlads.py`, and `fetch_puntandrally.py` need no key at all — all
+  three are unauthenticated.
 - **Routine prompt (current, not a draft):** "Run
   `python3 src/run_week.py --year <current season> --week <this week's
   number>`. It discovers every Top-25-involving FBS game, populates

@@ -1,6 +1,6 @@
 """Mass -- live rosters + snap counts from puntandrally.com (supplements
-DESIGN.md 4b). NOT yet wired into run_week.py -- see module-level notes at
-the bottom before doing that.
+DESIGN.md 4b). Wired into run_week.py as the primary roster source, and
+into fetch_talent.py's Experience metric via its year-parameterized fetch.
 
 Unlike ourlads.com (src/fetch_ourlads.py, a plain server-rendered site),
 puntandrally.com sits behind Cloudflare's managed JS challenge on every
@@ -86,6 +86,17 @@ Any row whose parenthesized tag falls outside the section's own known set
 up INSIDE Wisconsin's "Offensive Line" section, confirmed live -- is
 excluded from that section's parsed rows and reported in `warnings`
 rather than silently miscounted as a lineman.
+
+Multi-year snap data: confirmed live 2026-09-16 that `teamroster.php`
+takes a `year=` query param and returns that season's real, accurate
+FULL-SEASON snap totals for a completed year (e.g. Miami's 2025 Carson
+Beck: 1033 snaps; 2024 Cam Ward: 868 snaps -- both correct against known
+real stats) or in-progress totals for the current year. Data quality
+holds back to at least 2022 (verified: real Offensive Line section, real
+snap data); 2020 is degraded (duplicate entries, no snap data at all) --
+treat "reliable" as roughly 2022-present, not further back without
+re-verifying. `fetch_roster`'s `year` param is required (no default) so a
+caller can never accidentally fetch the wrong season silently.
 """
 
 from __future__ import annotations
@@ -97,7 +108,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Optional
 from urllib.parse import quote
 
-TEAM_ROSTER_URL_TMPL = "https://www.puntandrally.com/teamroster.php?team={team}"
+TEAM_ROSTER_URL_TMPL = "https://www.puntandrally.com/teamroster.php?year={year}&team={team}"
 TEAM_INDEX_URL = "https://www.puntandrally.com/teamsgrid.php?geturl=roster"
 TEAM_INDEX_SELECTOR = ".np-team-name"
 
@@ -116,6 +127,12 @@ KNOWN_DL_TAGS = {"DE", "DT", "DL"}
 # docstring -- there is no equivalent fixed split for DL (front size
 # varies by scheme), so callers must size that themselves per team.
 OL_STARTER_COUNTS = {"T": 2, "G": 2, "C": 1}
+
+# Flat top-N-by-snaps count for DL, regardless of DE/DT/DL tag -- the same
+# simplification run_week.py used to keep privately; promoted here so
+# fetch_talent.py's Experience computation and run_week.py's roster-file
+# writer can never disagree about who counts as this year's DL starters.
+DL_STARTER_COUNT = 4
 
 # Confirmed live 2026-09-16 against puntandrally's own team-roster grid --
 # see module docstring. Left as an empty dict (not removed) so a future
@@ -288,18 +305,22 @@ def fetch_team_index(browser_fetch: Optional[Callable[..., str]] = None) -> set:
 
 def fetch_roster(
     team: str,
+    year: int,
     browser_fetch: Optional[Callable[..., str]] = None,
 ) -> tuple:
-    """Returns (ol_section, dl_section) as RosterSections. `browser_fetch`
-    is a pluggable `(url, wait_for_selector=...) -> html` callable
-    (defaults to a one-off real Playwright launch); tests inject a fake
-    one instead of requests.Session, since this module isn't
+    """Returns (ol_section, dl_section) as RosterSections for the given
+    season -- `year` is required (no default) so a caller can never
+    accidentally fetch the wrong season silently; see module docstring for
+    the confirmed-live multi-year support and its ~2022 reliability floor.
+    `browser_fetch` is a pluggable `(url, wait_for_selector=...) -> html`
+    callable (defaults to a one-off real Playwright launch); tests inject a
+    fake one instead of requests.Session, since this module isn't
     `requests`-based -- see module docstring. Pass a browser_session()
     fetch here for a multi-team batch, instead of the default, to reuse
     one browser process across every call."""
     site_name = TEAM_NAME_ALIASES.get(team, team)
     fetcher = browser_fetch or _browser_fetch_html
-    url = TEAM_ROSTER_URL_TMPL.format(team=quote(site_name))
+    url = TEAM_ROSTER_URL_TMPL.format(year=year, team=quote(site_name))
     page_html = fetcher(url)
 
     ol_section = parse_position_section(page_html, "Offensive Line", KNOWN_OL_TAGS)
@@ -322,17 +343,33 @@ def starters_for_group(players: list, starter_counts: dict) -> list:
     return starters
 
 
+def dl_starters_for_group(players: list, count: int = DL_STARTER_COUNT) -> list:
+    """Top `count` DL players by snap count, regardless of DE/DT/DL tag.
+    puntandrally's DL tags are too coarse to split by slot the way
+    starters_for_group does for OL -- front size genuinely varies by
+    scheme (a 4-3's 4 down linemen vs. a 3-4's 3), and this module
+    deliberately declines to guess a fixed split (see module docstring).
+    A flat top-N by usage is the simplification every caller of this
+    module shares -- both config/rosters/{team}.yaml's DL list and the
+    Experience metric's DL snap-share lookup use this exact function, so
+    they can never disagree about who counts as this year's DL starters."""
+    ranked = sorted(players, key=lambda p: p.snaps if p.snaps is not None else -1, reverse=True)
+    return [p.name for p in ranked[:count]]
+
+
 if __name__ == "__main__":
     import argparse
     import json
 
     parser = argparse.ArgumentParser(description="Fetch live roster + snap counts from puntandrally.com for one team.")
     parser.add_argument("team")
+    parser.add_argument("--year", type=int, required=True)
     args = parser.parse_args()
 
-    ol_section, dl_section = fetch_roster(args.team)
+    ol_section, dl_section = fetch_roster(args.team, args.year)
     print(json.dumps({
         "team": args.team,
+        "year": args.year,
         "OL": {
             "players": [vars(p) for p in ol_section.players],
             "starters": starters_for_group(ol_section.players, OL_STARTER_COUNTS),
@@ -340,6 +377,7 @@ if __name__ == "__main__":
         },
         "DL": {
             "players": [vars(p) for p in dl_section.players],
+            "starters": dl_starters_for_group(dl_section.players),
             "warnings": dl_section.warnings,
         },
     }, indent=2))

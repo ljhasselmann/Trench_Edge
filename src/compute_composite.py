@@ -1,6 +1,6 @@
 """Scoring model (DESIGN.md Section 5).
 
-Trench Edge = w_mass * Mass + w_push * Push + w_continuity * Continuity
+Trench Edge = w_mass * Mass + w_push * Push + w_experience * Experience
 
 Each subscore is normalized to -10 (favors Team B) .. +10 (favors Team A)
 before weighting. This module is pure computation -- no network calls --
@@ -28,9 +28,15 @@ def normalize_push(sp_plus_gap: float) -> float:
     return _clamp(sp_plus_gap / 5.0)
 
 
-def normalize_continuity(net_returning_starters: int) -> float:
-    """1 point per net returning-starter differential."""
-    return _clamp(float(net_returning_starters))
+def normalize_experience(experience_diff_pct: float) -> float:
+    """1 point per 10 percentage-points of returning-snap-share
+    differential, capped at +/-10 -- a starting hunch, same spirit as
+    Mass's "10 lbs/point" and Push's "5 SP+ points/point" above.
+    `experience_diff_pct` is `ol_side.returning_ol_snap_pct -
+    dl_side.returning_dl_snap_pct` (see fetch_talent.ExperienceInputs) --
+    the average share of THIS season's starters' snaps, at their own team,
+    that were played by the same players last season."""
+    return _clamp(experience_diff_pct / 10.0)
 
 
 VERDICT_BANDS = [
@@ -53,7 +59,7 @@ def verdict_for(composite: float) -> str:
 class CompositeResult:
     mass: float
     push: float
-    continuity: float
+    experience: float
     composite: float
     verdict: str
 
@@ -61,24 +67,24 @@ class CompositeResult:
 def compute_composite(
     weight_diff_lbs: float,
     sp_plus_gap: float,
-    net_returning_starters: int,
+    experience_diff_pct: float,
     weights: dict,
 ) -> CompositeResult:
     mass = normalize_mass(weight_diff_lbs)
     push = normalize_push(sp_plus_gap)
-    continuity = normalize_continuity(net_returning_starters)
+    experience = normalize_experience(experience_diff_pct)
 
     composite = (
         weights["mass"] * mass
         + weights["push"] * push
-        + weights["continuity"] * continuity
+        + weights["experience"] * experience
     )
     composite = _clamp(composite)
 
     return CompositeResult(
         mass=mass,
         push=push,
-        continuity=continuity,
+        experience=experience,
         composite=composite,
         verdict=verdict_for(composite),
     )
@@ -91,7 +97,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Compute a Trench Edge composite score.")
     parser.add_argument("--weight-diff-lbs", type=float, required=True)
     parser.add_argument("--sp-plus-gap", type=float, required=True)
-    parser.add_argument("--net-returning-starters", type=int, required=True)
+    parser.add_argument("--experience-diff-pct", type=float, required=True)
     parser.add_argument("--weights-file", default="config/weights.yaml")
     args = parser.parse_args()
 
@@ -99,6 +105,6 @@ if __name__ == "__main__":
         weights = yaml.safe_load(f)
 
     result = compute_composite(
-        args.weight_diff_lbs, args.sp_plus_gap, args.net_returning_starters, weights
+        args.weight_diff_lbs, args.sp_plus_gap, args.experience_diff_pct, weights
     )
     print(result)
