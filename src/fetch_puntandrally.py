@@ -92,12 +92,14 @@ from __future__ import annotations
 
 import html
 import re
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import Callable, Optional
 from urllib.parse import quote
 
 TEAM_ROSTER_URL_TMPL = "https://www.puntandrally.com/teamroster.php?team={team}"
 TEAM_INDEX_URL = "https://www.puntandrally.com/teamsgrid.php?geturl=roster"
+TEAM_INDEX_SELECTOR = ".np-team-name"
 
 DEFAULT_USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -153,7 +155,7 @@ class RosterSection:
     warnings: list = field(default_factory=list)  # list[str]
 
 
-def _browser_fetch_html(url: str, wait_for_selector: str = CONTENT_SELECTOR) -> str:
+def _import_playwright():
     try:
         from playwright.sync_api import Error as PlaywrightError
         from playwright.sync_api import sync_playwright
@@ -163,19 +165,60 @@ def _browser_fetch_html(url: str, wait_for_selector: str = CONTENT_SELECTOR) -> 
             "challenge plain `requests` can't solve) -- install it and its browser via "
             "`pip install playwright && playwright install chromium`"
         ) from exc
+    return PlaywrightError, sync_playwright
 
+
+def _navigate_and_get_html(browser, url: str, wait_for_selector: str, playwright_error) -> str:
     try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            try:
-                page = browser.new_page(user_agent=DEFAULT_USER_AGENT)
-                page.goto(url, timeout=NAVIGATION_TIMEOUT_MS)
-                page.wait_for_selector(wait_for_selector, timeout=CONTENT_SELECTOR_TIMEOUT_MS)
-                return page.content()
-            finally:
-                browser.close()
-    except PlaywrightError as exc:
+        page = browser.new_page(user_agent=DEFAULT_USER_AGENT)
+        try:
+            page.goto(url, timeout=NAVIGATION_TIMEOUT_MS)
+            page.wait_for_selector(wait_for_selector, timeout=CONTENT_SELECTOR_TIMEOUT_MS)
+            return page.content()
+        finally:
+            page.close()
+    except playwright_error as exc:
         raise PuntAndRallyFetchError(f"browser navigation to {url!r} failed: {exc}") from exc
+
+
+def _browser_fetch_html(url: str, wait_for_selector: str = CONTENT_SELECTOR) -> str:
+    """One-off fetch: launches Chromium, fetches a single page, closes it.
+    Fine for a single team lookup (the CLI below), but launching a fresh
+    browser process per call is real overhead (several seconds on top of
+    the Cloudflare challenge itself) -- a multi-team batch should use
+    browser_session() instead so one browser process serves every fetch."""
+    playwright_error, sync_playwright = _import_playwright()
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        try:
+            return _navigate_and_get_html(browser, url, wait_for_selector, playwright_error)
+        finally:
+            browser.close()
+
+
+@contextmanager
+def browser_session():
+    """One Chromium process, reused across many fetch() calls -- for a
+    week's ~45-team roster batch, this is the difference between
+    launching Chromium once vs. 45 times. Yields a
+    `fetch(url, wait_for_selector=CONTENT_SELECTOR) -> str` callable with
+    the same signature `_browser_fetch_html` has, suitable for
+    fetch_roster's/fetch_team_index's `browser_fetch` param:
+
+        with browser_session() as fetch:
+            for team in teams:
+                ol_section, dl_section = fetch_roster(team, browser_fetch=fetch)
+    """
+    playwright_error, sync_playwright = _import_playwright()
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        try:
+            def fetch(url: str, wait_for_selector: str = CONTENT_SELECTOR) -> str:
+                return _navigate_and_get_html(browser, url, wait_for_selector, playwright_error)
+
+            yield fetch
+        finally:
+            browser.close()
 
 
 def _to_first_last_or_full(raw: str) -> str:
@@ -225,14 +268,18 @@ def parse_position_section(page_html: str, section_title: str, known_tags: set) 
     return result
 
 
-def fetch_team_index(browser_fetch: Optional[Callable[[str], str]] = None) -> set:
+def fetch_team_index(browser_fetch: Optional[Callable[..., str]] = None) -> set:
     """Every team name puntandrally lists on its own roster grid --
     confirmed live to cover all 138 FBS teams, all matching CFBD's
     canonical spelling directly (see module docstring). Used by
     scripts/check_team_name_coverage.py, not by fetch_roster itself
-    (which doesn't need a lookup since the URL just takes a team name)."""
-    fetcher = browser_fetch or (lambda url: _browser_fetch_html(url, wait_for_selector=".np-team-name"))
-    page_html = fetcher(TEAM_INDEX_URL)
+    (which doesn't need a lookup since the URL just takes a team name).
+    `browser_fetch` follows the same `(url, wait_for_selector=...) -> str`
+    contract as fetch_roster's -- a browser_session() fetch works here too,
+    so a caller can build the index and fetch every team's roster under
+    one shared browser process."""
+    fetcher = browser_fetch or _browser_fetch_html
+    page_html = fetcher(TEAM_INDEX_URL, wait_for_selector=TEAM_INDEX_SELECTOR)
     index = {html.unescape(name).strip() for name in _TEAM_INDEX_PATTERN.findall(page_html)}
     if not index:
         raise PuntAndRallyFetchError("puntandrally team index parsed to zero teams -- page structure may have changed")
@@ -241,12 +288,15 @@ def fetch_team_index(browser_fetch: Optional[Callable[[str], str]] = None) -> se
 
 def fetch_roster(
     team: str,
-    browser_fetch: Optional[Callable[[str], str]] = None,
+    browser_fetch: Optional[Callable[..., str]] = None,
 ) -> tuple:
     """Returns (ol_section, dl_section) as RosterSections. `browser_fetch`
-    is a pluggable `url -> html` callable (defaults to real Playwright);
-    tests inject a fake one instead of requests.Session, since this module
-    isn't `requests`-based -- see module docstring."""
+    is a pluggable `(url, wait_for_selector=...) -> html` callable
+    (defaults to a one-off real Playwright launch); tests inject a fake
+    one instead of requests.Session, since this module isn't
+    `requests`-based -- see module docstring. Pass a browser_session()
+    fetch here for a multi-team batch, instead of the default, to reuse
+    one browser process across every call."""
     site_name = TEAM_NAME_ALIASES.get(team, team)
     fetcher = browser_fetch or _browser_fetch_html
     url = TEAM_ROSTER_URL_TMPL.format(team=quote(site_name))

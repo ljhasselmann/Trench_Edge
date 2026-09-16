@@ -170,6 +170,45 @@ def test_fetch_roster_uses_injected_browser_fetch_not_real_playwright():
     assert [p.name for p in dl_section.players] == ["Marquise Lightfoot", "Ahmad Moten Sr.", "Justin Scott"]
 
 
+def test_browser_session_reuses_one_browser_across_multiple_fetches(monkeypatch):
+    # Can't launch a real browser in a unit test; verify the efficiency
+    # contract instead -- chromium.launch() is called exactly once for
+    # the whole `with` block, no matter how many fetch() calls happen
+    # inside it, and each fetch() reuses that same browser object rather
+    # than relaunching.
+    launch_calls = []
+    fetch_calls = []
+
+    class FakeBrowser:
+        def new_page(self, user_agent=None):
+            raise fetch_puntandrally.PuntAndRallyFetchError("should not navigate in this test")
+
+        def close(self):
+            pass
+
+    class FakeChromium:
+        def launch(self, headless=True):
+            launch_calls.append(headless)
+            return FakeBrowser()
+
+    class FakePlaywrightContext:
+        def __enter__(self):
+            return type("P", (), {"chromium": FakeChromium()})()
+
+        def __exit__(self, *args):
+            return False
+
+    monkeypatch.setattr(fetch_puntandrally, "_navigate_and_get_html", lambda browser, url, sel, err: fetch_calls.append(url) or "<html></html>")
+    monkeypatch.setattr(fetch_puntandrally, "_import_playwright", lambda: (Exception, lambda: FakePlaywrightContext()))
+
+    with fetch_puntandrally.browser_session() as fetch:
+        fetch("https://www.puntandrally.com/teamroster.php?team=Miami")
+        fetch("https://www.puntandrally.com/teamroster.php?team=Wisconsin")
+
+    assert launch_calls == [True]  # chromium.launch() called exactly once for both fetches
+    assert len(fetch_calls) == 2
+
+
 def test_fetch_roster_raises_typed_error_when_browser_fetch_fails():
     def failing_fetch(url):
         raise fetch_puntandrally.PuntAndRallyFetchError("browser navigation failed: timeout")
@@ -189,10 +228,24 @@ SAMPLE_TEAM_INDEX_HTML = """
 
 
 def test_fetch_team_index_unescapes_html_entities_in_team_names():
-    index = fetch_puntandrally.fetch_team_index(browser_fetch=lambda url: SAMPLE_TEAM_INDEX_HTML)
+    index = fetch_puntandrally.fetch_team_index(browser_fetch=lambda url, **kwargs: SAMPLE_TEAM_INDEX_HTML)
     assert index == {"Alabama", "Texas A&M"}
 
 
 def test_fetch_team_index_raises_on_empty_parse():
     with pytest.raises(fetch_puntandrally.PuntAndRallyFetchError, match="zero teams"):
-        fetch_puntandrally.fetch_team_index(browser_fetch=lambda url: "<html>nothing here</html>")
+        fetch_puntandrally.fetch_team_index(browser_fetch=lambda url, **kwargs: "<html>nothing here</html>")
+
+
+def test_fetch_team_index_passes_its_own_content_selector_to_the_fetcher():
+    # fetch_team_index's page has no ".tr-section-title" -- it must ask
+    # for its own selector, not the roster-page default, whether using
+    # the one-off default fetcher or an injected browser_session fetch.
+    seen = {}
+
+    def fake_fetch(url, wait_for_selector=None):
+        seen["wait_for_selector"] = wait_for_selector
+        return SAMPLE_TEAM_INDEX_HTML
+
+    fetch_puntandrally.fetch_team_index(browser_fetch=fake_fetch)
+    assert seen["wait_for_selector"] == fetch_puntandrally.TEAM_INDEX_SELECTOR
