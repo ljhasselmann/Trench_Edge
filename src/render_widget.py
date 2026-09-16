@@ -64,8 +64,8 @@ import requests
 import fetch_sp_plus
 from fetch_cfbd import fetch_team_trench_stats
 from fetch_roster import compute_mass_inputs
-from fetch_talent import compute_experience_inputs
-from compute_composite import compute_composite, normalize_mass, normalize_experience, normalize_push
+from fetch_talent import compute_experience_inputs, compute_recruiting_talent_inputs
+from compute_composite import compute_composite, normalize_mass, normalize_experience, normalize_push, normalize_recruiting_talent
 
 WEIGHTS_FILE = Path(__file__).resolve().parents[1] / "config" / "weights.yaml"
 
@@ -83,23 +83,26 @@ class WidgetContext:
     mass: dict
     push: dict
     experience: dict
+    recruiting: dict
     composite: Optional[dict]
     warnings: list[str] = field(default_factory=list)
 
 
 @dataclass
 class TeamData:
-    """Everything Mass/Experience/Tier1 need for one team -- both sides
-    (OL and DL weight, offense and defense stats), since the underlying
-    fetches (compute_mass_inputs, compute_experience_inputs,
-    fetch_team_trench_stats) all compute both regardless of which side of
-    a matchup this team plays. Fetching this once per team (not once per
-    matchup direction) is what makes four-corners scoring not double the
-    network cost -- see module docstring."""
+    """Everything Mass/Experience/Recruiting/Tier1 need for one team --
+    both sides (OL and DL weight, offense and defense stats), since the
+    underlying fetches (compute_mass_inputs, compute_experience_inputs,
+    compute_recruiting_talent_inputs, fetch_team_trench_stats) all compute
+    both regardless of which side of a matchup this team plays. Fetching
+    this once per team (not once per matchup direction) is what makes
+    four-corners scoring not double the network cost -- see module
+    docstring."""
 
     team: str
     mass: object  # fetch_roster.MassInputs
     experience: object  # fetch_talent.ExperienceInputs
+    recruiting: object  # fetch_talent.RecruitingTalentInputs
     tier1: Optional[object]  # fetch_cfbd.TeamAdvancedStats, None if the fetch failed
     warnings: list[str] = field(default_factory=list)
 
@@ -124,6 +127,9 @@ def fetch_team_data(
     experience = compute_experience_inputs(team, year, talent_table=talent_table, session=session, browser_fetch=browser_fetch)
     warnings += [f"[{team} Experience] {w}" for w in experience.warnings]
 
+    recruiting = compute_recruiting_talent_inputs(team)
+    warnings += [f"[{team} Recruiting] {w}" for w in recruiting.warnings]
+
     try:
         tier1 = fetch_team_trench_stats(team, year, session=session)
         warnings += [f"[{team} Tier1 offense] {w}" for w in tier1.offense.warnings]
@@ -132,7 +138,7 @@ def fetch_team_data(
         tier1 = None
         warnings.append(f"[{team} Tier1] fetch failed: {exc}")
 
-    return TeamData(team=team, mass=mass, experience=experience, tier1=tier1, warnings=warnings)
+    return TeamData(team=team, mass=mass, experience=experience, recruiting=recruiting, tier1=tier1, warnings=warnings)
 
 
 def _resolve_sp_plus_gap(
@@ -198,6 +204,12 @@ def combine_context(
         experience_diff_pct = ol_data.experience.returning_ol_snap_pct - dl_data.experience.returning_dl_snap_pct
         experience_score = normalize_experience(experience_diff_pct)
 
+    recruiting_score = None
+    recruiting_rating_diff = None
+    if ol_data.recruiting.avg_ol_rating is not None and dl_data.recruiting.avg_dl_rating is not None:
+        recruiting_rating_diff = ol_data.recruiting.avg_ol_rating - dl_data.recruiting.avg_dl_rating
+        recruiting_score = normalize_recruiting_talent(recruiting_rating_diff)
+
     push_score = normalize_push(gap) if gap is not None else None
     if push_score is None:
         warnings.append(
@@ -214,12 +226,15 @@ def combine_context(
         push_raw[f"{dl_label}_defense_line_yards"] = dl_data.tier1.defense.line_yards
 
     composite = None
-    if mass_score is not None and push_score is not None and experience_score is not None:
-        result = compute_composite(weight_diff, gap, experience_diff_pct, weights)
+    if mass_score is not None and push_score is not None and experience_score is not None and recruiting_score is not None:
+        result = compute_composite(weight_diff, gap, experience_diff_pct, recruiting_rating_diff, weights)
         composite = {"value": result.composite, "verdict": result.verdict}
     else:
         missing = [
-            name for name, val in (("Mass", mass_score), ("Push", push_score), ("Experience", experience_score))
+            name for name, val in (
+                ("Mass", mass_score), ("Push", push_score),
+                ("Experience", experience_score), ("Recruiting", recruiting_score),
+            )
             if val is None
         ]
         warnings.append(f"Composite not computed -- missing: {', '.join(missing)}")
@@ -249,6 +264,12 @@ def combine_context(
             "team_a_note": ol_data.experience.continuity_note,
             "team_b_driver": dl_data.experience.continuity_driver,
             "team_b_note": dl_data.experience.continuity_note,
+        },
+        recruiting={
+            "team_a_rating": ol_data.recruiting.avg_ol_rating,
+            "team_b_rating": dl_data.recruiting.avg_dl_rating,
+            "rating_diff": recruiting_rating_diff,
+            "score": recruiting_score,
         },
         composite=composite,
         warnings=warnings,
@@ -344,6 +365,7 @@ def context_to_history_dict(context: WidgetContext) -> dict:
         },
         "push": context.push,
         "experience": context.experience,
+        "recruiting": context.recruiting,
         "composite": context.composite,
         "warnings": context.warnings,
     }

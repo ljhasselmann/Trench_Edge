@@ -10,14 +10,20 @@ starters:
     jersey: '72'
     class_year: FR
     snaps_multi_year: 170
+    recruit_rating: 86
+    recruit_stars: 3
   - name: Ryan Berger
     jersey: '64'
     class_year: JR
     snaps_multi_year: 120
+    recruit_rating: 78
+    recruit_stars: 2
   - name: Jack Hines
     jersey: '78'
     class_year: SO
     snaps_multi_year: 172
+    recruit_rating: 87
+    recruit_stars: 3
   - name: Will Way
     jersey: '70'
     class_year: JR
@@ -27,6 +33,8 @@ starters:
     jersey: '11'
     class_year: SR
     snaps_multi_year: 779
+    recruit_rating: 81
+    recruit_stars: 3
   - name: Gabe Kirschke
     jersey: '10'
     class_year: SR
@@ -35,6 +43,8 @@ starters:
     jersey: '52'
     class_year: SR
     snaps_multi_year: 606
+    recruit_rating: 80
+    recruit_stars: 3
   - name: Zach Lohavichan
     jersey: '94'
     class_year: SR

@@ -3,14 +3,14 @@
   "team_a": "Miami",
   "team_b": "Wake Forest",
   "year": 2026,
-  "generated_at": "2026-09-16 15:41 UTC",
+  "generated_at": "2026-09-16 17:51 UTC",
   "direction_a": {
     "matchup_label": "2026-wk03-miami-wake-forest-a",
     "team_a": "Miami",
     "team_b": "Wake Forest",
     "side": "team_a_ol_vs_team_b_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 15:41 UTC",
+    "generated_at": "2026-09-16 17:51 UTC",
     "mass": {
       "team_a_avg_weight": 319.0,
       "team_b_avg_weight": 268.75,
@@ -24,7 +24,9 @@
           "source": "cfbd_roster",
           "jersey": "78",
           "class_year": "SR",
-          "snaps_multi_year": 1355
+          "snaps_multi_year": 1355,
+          "recruit_rating": 86,
+          "recruit_stars": 3
         },
         {
           "name": "Samson Okunlola",
@@ -33,7 +35,9 @@
           "source": "cfbd_roster",
           "jersey": "63",
           "class_year": "JR",
-          "snaps_multi_year": 646
+          "snaps_multi_year": 646,
+          "recruit_rating": 98,
+          "recruit_stars": 5
         },
         {
           "name": "Max Buchanan",
@@ -42,7 +46,9 @@
           "source": "cfbd_roster",
           "jersey": "66",
           "class_year": "SO",
-          "snaps_multi_year": 134
+          "snaps_multi_year": 134,
+          "recruit_rating": 88,
+          "recruit_stars": 3
         },
         {
           "name": "Jackson Cantwell",
@@ -51,7 +57,9 @@
           "source": "cfbd_roster",
           "jersey": "79",
           "class_year": "FR",
-          "snaps_multi_year": 60
+          "snaps_multi_year": 60,
+          "recruit_rating": 99,
+          "recruit_stars": 5
         },
         {
           "name": "Ryan Rodriguez",
@@ -60,7 +68,9 @@
           "source": "cfbd_roster",
           "jersey": "76",
           "class_year": "SR",
-          "snaps_multi_year": 221
+          "snaps_multi_year": 221,
+          "recruit_rating": 89,
+          "recruit_stars": 3
         }
       ],
       "team_b_starters": [
@@ -71,7 +81,9 @@
           "source": "cfbd_roster",
           "jersey": "11",
           "class_year": "SR",
-          "snaps_multi_year": 779
+          "snaps_multi_year": 779,
+          "recruit_rating": 81,
+          "recruit_stars": 3
         },
         {
           "name": "Gabe Kirschke",
@@ -80,7 +92,9 @@
           "source": "cfbd_roster",
           "jersey": "10",
           "class_year": "SR",
-          "snaps_multi_year": 595
+          "snaps_multi_year": 595,
+          "recruit_rating": null,
+          "recruit_stars": null
         },
         {
           "name": "Dallas Afalava",
@@ -89,7 +103,9 @@
           "source": "cfbd_roster",
           "jersey": "52",
           "class_year": "SR",
-          "snaps_multi_year": 606
+          "snaps_multi_year": 606,
+          "recruit_rating": 80,
+          "recruit_stars": 3
         },
         {
           "name": "Zach Lohavichan",
@@ -98,7 +114,9 @@
           "source": "cfbd_roster",
           "jersey": "94",
           "class_year": "SR",
-          "snaps_multi_year": 878
+          "snaps_multi_year": 878,
+          "recruit_rating": null,
+          "recruit_stars": null
         }
       ]
     },
@@ -123,8 +141,14 @@
       "team_b_driver": null,
       "team_b_note": null
     },
+    "recruiting": {
+      "team_a_rating": 92.0,
+      "team_b_rating": 80.5,
+      "rating_diff": 11.5,
+      "score": 2.3
+    },
     "composite": {
-      "value": 3.2810000000000006,
+      "value": 2.7945,
       "verdict": "slight-to-moderate edge"
     },
     "warnings": [
@@ -138,7 +162,7 @@
     "team_b": "Miami",
     "side": "team_b_ol_vs_team_a_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 15:41 UTC",
+    "generated_at": "2026-09-16 17:51 UTC",
     "mass": {
       "team_a_avg_weight": 296.8,
       "team_b_avg_weight": 270.75,
@@ -152,7 +176,9 @@
           "source": "cfbd_roster",
           "jersey": "55",
           "class_year": "SR",
-          "snaps_multi_year": 137
+          "snaps_multi_year": 137,
+          "recruit_rating": null,
+          "recruit_stars": null
         },
         {
           "name": "Aidan Martin",
@@ -161,7 +187,9 @@
           "source": "cfbd_roster",
           "jersey": "72",
           "class_year": "FR",
-          "snaps_multi_year": 170
+          "snaps_multi_year": 170,
+          "recruit_rating": 86,
+          "recruit_stars": 3
         },
         {
           "name": "Ryan Berger",
@@ -170,7 +198,9 @@
           "source": "cfbd_roster",
           "jersey": "64",
           "class_year": "JR",
-          "snaps_multi_year": 120
+          "snaps_multi_year": 120,
+          "recruit_rating": 78,
+          "recruit_stars": 2
         },
         {
           "name": "Jack Hines",
@@ -179,7 +209,9 @@
           "source": "cfbd_roster",
           "jersey": "78",
           "class_year": "SO",
-          "snaps_multi_year": 172
+          "snaps_multi_year": 172,
+          "recruit_rating": 87,
+          "recruit_stars": 3
         },
         {
           "name": "Will Way",
@@ -188,7 +220,9 @@
           "source": "cfbd_roster",
           "jersey": "70",
           "class_year": "JR",
-          "snaps_multi_year": 113
+          "snaps_multi_year": 113,
+          "recruit_rating": null,
+          "recruit_stars": null
         }
       ],
       "team_b_starters": [
@@ -199,7 +233,9 @@
           "source": "cfbd_roster",
           "jersey": "8",
           "class_year": "JR",
-          "snaps_multi_year": 361
+          "snaps_multi_year": 361,
+          "recruit_rating": 97,
+          "recruit_stars": 4
         },
         {
           "name": "Ahmad Moten Sr.",
@@ -208,7 +244,9 @@
           "source": "cfbd_roster",
           "jersey": "99",
           "class_year": "SR",
-          "snaps_multi_year": 828
+          "snaps_multi_year": 828,
+          "recruit_rating": 85,
+          "recruit_stars": 3
         },
         {
           "name": "Justin Scott",
@@ -217,7 +255,9 @@
           "source": "cfbd_roster",
           "jersey": "5",
           "class_year": "JR",
-          "snaps_multi_year": 680
+          "snaps_multi_year": 680,
+          "recruit_rating": 98,
+          "recruit_stars": 5
         },
         {
           "name": "Damon Wilson II",
@@ -226,7 +266,9 @@
           "source": "cfbd_roster",
           "jersey": "10",
           "class_year": "SR",
-          "snaps_multi_year": 61
+          "snaps_multi_year": 61,
+          "recruit_rating": 97,
+          "recruit_stars": 4
         }
       ]
     },
@@ -251,8 +293,14 @@
       "team_b_driver": null,
       "team_b_note": null
     },
+    "recruiting": {
+      "team_a_rating": 83.66666666666667,
+      "team_b_rating": 94.25,
+      "rating_diff": -10.583333333333329,
+      "score": -2.116666666666666
+    },
     "composite": {
-      "value": -1.3589999999999998,
+      "value": -1.5988333333333327,
       "verdict": "negligible edge"
     },
     "warnings": [

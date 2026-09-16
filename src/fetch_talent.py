@@ -43,6 +43,20 @@ still a plain human-authored field on the same file (`continuity_note`) --
 nothing here automates it; DESIGN.md does not specify a numeric discount
 for it either, only "discount further," so this module surfaces it as a
 caveat rather than inventing one.
+
+Recruiting Talent Differential (a separate Section 5 scoring component,
+not folded into Experience): `fetch_247sports.py` fetches each starter's
+real 247Sports composite rating (0-100) and star count at the same point
+`run_week.py` stages jersey/class_year/snaps_multi_year onto each starter
+YAML entry (see that module's docstring) -- so `compute_recruiting_talent_
+inputs` here is PURE, no network at all, just averaging `recruit_rating`
+across config/rosters/{team}.yaml's already-staged starters, the same way
+Mass averages already-staged weights. A starter missing a rating (an
+unrated walk-on, or the 247Sports fetch never found/matched them) is
+excluded from the average, not counted as 0 -- unlike Experience's
+snap-share average, where a name genuinely not returning IS meaningfully
+0%, an unrated player isn't meaningfully "0 recruiting talent," just
+unmeasured.
 """
 
 from __future__ import annotations
@@ -209,6 +223,46 @@ def compute_experience_inputs(
     return inputs
 
 
+@dataclass
+class RecruitingTalentInputs:
+    team: str
+    avg_ol_rating: Optional[float] = None  # avg 247Sports composite (0-100) across this team's staged OL starters
+    avg_dl_rating: Optional[float] = None
+    warnings: list[str] = field(default_factory=list)
+
+
+def compute_recruiting_talent_inputs(team: str) -> RecruitingTalentInputs:
+    """Pure, no network -- averages the `recruit_rating` field
+    run_week.py's populate_roster already staged onto each starter entry
+    in config/rosters/{team}.yaml (from fetch_247sports.py). A starter
+    with no rating (unrated walk-on, or unmatched against 247Sports) is
+    excluded from the average, not counted as 0 -- see module docstring."""
+    inputs = RecruitingTalentInputs(team=team)
+
+    config = _load_starter_config(team)
+    if config is None:
+        inputs.warnings.append(
+            f"config/rosters/{team}.yaml does not exist -- recruiting talent unavailable"
+        )
+        return inputs
+
+    starters = config.get("starters", {})
+    for group_key, attr in (("OL", "avg_ol_rating"), ("DL", "avg_dl_rating")):
+        entries = starters.get(group_key, [])
+        ratings = [e["recruit_rating"] for e in entries if e.get("recruit_rating") is not None]
+        if not entries:
+            continue
+        if not ratings:
+            inputs.warnings.append(
+                f"no {group_key} starter for {team} has a 247Sports recruit_rating staged -- "
+                "recruiting talent unavailable for this side"
+            )
+            continue
+        setattr(inputs, attr, sum(ratings) / len(ratings))
+
+    return inputs
+
+
 if __name__ == "__main__":
     import argparse
     import json
@@ -220,3 +274,5 @@ if __name__ == "__main__":
 
     result = compute_experience_inputs(args.team, args.year)
     print(json.dumps(vars(result), indent=2))
+    recruiting = compute_recruiting_talent_inputs(args.team)
+    print(json.dumps(vars(recruiting), indent=2))

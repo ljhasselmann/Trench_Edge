@@ -55,6 +55,8 @@ class StarterWeight:
     jersey: Optional[str] = None
     class_year: Optional[str] = None  # "FR" | "SO" | "JR" | "SR" | "GR"
     snaps_multi_year: Optional[int] = None  # multi-season sum from fetch_puntandrally, NOT a true career total
+    recruit_rating: Optional[int] = None  # 0-100 composite, from fetch_247sports -- display only, see fetch_talent.py for the actual scored differential
+    recruit_stars: Optional[int] = None  # 0-5, from fetch_247sports's real star icons
 
 
 @dataclass
@@ -152,6 +154,7 @@ def compute_mass_inputs(
                     name=name, weight_lbs=weight, confidence="confirmed", source="cfbd_roster",
                     jersey=entry.get("jersey"), class_year=entry.get("class_year"),
                     snaps_multi_year=entry.get("snaps_multi_year"),
+                    recruit_rating=entry.get("recruit_rating"), recruit_stars=entry.get("recruit_stars"),
                 ))
                 if live_player.get("position") not in tag_set:
                     inputs.warnings.append(
@@ -168,6 +171,7 @@ def compute_mass_inputs(
                     source=entry.get("source", "manual"),
                     jersey=entry.get("jersey"), class_year=entry.get("class_year"),
                     snaps_multi_year=entry.get("snaps_multi_year"),
+                    recruit_rating=entry.get("recruit_rating"), recruit_stars=entry.get("recruit_stars"),
                 ))
             else:
                 inputs.warnings.append(

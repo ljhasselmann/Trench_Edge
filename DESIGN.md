@@ -10,7 +10,7 @@ Trench Edge is a weekly, automatically-refreshed composite score comparing the
 offensive line of one college football team against the defensive line of
 another (and vice versa, once the four-corners version ships). It formalizes
 the "mass kicks ass" heuristic into three measurable, individually-labeled
-components — Mass, Push, and Experience — instead of a single vibes-based
+components — Mass, Push, Experience, and Recruiting Talent Differential — instead of a single vibes-based
 gut call.
 
 It is explicitly **not** a standalone betting signal. It's a supplementary
@@ -35,7 +35,7 @@ trench-edge/
   .env                        CFBD_API_KEY=... (gitignored, never committed)
   .gitignore                  .env, /history/*.json (or keep history, TBD)
   config/
-    weights.yaml               Mass/Push/Experience weights, tunable
+    weights.yaml               Mass/Push/Experience/Recruiting weights, tunable
     teams.yaml                 hand-curated matchup(s) to score/override
     matchups/
       2026-wk03.yaml            this week's discovered + merged matchups
@@ -118,14 +118,15 @@ preference:
    incumbents mid-season, as happened with Cantwell/McCoy). The routine
    should flag when it's using a roster snapshot older than 7 days rather
    than silently using stale starters.
-4. Each starter entry also carries, where puntandrally has it,
-   `jersey`, `class_year` (FR/SO/JR/SR/GR), and `snaps_multi_year` (a
+4. Each starter entry also carries, where the source has it, `jersey`,
+   `class_year` (FR/SO/JR/SR/GR), `snaps_multi_year` (a
    `fetch_puntandrally.DEFAULT_SNAP_HISTORY_YEARS`-season sum, NOT a true
-   career total — see that module's docstring) — populated automatically
-   by `run_week.py` alongside the starter name itself, rendered in the
-   widget's starters table.
+   career total — see that module's docstring), and `recruit_rating`/
+   `recruit_stars` (from `fetch_247sports.py`, see Section 4c) — all
+   populated automatically by `run_week.py` alongside the starter name
+   itself, rendered in the widget's starters table.
 
-### 4c. Tier 2 — talent and experience (`fetch_talent.py`)
+### 4c. Tier 2 — talent, experience, and recruiting (`fetch_talent.py`, `fetch_247sports.py`)
 
 - **Returning experience, by position group (OL, DL) — automated, not
   human-typed.** `fetch_puntandrally.py`'s `year=` query param gives real,
@@ -142,8 +143,23 @@ preference:
   when the live year-over-year fetch fails for a team (site issue, or a
   team predating puntandrally's reliability floor); it's a coarser,
   non-snap-weighted proxy when used.
-- 247/On3 team talent composite or blue-chip ratio, position-group-specific
-  where available, team-wide as fallback
+- **247/On3 team talent composite or blue-chip ratio, position-group-
+  specific — resolved as its own separate Section 5 scoring component,
+  Recruiting Talent Differential, not folded into Experience.**
+  `fetch_247sports.py` fetches each current starter's real 247Sports
+  composite rating (0-100) and star count directly from that team's own
+  roster page — confirmed live to sit behind the same class of
+  bot-detection puntandrally.com does (plain `requests` 403s; a plain,
+  non-stealth headless Playwright launch gets through cleanly, no
+  evasion needed) and to need no cross-referencing of recruiting-class
+  archives: one roster page per team lists jersey/position/class-year/
+  rating for the whole CURRENT roster at once, including transfers. Like
+  jersey/class_year/snaps_multi_year, this is staged onto each starter's
+  `config/rosters/{team}.yaml` entry by `run_week.py` at populate time
+  (`recruit_rating`, `recruit_stars`) — `compute_recruiting_talent_inputs`
+  is then pure, no network, just averaging the already-staged rating per
+  side. A starter with no rating (unrated walk-on, or unmatched against
+  247Sports) is excluded from the average, not counted as 0.
 - A qualitative flag, set manually per team per season: is this unit's
   performance level talent-driven or coaching/scheme-driven? (E.g., Wake
   Forest's 2025 defensive turnaround was explicitly coaching-driven per beat
@@ -158,6 +174,7 @@ preference:
 
 ```
 Trench Edge = w_mass * Mass + w_push * Push + w_experience * Experience
+              + w_recruiting * Recruiting
 ```
 
 Each subscore is normalized to a **-10 (favors Team B) to +10 (favors Team A)**
@@ -168,6 +185,7 @@ scale before weighting:
 | Mass | 1 point per 10 lbs of average weight differential, capped at ±10 | Simplest, most reliable input — pure roster data, no adjustment needed |
 | Push | 1 point per 5 points of **overall** SP+ differential (`team_a.SP+ - team_b.SP+`), capped at ±10 | See below — resolved decision, not the original placeholder |
 | Experience | 1 point per 10 percentage-points of returning-snap-share differential, capped at ±10 | Replaced Continuity's bare returning-starter count — see Section 4c. A starting hunch, same spirit as Mass's and Push's constants above, not fitted to anything yet |
+| Recruiting | 1 point per 5 points of average 247Sports composite-rating (0-100 scale) differential, capped at ±10 | See Section 4c. A starting hunch — real P4-vs-P4 OL/DL rating gaps seen live so far run roughly 0-15 points |
 
 **Push, resolved:** an earlier draft of this formula tried an "off-vs-def"
 combination — `team_a`'s Off. SP+ plus `team_b`'s Def. SP+ (their Def. SP+
@@ -199,9 +217,10 @@ explicitly as `week` per matchup in `config/teams.yaml`.
 Default weights (`config/weights.yaml`), tunable, starting point:
 
 ```yaml
-mass: 0.4
-push: 0.4
+mass: 0.3
+push: 0.3
 experience: 0.2
+recruiting: 0.2
 ```
 
 These are a starting hunch, not a fitted model. See Section 8 for the
@@ -323,11 +342,17 @@ per firing.
   calls to fail there and fall back to ourlads for roster population — the
   local/manual `run_week.py` invocation this was validated against
   (2026 Week 3, Miami vs Wake Forest) is the one puntandrally actually
-  works end-to-end for today.
+  works end-to-end for today. `247sports.com` (`fetch_247sports.py`,
+  Recruiting Talent Differential) is very likely the same story — it
+  sits behind the same class of bot-detection, solved the same way (a
+  plain, non-stealth headless Playwright launch), and hasn't been tried
+  from the cloud Routine environment specifically yet; assume it needs
+  the same local-machine treatment until checked.
 - **Secrets:** `CFBD_API_KEY` lives in the environment, never in the
   Routine's prompt or committed to the repo. `fetch_sp_plus.py`,
-  `fetch_ourlads.py`, and `fetch_puntandrally.py` need no key at all — all
-  three are unauthenticated.
+  `fetch_ourlads.py`, `fetch_puntandrally.py`, and `fetch_247sports.py`
+  need no key at all — all four are unauthenticated (247Sports' core
+  roster/rating data is publicly visible, no login needed, confirmed live).
 - **Routine prompt (current, not a draft):** "Run
   `python3 src/run_week.py --year <current season> --week <this week's
   number>`. It discovers every Top-25-involving FBS game, populates

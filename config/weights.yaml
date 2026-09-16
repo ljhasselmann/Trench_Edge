@@ -1,5 +1,8 @@
 # Trench Edge scoring weights (Section 5 of DESIGN.md).
 # Starting hunch, not a fitted model -- see DESIGN.md Section 8 (backtesting).
-mass: 0.4
-push: 0.4
+# Rebalanced when Recruiting Talent Differential was added (was mass .4 /
+# push .4 / experience .2) -- still a hunch, not re-fit to data.
+mass: 0.3
+push: 0.3
 experience: 0.2
+recruiting: 0.2

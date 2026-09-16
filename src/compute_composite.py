@@ -1,6 +1,7 @@
 """Scoring model (DESIGN.md Section 5).
 
 Trench Edge = w_mass * Mass + w_push * Push + w_experience * Experience
+              + w_recruiting * Recruiting
 
 Each subscore is normalized to -10 (favors Team B) .. +10 (favors Team A)
 before weighting. This module is pure computation -- no network calls --
@@ -39,6 +40,17 @@ def normalize_experience(experience_diff_pct: float) -> float:
     return _clamp(experience_diff_pct / 10.0)
 
 
+def normalize_recruiting_talent(recruiting_rating_diff: float) -> float:
+    """1 point per 5 points of average 247Sports composite-rating (0-100
+    scale) differential, capped at +/-10 -- a starting hunch, same spirit
+    as Mass/Push/Experience's own constants above; real P4-vs-P4 OL/DL
+    rating gaps seen live so far run roughly 0-15 points, occasionally
+    more for a real recruiting-talent mismatch. `recruiting_rating_diff`
+    is `ol_side.avg_ol_rating - dl_side.avg_dl_rating` (see
+    fetch_talent.RecruitingTalentInputs)."""
+    return _clamp(recruiting_rating_diff / 5.0)
+
+
 VERDICT_BANDS = [
     (2.0, "negligible edge"),
     (5.0, "slight-to-moderate edge"),
@@ -60,6 +72,7 @@ class CompositeResult:
     mass: float
     push: float
     experience: float
+    recruiting: float
     composite: float
     verdict: str
 
@@ -68,16 +81,19 @@ def compute_composite(
     weight_diff_lbs: float,
     sp_plus_gap: float,
     experience_diff_pct: float,
+    recruiting_rating_diff: float,
     weights: dict,
 ) -> CompositeResult:
     mass = normalize_mass(weight_diff_lbs)
     push = normalize_push(sp_plus_gap)
     experience = normalize_experience(experience_diff_pct)
+    recruiting = normalize_recruiting_talent(recruiting_rating_diff)
 
     composite = (
         weights["mass"] * mass
         + weights["push"] * push
         + weights["experience"] * experience
+        + weights["recruiting"] * recruiting
     )
     composite = _clamp(composite)
 
@@ -85,6 +101,7 @@ def compute_composite(
         mass=mass,
         push=push,
         experience=experience,
+        recruiting=recruiting,
         composite=composite,
         verdict=verdict_for(composite),
     )
@@ -98,6 +115,7 @@ if __name__ == "__main__":
     parser.add_argument("--weight-diff-lbs", type=float, required=True)
     parser.add_argument("--sp-plus-gap", type=float, required=True)
     parser.add_argument("--experience-diff-pct", type=float, required=True)
+    parser.add_argument("--recruiting-rating-diff", type=float, required=True)
     parser.add_argument("--weights-file", default="config/weights.yaml")
     args = parser.parse_args()
 
@@ -105,6 +123,7 @@ if __name__ == "__main__":
         weights = yaml.safe_load(f)
 
     result = compute_composite(
-        args.weight_diff_lbs, args.sp_plus_gap, args.experience_diff_pct, weights
+        args.weight_diff_lbs, args.sp_plus_gap, args.experience_diff_pct,
+        args.recruiting_rating_diff, weights,
     )
     print(result)

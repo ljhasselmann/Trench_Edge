@@ -15,7 +15,11 @@ corners" plan:
    needed, and it additionally carries real snap counts ourlads never had
    (see fetch_puntandrally.py's docstring). `prior_season_starters` /
    `continuity_note` are untouched -- those stay human-curated once per
-   season, per _template.yaml. A team puntandrally can't resolve (name
+   season, per _template.yaml. Each starter is also enriched with a real
+   247Sports.com recruiting rating/star count (fetch_247sports.py) for
+   the Recruiting Talent Differential score -- a degraded-but-recoverable
+   fetch (a starter is just staged without a rating if it fails, never
+   fatal to roster population). A team puntandrally can't resolve (name
    miss, page-structure change) is reported, not guessed at -- this plain
    script has no WebSearch/WebFetch access itself; a human or the wrapping
    Routine session does that fallback research for exactly the teams this
@@ -45,6 +49,7 @@ from typing import Optional
 import requests
 import yaml
 
+import fetch_247sports
 import fetch_cfbd
 import fetch_matchups
 import fetch_puntandrally
@@ -174,6 +179,19 @@ def populate_roster(
     ol_by_name = {p.name: p for p in ol_section.players}
     dl_by_name = {p.name: p for p in dl_section.players}
 
+    # Recruiting Talent Differential: a separate site (247Sports), so its
+    # failure is degraded-but-recoverable, not fatal to this whole call --
+    # puntandrally's roster/snap data (already fetched above) is the
+    # authoritative source of who's starting; 247Sports only enriches
+    # those already-determined starters with a rating, never decides who
+    # starts.
+    talent_warnings: list[str] = []
+    try:
+        recruiting_by_name = fetch_247sports.fetch_roster(team, year, browser_fetch=browser_fetch)
+    except fetch_247sports.TwoFortySevenFetchError as exc:
+        recruiting_by_name = {}
+        talent_warnings.append(f"247Sports recruiting-rating fetch failed for {team}, starters staged without a rating: {exc}")
+
     def _starter_entry(name: str, by_name: dict) -> dict:
         entry = {"name": name}
         player = by_name.get(name)
@@ -184,6 +202,17 @@ def populate_roster(
                 entry["class_year"] = player.class_year
         if name in multi_year_snaps:
             entry["snaps_multi_year"] = multi_year_snaps[name]
+        recruit = recruiting_by_name.get(name.lower())
+        if recruit is not None:
+            if recruit.rating is not None:
+                entry["recruit_rating"] = recruit.rating
+            if recruit.stars is not None:
+                entry["recruit_stars"] = recruit.stars
+        elif recruiting_by_name:
+            # 247Sports fetch succeeded but this exact name wasn't found
+            # there -- a real name-spelling mismatch worth flagging, not
+            # the same as the whole fetch failing.
+            talent_warnings.append(f"{name} ({team}) not found on 247Sports's roster page -- staged without a recruit_rating")
         return entry
 
     new_starters = {
@@ -205,7 +234,7 @@ def populate_roster(
     ROSTERS_DIR.mkdir(parents=True, exist_ok=True)
     (ROSTERS_DIR / f"{team}.yaml").write_text(yaml.safe_dump(updated, sort_keys=False))
 
-    return {"team": team, "status": "ok", "changes": changes, "error": None, "warnings": snap_history.warnings}
+    return {"team": team, "status": "ok", "changes": changes, "error": None, "warnings": snap_history.warnings + talent_warnings}
 
 
 def populate_all_rosters(teams: list[str], year: int, today: str, browser_fetch=None) -> list[dict]:

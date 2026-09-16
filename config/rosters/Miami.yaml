@@ -6,37 +6,55 @@ starters:
     jersey: '78'
     class_year: SR
     snaps_multi_year: 1355
+    recruit_rating: 86
+    recruit_stars: 3
   - name: Samson Okunlola
     jersey: '63'
     class_year: JR
     snaps_multi_year: 646
+    recruit_rating: 98
+    recruit_stars: 5
   - name: Max Buchanan
     jersey: '66'
     class_year: SO
     snaps_multi_year: 134
+    recruit_rating: 88
+    recruit_stars: 3
   - name: Jackson Cantwell
     jersey: '79'
     class_year: FR
     snaps_multi_year: 60
+    recruit_rating: 99
+    recruit_stars: 5
   - name: Ryan Rodriguez
     jersey: '76'
     class_year: SR
     snaps_multi_year: 221
+    recruit_rating: 89
+    recruit_stars: 3
   DL:
   - name: Marquise Lightfoot
     jersey: '8'
     class_year: JR
     snaps_multi_year: 361
+    recruit_rating: 97
+    recruit_stars: 4
   - name: Ahmad Moten Sr.
     jersey: '99'
     class_year: SR
     snaps_multi_year: 828
+    recruit_rating: 85
+    recruit_stars: 3
   - name: Justin Scott
     jersey: '5'
     class_year: JR
     snaps_multi_year: 680
+    recruit_rating: 98
+    recruit_stars: 5
   - name: Damon Wilson II
     jersey: '10'
     class_year: SR
     snaps_multi_year: 61
+    recruit_rating: 97
+    recruit_stars: 4
 roster_source: puntandrally.com (live fetch via run_week.py)

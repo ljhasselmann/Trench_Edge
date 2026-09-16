@@ -229,3 +229,72 @@ def test_compute_experience_inputs_reuses_prefetched_talent_table(monkeypatch, t
         "Miami", 2026, talent_table={"Miami": 885.94}, session=_ExplodingSession()
     )
     assert result.talent_composite == 885.94
+
+
+def test_compute_recruiting_talent_inputs_averages_staged_ratings(tmp_path, monkeypatch):
+    _write_config(tmp_path, monkeypatch, {
+        "team": "Miami",
+        "updated_by_human_at": "2026-09-14",
+        "starters": {
+            "OL": [
+                {"name": "Matthew McCoy", "recruit_rating": 86, "recruit_stars": 3},
+                {"name": "Samson Okunlola", "recruit_rating": 98, "recruit_stars": 5},
+            ],
+            "DL": [
+                {"name": "Marquise Lightfoot", "recruit_rating": 97, "recruit_stars": 4},
+                {"name": "Ahmad Moten Sr.", "recruit_rating": 85, "recruit_stars": 3},
+            ],
+        },
+    })
+
+    result = fetch_talent.compute_recruiting_talent_inputs("Miami")
+
+    assert result.avg_ol_rating == 92.0  # (86 + 98) / 2
+    assert result.avg_dl_rating == 91.0  # (97 + 85) / 2
+    assert result.warnings == []
+
+
+def test_compute_recruiting_talent_inputs_excludes_unrated_starters_not_zero(tmp_path, monkeypatch):
+    _write_config(tmp_path, monkeypatch, {
+        "team": "Miami",
+        "updated_by_human_at": "2026-09-14",
+        "starters": {
+            "OL": [
+                {"name": "Matthew McCoy", "recruit_rating": 86},
+                {"name": "Walk On Guy"},  # no recruit_rating staged (unrated, or unmatched against 247Sports)
+            ],
+            "DL": [],
+        },
+    })
+
+    result = fetch_talent.compute_recruiting_talent_inputs("Miami")
+
+    assert result.avg_ol_rating == 86.0  # only the rated starter counts -- unrated is excluded, not averaged in as 0
+    assert result.avg_dl_rating is None
+
+
+def test_compute_recruiting_talent_inputs_warns_when_no_starter_has_a_rating(tmp_path, monkeypatch):
+    # DL has real starter entries, but none carries a recruit_rating --
+    # this is the "247Sports fetch never matched anyone" case, distinct
+    # from an empty DL list (which is silently skipped, not warned about).
+    _write_config(tmp_path, monkeypatch, {
+        "team": "Miami",
+        "updated_by_human_at": "2026-09-14",
+        "starters": {
+            "OL": [],
+            "DL": [{"name": "Marquise Lightfoot"}, {"name": "Ahmad Moten Sr."}],
+        },
+    })
+
+    result = fetch_talent.compute_recruiting_talent_inputs("Miami")
+
+    assert result.avg_dl_rating is None
+    assert any("no DL starter" in w and "recruit_rating" in w for w in result.warnings)
+
+
+def test_compute_recruiting_talent_inputs_missing_config_flags_and_continues(tmp_path, monkeypatch):
+    monkeypatch.setattr(fetch_roster, "ROSTERS_DIR", tmp_path)
+    result = fetch_talent.compute_recruiting_talent_inputs("Nonexistent Team")
+    assert result.avg_ol_rating is None
+    assert result.avg_dl_rating is None
+    assert any("does not exist" in w for w in result.warnings)

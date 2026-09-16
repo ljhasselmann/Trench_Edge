@@ -3,8 +3,11 @@ import sys
 from contextlib import contextmanager
 from pathlib import Path
 
+import yaml
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+import fetch_247sports
 import fetch_puntandrally
 import render_widget
 import run_week
@@ -47,6 +50,10 @@ def _fake_browser_session():
     yield None  # _fake_fetch_roster ignores browser_fetch entirely
 
 
+def _fake_247sports_fetch_roster(team, year, browser_fetch=None):
+    return {}  # no ratings staged in these tests -- 247Sports enrichment isn't under test here
+
+
 def _fake_ctx(label: str, side: str) -> render_widget.WidgetContext:
     return render_widget.WidgetContext(
         matchup_label=label,
@@ -64,6 +71,7 @@ def _fake_ctx(label: str, side: str) -> render_widget.WidgetContext:
             "team_a_returning_pct": 70.0, "team_b_returning_pct": 60.0, "experience_diff_pct": 10.0, "score": 1.0,
             "team_a_driver": None, "team_a_note": None, "team_b_driver": None, "team_b_note": None,
         },
+        recruiting={"team_a_rating": 90.0, "team_b_rating": 80.0, "rating_diff": 10.0, "score": 2.0},
         composite={"value": 1.5, "verdict": "test verdict"},
         warnings=[],
     )
@@ -89,6 +97,7 @@ def _patch_network(monkeypatch):
     monkeypatch.setattr(run_week.fetch_matchups, "fetch_ap_top25", lambda year, week, **kw: SAMPLE_TOP25)
     monkeypatch.setattr(run_week.fetch_puntandrally, "browser_session", _fake_browser_session)
     monkeypatch.setattr(run_week.fetch_puntandrally, "fetch_roster", _fake_fetch_roster)
+    monkeypatch.setattr(run_week.fetch_247sports, "fetch_roster", _fake_247sports_fetch_roster)
     monkeypatch.setattr(run_week.fetch_sp_plus, "fetch_fbs_week_table", lambda week, **kw: {})
     monkeypatch.setattr(run_week.fetch_talent, "fetch_talent_table", lambda year, **kw: {})
     monkeypatch.setattr(run_week.render_widget, "build_both_directions", _fake_build_both_directions)
@@ -175,6 +184,47 @@ def test_run_week_roster_diff_compares_against_teams_own_prior_config(monkeypatc
     written = (rosters_dir / "Miami.yaml").read_text()
     assert "Miami T1" in written
     assert "2026-09-16" in written
+
+
+def test_populate_roster_stages_247sports_rating_when_matched(monkeypatch, tmp_path):
+    monkeypatch.setattr(run_week, "ROSTERS_DIR", tmp_path)
+    monkeypatch.setattr(run_week.fetch_puntandrally, "fetch_roster", _fake_fetch_roster)
+    monkeypatch.setattr(
+        run_week.fetch_247sports, "fetch_roster",
+        lambda team, year, browser_fetch=None: {
+            f"{team.lower()} t1": fetch_247sports.RecruitRating(
+                name=f"{team} T1", position="OL", class_year="SR", high_school="Test HS", rating=93, stars=4,
+            ),
+        },
+    )
+
+    result = run_week.populate_roster("Miami", 2026, "2026-09-16")
+
+    assert result["status"] == "ok"
+    written = yaml.safe_load((tmp_path / "Miami.yaml").read_text())
+    t1_entry = next(e for e in written["starters"]["OL"] if e["name"] == "Miami T1")
+    assert t1_entry["recruit_rating"] == 93
+    assert t1_entry["recruit_stars"] == 4
+    # T2 has no match in the fake 247Sports response -- staged without a rating, and flagged.
+    t2_entry = next(e for e in written["starters"]["OL"] if e["name"] == "Miami T2")
+    assert "recruit_rating" not in t2_entry
+    assert any("Miami T2" in w and "not found on 247Sports" in w for w in result["warnings"])
+
+
+def test_populate_roster_continues_without_ratings_when_247sports_fetch_fails(monkeypatch, tmp_path):
+    monkeypatch.setattr(run_week, "ROSTERS_DIR", tmp_path)
+    monkeypatch.setattr(run_week.fetch_puntandrally, "fetch_roster", _fake_fetch_roster)
+
+    def _raise(team, year, browser_fetch=None):
+        raise fetch_247sports.TwoFortySevenFetchError("mock 247Sports outage")
+    monkeypatch.setattr(run_week.fetch_247sports, "fetch_roster", _raise)
+
+    result = run_week.populate_roster("Miami", 2026, "2026-09-16")
+
+    assert result["status"] == "ok"  # 247Sports failing never fails roster population
+    written = yaml.safe_load((tmp_path / "Miami.yaml").read_text())
+    assert "recruit_rating" not in written["starters"]["OL"][0]
+    assert any("247Sports recruiting-rating fetch failed" in w for w in result["warnings"])
 
 
 def test_run_week_skip_roster_leaves_existing_files_untouched(monkeypatch, tmp_path):
