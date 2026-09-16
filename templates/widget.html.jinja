@@ -129,11 +129,14 @@
   <h3>{{ ctx.team_a }} starting OL</h3>
   {% if ctx.mass.team_a_starters %}
   <table>
-    <tr><th>Player</th><th>Weight</th><th>Confidence</th></tr>
+    <tr><th>#</th><th>Player</th><th>Class</th><th>Weight</th><th>Snaps (multi-yr)</th><th>Confidence</th></tr>
     {% for s in ctx.mass.team_a_starters %}
     <tr>
+      <td>{% if s.jersey %}#{{ s.jersey }}{% else %}&mdash;{% endif %}</td>
       <td>{{ s.name }}</td>
+      <td>{% if s.class_year %}{{ s.class_year }}{% else %}&mdash;{% endif %}</td>
       <td>{% if s.weight_lbs %}{{ s.weight_lbs|int }} lbs{% else %}&mdash;{% endif %}</td>
+      <td>{% if s.snaps_multi_year is not none %}{{ s.snaps_multi_year }}{% else %}&mdash;{% endif %}</td>
       <td class="te-badge">{% if s.confidence == "confirmed" %}&check; confirmed{% else %}&asymp; estimated{% endif %}</td>
     </tr>
     {% endfor %}
@@ -145,11 +148,14 @@
   <h3>{{ ctx.team_b }} starting DL</h3>
   {% if ctx.mass.team_b_starters %}
   <table>
-    <tr><th>Player</th><th>Weight</th><th>Confidence</th></tr>
+    <tr><th>#</th><th>Player</th><th>Class</th><th>Weight</th><th>Snaps (multi-yr)</th><th>Confidence</th></tr>
     {% for s in ctx.mass.team_b_starters %}
     <tr>
+      <td>{% if s.jersey %}#{{ s.jersey }}{% else %}&mdash;{% endif %}</td>
       <td>{{ s.name }}</td>
+      <td>{% if s.class_year %}{{ s.class_year }}{% else %}&mdash;{% endif %}</td>
       <td>{% if s.weight_lbs %}{{ s.weight_lbs|int }} lbs{% else %}&mdash;{% endif %}</td>
+      <td>{% if s.snaps_multi_year is not none %}{{ s.snaps_multi_year }}{% else %}&mdash;{% endif %}</td>
       <td class="te-badge">{% if s.confidence == "confirmed" %}&check; confirmed{% else %}&asymp; estimated{% endif %}</td>
     </tr>
     {% endfor %}

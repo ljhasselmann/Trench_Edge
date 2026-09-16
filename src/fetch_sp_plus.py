@@ -53,12 +53,27 @@ the sheet, not a fuzzy guess -- the coverage script's own get_close_matches
 suggestions included at least one wrong pairing (CFBD's "Louisiana" fuzzy-
 matched to "Louisiana Tech", a different school; the real match, verified
 by listing the sheet's own team names directly, is "UL-Lafayette").
+
+REAL PER-GAME BETTING LINES, confirmed live 2026-09-16 -- the SAME
+"FBS Week N" tab also carries a full schedule in columns to the LEFT of
+the team-ratings table `fetch_fbs_week_table` parses (`Game`, `Spread`,
+`ATS Pick`, `Proj. margin`, `O/U`, `O/U pick`) -- e.g. the real Week 3 row
+for this matchup: `"Miami-FL at Wake Forest"`, `Spread: "Miami-FL -22.5"`,
+`ATS Pick: "Wake Forest"`. This had gone unused; `fetch_week_lines()`
+parses it for backtesting against real closing lines (see
+scripts/backfill_game_results.py), not just SP+'s own aggregate
+season-long ATS record (a genuinely different tab this module does NOT
+parse -- gviz's silent-fallback-to-first-tab behavior above happens to
+land on that aggregate tab, which only has week-level W-L-push totals
+across the whole slate, no per-game data at all; confirmed live by
+requesting a nonexistent week and inspecting what came back).
 """
 
 from __future__ import annotations
 
 import csv
 import io
+import re
 from dataclasses import dataclass
 from difflib import get_close_matches
 from typing import Optional
@@ -103,11 +118,23 @@ def _to_sheet_name(team: str) -> str:
     return TEAM_NAME_ALIASES.get(team, team)
 
 
-def fetch_fbs_week_table(week: int, session: Optional[requests.Session] = None) -> dict:
-    """Fetch the "FBS Week {week}" tab. Returns {team: TeamSPPlus}.
-    Raises SPPlusFetchError if that tab doesn't exist or its header
-    doesn't match what's expected -- never returns data silently read
-    from the wrong tab."""
+_SHEET_NAME_TO_CANONICAL = {sheet: canonical for canonical, sheet in TEAM_NAME_ALIASES.items()}
+
+
+def _from_sheet_name(sheet_name: str) -> str:
+    """Reverse of _to_sheet_name -- most sheet names already match this
+    repo's canonical (CFBD) spelling directly, so this is a no-op for
+    the vast majority of teams; only the handful in TEAM_NAME_ALIASES
+    need translating back."""
+    return _SHEET_NAME_TO_CANONICAL.get(sheet_name, sheet_name)
+
+
+def _fetch_week_rows(week: int, session: Optional[requests.Session] = None) -> list:
+    """Raw CSV rows for the "FBS Week {week}" tab, validated to actually be
+    an FBS ratings tab (see module docstring on gviz's silent wrong-tab
+    fallback). Shared by fetch_fbs_week_table (the ratings half of the
+    tab) and fetch_week_lines (the schedule/spread half, to its left) --
+    one fetch serves both rather than hitting the sheet twice."""
     sheet_name = f"FBS Week {week}"
     http = session or requests
     try:
@@ -132,7 +159,16 @@ def fetch_fbs_week_table(week: int, session: Optional[requests.Session] = None) 
             f"workbook's first tab for a sheet name that doesn't exist, so this week's "
             f"tab likely hasn't been published yet. Got header: {header!r}"
         )
+    return rows
 
+
+def fetch_fbs_week_table(week: int, session: Optional[requests.Session] = None) -> dict:
+    """Fetch the "FBS Week {week}" tab. Returns {team: TeamSPPlus}.
+    Raises SPPlusFetchError if that tab doesn't exist or its header
+    doesn't match what's expected -- never returns data silently read
+    from the wrong tab."""
+    rows = _fetch_week_rows(week, session=session)
+    header = rows[0]
     team_col = header.index("Team")
     teams: dict[str, TeamSPPlus] = {}
     for row in rows[1:]:
@@ -178,6 +214,112 @@ def compute_sp_plus_gap(
     a = team_sp_plus(team_a, week, table=table)
     b = team_sp_plus(team_b, week, table=table)
     return a.sp_plus - b.sp_plus
+
+
+@dataclass
+class GameLine:
+    away_team: str  # sheet's own spelling, e.g. "Miami-FL"
+    home_team: str
+    favorite: Optional[str]  # sheet's own spelling of the favored team; None if no line posted (e.g. an FCS game)
+    spread: Optional[float]  # points the favorite is favored by (always positive); None if no line
+    ats_pick: Optional[str]  # sheet's own spelling of the team Connelly's model picks to cover
+    proj_margin: Optional[float]
+    over_under: Optional[float]
+    ou_pick: Optional[str]
+
+
+_SCHEDULE_COLUMNS = ("Game", "Spread", "ATS Pick", "Proj. margin", "O/U", "O/U pick")
+
+
+def _parse_game(game_text: str) -> Optional[tuple]:
+    """"Away at Home" or "Team1 vs. Team2" (neutral site) -> (first, second).
+    For a neutral-site game this repo has no way to know which is CFBD's
+    homeTeam -- find_game_line() below matches by team IDENTITY, not by
+    away/home position, specifically so that ambiguity never matters."""
+    for sep in (" at ", " vs. "):
+        if sep in game_text:
+            first, second = game_text.split(sep, 1)
+            return first.strip(), second.strip()
+    return None
+
+
+def _parse_spread(spread_text: str) -> Optional[tuple]:
+    """"Miami-FL -22.5" -> ("Miami-FL", 22.5). Blank means no line posted."""
+    spread_text = spread_text.strip()
+    if not spread_text:
+        return None
+    match = re.match(r"^(.+?)\s+([+-]?\d+(?:\.\d+)?)$", spread_text)
+    if not match:
+        return None
+    return match.group(1).strip(), abs(float(match.group(2)))
+
+
+def _to_float_or_none(text: str) -> Optional[float]:
+    text = text.strip()
+    if not text:
+        return None
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
+def fetch_week_lines(week: int, session: Optional[requests.Session] = None) -> list:
+    """Real per-game betting lines + Connelly's own ATS picks for a week,
+    from the SAME "FBS Week {week}" tab fetch_fbs_week_table reads -- see
+    module docstring. Returns a list[GameLine] (order as the sheet lists
+    them); a game with no line posted (common for an FCS opponent) still
+    appears, with favorite/spread as None -- never guessed at."""
+    rows = _fetch_week_rows(week, session=session)
+    header = rows[0]
+    col = {name: header.index(name) for name in _SCHEDULE_COLUMNS if name in header}
+    missing = [name for name in _SCHEDULE_COLUMNS if name not in col]
+    if missing:
+        raise SPPlusFetchError(
+            f"FBS Week {week} tab is missing expected schedule column(s) {missing!r} -- header: {header!r}"
+        )
+
+    lines = []
+    for row in rows[1:]:
+        if len(row) <= col["Game"] or not row[col["Game"]].strip():
+            continue
+        parsed_game = _parse_game(row[col["Game"]])
+        if parsed_game is None:
+            continue
+        away, home = parsed_game
+
+        spread_cell = row[col["Spread"]] if len(row) > col["Spread"] else ""
+        parsed_spread = _parse_spread(spread_cell)
+        favorite, spread = parsed_spread if parsed_spread else (None, None)
+
+        ats_cell = row[col["ATS Pick"]].strip() if len(row) > col["ATS Pick"] else ""
+        ou_pick_cell = row[col["O/U pick"]].strip() if len(row) > col["O/U pick"] else ""
+
+        lines.append(GameLine(
+            away_team=away,
+            home_team=home,
+            favorite=favorite,
+            spread=spread,
+            ats_pick=ats_cell or None,
+            proj_margin=_to_float_or_none(row[col["Proj. margin"]]) if len(row) > col["Proj. margin"] else None,
+            over_under=_to_float_or_none(row[col["O/U"]]) if len(row) > col["O/U"] else None,
+            ou_pick=ou_pick_cell or None,
+        ))
+    return lines
+
+
+def find_game_line(lines: list, team_a: str, team_b: str) -> Optional[GameLine]:
+    """team_a/team_b in this repo's canonical (CFBD) spelling; resolves
+    aliases the same way team_sp_plus does, and matches by team IDENTITY
+    (either away/home order) since a neutral-site "vs." entry's ordering
+    doesn't reliably correspond to CFBD's own homeTeam/awayTeam."""
+    sheet_a = _to_sheet_name(team_a)
+    sheet_b = _to_sheet_name(team_b)
+    wanted = {sheet_a, sheet_b}
+    for line in lines:
+        if {line.away_team, line.home_team} == wanted:
+            return line
+    return None
 
 
 if __name__ == "__main__":

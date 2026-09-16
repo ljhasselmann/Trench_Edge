@@ -118,6 +118,27 @@ def test_unmatched_starter_with_fallback_weight_is_flagged_estimated(monkeypatch
     assert any("using human-supplied estimated weight" in w for w in result.warnings)
 
 
+def test_starter_carries_jersey_class_year_and_multi_year_snaps_from_config(monkeypatch, tmp_path):
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    now = dt.datetime(2026, 9, 15, tzinfo=dt.timezone.utc)
+    _write_config(tmp_path, monkeypatch, {
+        "team": "Miami",
+        "updated_by_human_at": "2026-09-14",
+        "starters": {
+            "OL": [{"name": "Jacob Hawks", "jersey": "75", "class_year": "SO", "snaps_multi_year": 695}],
+            "DL": [],
+        },
+    })
+    session = _FakeSession(_FakeResponse(200, LIVE_ROSTER))
+
+    result = fetch_roster.compute_mass_inputs("Miami", 2026, session=session, now=now)
+
+    starter = result.ol_starters[0]
+    assert starter.jersey == "75"
+    assert starter.class_year == "SO"
+    assert starter.snaps_multi_year == 695
+
+
 def test_position_tag_mismatch_is_flagged(monkeypatch, tmp_path):
     monkeypatch.setenv("CFBD_API_KEY", "k")
     now = dt.datetime(2026, 9, 15, tzinfo=dt.timezone.utc)

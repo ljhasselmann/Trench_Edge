@@ -109,6 +109,17 @@ def test_parse_position_section_extracts_snaps_and_share():
     assert mccoy.position_tag == "T"
 
 
+def test_parse_position_section_extracts_jersey_and_class_year():
+    section = fetch_puntandrally.parse_position_section(SAMPLE_MIAMI_OL_HTML, "Offensive Line", fetch_puntandrally.KNOWN_OL_TAGS)
+    mccoy = next(p for p in section.players if p.name == "Matthew McCoy")
+    assert mccoy.jersey == "78"
+    assert mccoy.class_year == "SR"
+
+    okunlola = next(p for p in section.players if p.name == "Samson Okunlola")
+    assert okunlola.jersey == "63"
+    assert okunlola.class_year == "JR"
+
+
 def test_parse_position_section_handles_blank_snaps_as_none_not_zero():
     section = fetch_puntandrally.parse_position_section(SAMPLE_MIAMI_OL_HTML, "Offensive Line", fetch_puntandrally.KNOWN_OL_TAGS)
     campbell = next(p for p in section.players if p.name == "Demetrius Campbell")
@@ -263,6 +274,51 @@ def test_fetch_team_index_unescapes_html_entities_in_team_names():
 def test_fetch_team_index_raises_on_empty_parse():
     with pytest.raises(fetch_puntandrally.PuntAndRallyFetchError, match="zero teams"):
         fetch_puntandrally.fetch_team_index(browser_fetch=lambda url, **kwargs: "<html>nothing here</html>")
+
+
+def test_fetch_snap_history_sums_snaps_per_player_across_years():
+    fetch_calls = []
+
+    def fake_fetch_roster(team, year, browser_fetch=None):
+        fetch_calls.append(year)
+        html_by_year = {
+            2026: SAMPLE_MIAMI_OL_HTML,  # McCoy 90, Okunlola 90, Hawks 38, Buchanan 79, Cantwell 60, Rodriguez 90, Campbell None
+            2025: SAMPLE_WISCONSIN_OL_HTML,  # Heywood 108 (different player, no overlap with 2026 sample)
+        }
+        html = html_by_year.get(year)
+        if html is None:
+            raise fetch_puntandrally.PuntAndRallyFetchError(f"no fixture for {year}")
+        return fetch_puntandrally.parse_position_section(html, "Offensive Line", fetch_puntandrally.KNOWN_OL_TAGS), fetch_puntandrally.RosterSection()
+
+    import unittest.mock
+    with unittest.mock.patch.object(fetch_puntandrally, "fetch_roster", fake_fetch_roster):
+        history = fetch_puntandrally.fetch_snap_history("Miami", through_year=2026, years=2)
+
+    assert fetch_calls == [2025, 2026]
+    assert history.years_fetched == [2025, 2026]
+    assert history.totals["Matthew McCoy"] == 90
+    assert history.totals["Kevin Heywood"] == 108
+    assert "Demetrius Campbell" not in history.totals  # snaps=None contributes nothing, not a KeyError
+    assert history.warnings == []
+
+
+def test_fetch_snap_history_skips_failed_year_with_warning_not_hard_failure():
+    def fake_fetch_roster(team, year, browser_fetch=None):
+        if year == 2024:
+            raise fetch_puntandrally.PuntAndRallyFetchError("predates reliability floor")
+        return (
+            fetch_puntandrally.parse_position_section(SAMPLE_MIAMI_OL_HTML, "Offensive Line", fetch_puntandrally.KNOWN_OL_TAGS),
+            fetch_puntandrally.RosterSection(),
+        )
+
+    import unittest.mock
+    with unittest.mock.patch.object(fetch_puntandrally, "fetch_roster", fake_fetch_roster):
+        history = fetch_puntandrally.fetch_snap_history("Miami", through_year=2026, years=3)
+
+    assert history.years_fetched == [2025, 2026]  # 2024 excluded
+    assert history.totals["Matthew McCoy"] == 180  # counted twice (2025 + 2026), not three times
+    assert len(history.warnings) == 1
+    assert "2024" in history.warnings[0]
 
 
 def test_fetch_team_index_passes_its_own_content_selector_to_the_fetcher():

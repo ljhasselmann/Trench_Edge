@@ -3,14 +3,14 @@
   "team_a": "Miami",
   "team_b": "Wake Forest",
   "year": 2026,
-  "generated_at": "2026-09-16 14:41 UTC",
+  "generated_at": "2026-09-16 15:41 UTC",
   "direction_a": {
     "matchup_label": "2026-wk03-miami-wake-forest-a",
     "team_a": "Miami",
     "team_b": "Wake Forest",
     "side": "team_a_ol_vs_team_b_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 14:41 UTC",
+    "generated_at": "2026-09-16 15:41 UTC",
     "mass": {
       "team_a_avg_weight": 319.0,
       "team_b_avg_weight": 268.75,
@@ -21,31 +21,46 @@
           "name": "Matthew McCoy",
           "weight_lbs": 325,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "78",
+          "class_year": "SR",
+          "snaps_multi_year": 1355
         },
         {
           "name": "Samson Okunlola",
           "weight_lbs": 330,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "63",
+          "class_year": "JR",
+          "snaps_multi_year": 646
         },
         {
           "name": "Max Buchanan",
           "weight_lbs": 310,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "66",
+          "class_year": "SO",
+          "snaps_multi_year": 134
         },
         {
           "name": "Jackson Cantwell",
           "weight_lbs": 330,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "79",
+          "class_year": "FR",
+          "snaps_multi_year": 60
         },
         {
           "name": "Ryan Rodriguez",
           "weight_lbs": 300,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "76",
+          "class_year": "SR",
+          "snaps_multi_year": 221
         }
       ],
       "team_b_starters": [
@@ -53,25 +68,37 @@
           "name": "Langston Hardy",
           "weight_lbs": 250,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "11",
+          "class_year": "SR",
+          "snaps_multi_year": 779
         },
         {
           "name": "Gabe Kirschke",
           "weight_lbs": 249,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "10",
+          "class_year": "SR",
+          "snaps_multi_year": 595
         },
         {
           "name": "Dallas Afalava",
           "weight_lbs": 291,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "52",
+          "class_year": "SR",
+          "snaps_multi_year": 606
         },
         {
           "name": "Zach Lohavichan",
           "weight_lbs": 285,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "94",
+          "class_year": "SR",
+          "snaps_multi_year": 878
         }
       ]
     },
@@ -111,7 +138,7 @@
     "team_b": "Miami",
     "side": "team_b_ol_vs_team_a_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 14:41 UTC",
+    "generated_at": "2026-09-16 15:41 UTC",
     "mass": {
       "team_a_avg_weight": 296.8,
       "team_b_avg_weight": 270.75,
@@ -122,31 +149,46 @@
           "name": "Tolu Olajide",
           "weight_lbs": 300,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "55",
+          "class_year": "SR",
+          "snaps_multi_year": 137
         },
         {
           "name": "Aidan Martin",
           "weight_lbs": 265,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "72",
+          "class_year": "FR",
+          "snaps_multi_year": 170
         },
         {
           "name": "Ryan Berger",
           "weight_lbs": 318,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "64",
+          "class_year": "JR",
+          "snaps_multi_year": 120
         },
         {
           "name": "Jack Hines",
           "weight_lbs": 311,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "78",
+          "class_year": "SO",
+          "snaps_multi_year": 172
         },
         {
           "name": "Will Way",
           "weight_lbs": 290,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "70",
+          "class_year": "JR",
+          "snaps_multi_year": 113
         }
       ],
       "team_b_starters": [
@@ -154,25 +196,37 @@
           "name": "Marquise Lightfoot",
           "weight_lbs": 230,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "8",
+          "class_year": "JR",
+          "snaps_multi_year": 361
         },
         {
           "name": "Ahmad Moten Sr.",
           "weight_lbs": 300,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "99",
+          "class_year": "SR",
+          "snaps_multi_year": 828
         },
         {
           "name": "Justin Scott",
           "weight_lbs": 303,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "5",
+          "class_year": "JR",
+          "snaps_multi_year": 680
         },
         {
           "name": "Damon Wilson II",
           "weight_lbs": 250,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "10",
+          "class_year": "SR",
+          "snaps_multi_year": 61
         }
       ]
     },

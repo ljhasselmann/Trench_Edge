@@ -187,7 +187,8 @@ def test_write_history_snapshot_produces_readable_json_with_starter_detail(tmp_p
     assert data["team_a"] == "Miami"
     assert data["team_b"] == "Wake Forest"
     assert data["mass"]["team_a_starters"] == [
-        {"name": "Jacob Hawks", "weight_lbs": 330, "confidence": "confirmed", "source": "cfbd_roster"}
+        {"name": "Jacob Hawks", "weight_lbs": 330, "confidence": "confirmed", "source": "cfbd_roster",
+         "jersey": None, "class_year": None, "snaps_multi_year": None}
     ]
     assert data["mass"]["score"] == 3.0
     assert data["composite"] is None

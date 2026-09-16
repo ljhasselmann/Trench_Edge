@@ -143,8 +143,8 @@ _SECTION_TABLE_PATTERN_TMPL = r'<div class="tr-section-title">{title}</div>.*?<t
 _TBODY_PATTERN = re.compile(r"<tbody>(.*?)</tbody>", re.S)
 _ROW_PATTERN = re.compile(r"<tr>(.*?)</tr>", re.S)
 _PLAYER_CELL_PATTERN = re.compile(
-    r'<td class="player[^"]*">.*?<span class="num">#\d+</span>\s*</span>\s*'
-    r"([^<(]+?)\s*(?:\(([A-Z]+)\))?\s*<span class=\"elig-badge",
+    r'<td class="player[^"]*">.*?<span class="num">#(\d+)</span>\s*</span>\s*'
+    r"([^<(]+?)\s*(?:\(([A-Z]+)\))?\s*<span class=\"elig-badge[^\"]*\">\s*([A-Z]*)\s*</span>",
     re.S,
 )
 _SNAPS_CELL_PATTERN = re.compile(r'<td class="snaps[^"]*">([^<]*)</td>')
@@ -164,6 +164,15 @@ class PlayerSnaps:
     position_tag: str
     snaps: Optional[int]
     snap_share_pct: Optional[float]
+    jersey: Optional[str] = None  # kept as a string ("00" has a real leading zero)
+    class_year: Optional[str] = None  # "FR" | "SO" | "JR" | "SR" | "GR", from the page's own eligibility badge
+
+
+@dataclass
+class SnapHistory:
+    totals: dict = field(default_factory=dict)  # name -> summed snaps across every year actually fetched
+    years_fetched: list = field(default_factory=list)
+    warnings: list = field(default_factory=list)
 
 
 @dataclass
@@ -259,8 +268,10 @@ def parse_position_section(page_html: str, section_title: str, known_tags: set) 
         player_match = _PLAYER_CELL_PATTERN.search(row_html)
         if not player_match:
             continue  # a comment-only or otherwise non-player row; not every <tr> in the source has a player cell
-        name = _to_first_last_or_full(player_match.group(1))
-        tag = player_match.group(2)
+        jersey = player_match.group(1)
+        name = _to_first_last_or_full(player_match.group(2))
+        tag = player_match.group(3)
+        class_year = player_match.group(4) or None
         if not tag or tag not in known_tags:
             result.warnings.append(
                 f"{name!r} in {section_title!r} section has an unrecognized position tag {tag!r} -- excluded from parsed rows"
@@ -276,7 +287,10 @@ def parse_position_section(page_html: str, section_title: str, known_tags: set) 
                 snaps = int(value_match.group(1))
                 snap_share_pct = float(value_match.group(2))
 
-        result.players.append(PlayerSnaps(name=name, position_tag=tag, snaps=snaps, snap_share_pct=snap_share_pct))
+        result.players.append(PlayerSnaps(
+            name=name, position_tag=tag, snaps=snaps, snap_share_pct=snap_share_pct,
+            jersey=jersey, class_year=class_year,
+        ))
 
     if not result.players and not result.warnings:
         raise PuntAndRallyFetchError(
@@ -326,6 +340,41 @@ def fetch_roster(
     ol_section = parse_position_section(page_html, "Offensive Line", KNOWN_OL_TAGS)
     dl_section = parse_position_section(page_html, "Defensive Line", KNOWN_DL_TAGS)
     return ol_section, dl_section
+
+
+# How many consecutive seasons (inclusive of through_year) fetch_snap_history
+# sums by default -- NOT a true career total (see module docstring's
+# ~2022 reliability floor), just a multi-year sum over whatever seasons
+# were actually fetched.
+DEFAULT_SNAP_HISTORY_YEARS = 3
+
+
+def fetch_snap_history(
+    team: str,
+    through_year: int,
+    years: int = DEFAULT_SNAP_HISTORY_YEARS,
+    browser_fetch: Optional[Callable[..., str]] = None,
+) -> SnapHistory:
+    """Sums OL+DL snap counts per player name across `years` consecutive
+    seasons ending at `through_year` (inclusive) -- e.g. years=3,
+    through_year=2026 sums 2024, 2025, 2026. A player absent from a given
+    season simply doesn't contribute for that year, not excluded. If a
+    season's fetch fails (e.g. predates puntandrally's ~2022 reliability
+    floor, or a site hiccup), that season is skipped with a warning
+    appended -- every OTHER season still fetched still contributes, this
+    never fails the whole call over one bad year."""
+    result = SnapHistory()
+    for year in range(through_year - years + 1, through_year + 1):
+        try:
+            ol_section, dl_section = fetch_roster(team, year, browser_fetch=browser_fetch)
+        except PuntAndRallyFetchError as exc:
+            result.warnings.append(f"{team} {year} snap-count fetch failed, excluded from multi-year total: {exc}")
+            continue
+        result.years_fetched.append(year)
+        for player in ol_section.players + dl_section.players:
+            if player.snaps is not None:
+                result.totals[player.name] = result.totals.get(player.name, 0) + player.snaps
+    return result
 
 
 def starters_for_group(players: list, starter_counts: dict) -> list:

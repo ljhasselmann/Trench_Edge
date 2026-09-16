@@ -118,6 +118,12 @@ preference:
    incumbents mid-season, as happened with Cantwell/McCoy). The routine
    should flag when it's using a roster snapshot older than 7 days rather
    than silently using stale starters.
+4. Each starter entry also carries, where puntandrally has it,
+   `jersey`, `class_year` (FR/SO/JR/SR/GR), and `snaps_multi_year` (a
+   `fetch_puntandrally.DEFAULT_SNAP_HISTORY_YEARS`-season sum, NOT a true
+   career total — see that module's docstring) — populated automatically
+   by `run_week.py` alongside the starter name itself, rendered in the
+   widget's starters table.
 
 ### 4c. Tier 2 — talent and experience (`fetch_talent.py`)
 
@@ -344,11 +350,27 @@ per firing.
 - **Four corners.** Current worked example only did Team A's OL vs Team B's
   DL. The reverse side (Team B's OL vs Team A's DL) needs the same treatment
   before any matchup is "fully scored."
-- **Backtesting.** Once a few weeks of history accumulate, check whether the
-  composite (or any single component) actually correlates with something —
-  ATS results, rushing success rate in the actual game, sacks allowed. If it
-  doesn't beat a naive baseline, that's a real finding, not a failure —
-  report it honestly rather than tuning weights until it looks predictive.
+- **Backtesting — real ATS data, now built.** `scripts/backfill_game_results.py`
+  attaches each game's real final score (CFBD's `/games`, via
+  `fetch_matchups.fetch_game_results` — already-fetched data, no new
+  endpoint) AND a real closing-line ATS result to its `history/*.json`
+  snapshot, run after that week's games are final (`run_week.py` itself
+  runs pre-kickoff and can't know scores yet). The ATS line comes from a
+  genuine find: the SAME "FBS Week N" Google Sheet tab this repo already
+  reads for Push also carries a full per-game schedule with real betting
+  spreads and Bill Connelly's own ATS picks (`Game`, `Spread`, `ATS Pick`
+  columns to the left of the ratings table `fetch_sp_plus.py` used to stop
+  reading at) — confirmed live against the real Week 3 Miami/Wake Forest
+  line, `"Miami-FL -22.5"`. `scripts/analyze_ats_correlation.py` then
+  reports sign agreement + Pearson r between the composite (and each
+  subscore) and `cover_margin_for_team_a` — how many points BETTER than
+  the closing line's own expectation a team performed, not raw margin,
+  since raw margin conflates "this team is good" (already priced into the
+  spread) with "beat what was already expected." Reports only, never
+  tunes weights; leads with sample size and an explicit "not
+  statistically meaningful yet" flag below 30 data points, which is where
+  this repo's real history sits today (2026 Week 3 games weren't final
+  yet as of the last live run).
 - **CFBD roster weights — resolved.** `/roster` does carry listed weight
   directly, confirmed live (~93-100% coverage across three teams checked).
   Section 4b's manual-research stage for raw weights is gone; a human still

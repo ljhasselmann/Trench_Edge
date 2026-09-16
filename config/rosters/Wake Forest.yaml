@@ -3,13 +3,40 @@ updated_by_human_at: '2026-09-16'
 starters:
   OL:
   - name: Tolu Olajide
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 137
   - name: Aidan Martin
+    jersey: '72'
+    class_year: FR
+    snaps_multi_year: 170
   - name: Ryan Berger
+    jersey: '64'
+    class_year: JR
+    snaps_multi_year: 120
   - name: Jack Hines
+    jersey: '78'
+    class_year: SO
+    snaps_multi_year: 172
   - name: Will Way
+    jersey: '70'
+    class_year: JR
+    snaps_multi_year: 113
   DL:
   - name: Langston Hardy
+    jersey: '11'
+    class_year: SR
+    snaps_multi_year: 779
   - name: Gabe Kirschke
+    jersey: '10'
+    class_year: SR
+    snaps_multi_year: 595
   - name: Dallas Afalava
+    jersey: '52'
+    class_year: SR
+    snaps_multi_year: 606
   - name: Zach Lohavichan
+    jersey: '94'
+    class_year: SR
+    snaps_multi_year: 878
 roster_source: puntandrally.com (live fetch via run_week.py)

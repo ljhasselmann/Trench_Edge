@@ -138,20 +138,58 @@ def populate_roster(
     team: str, year: int, today: str, browser_fetch=None
 ) -> dict:
     """Fetch one team's live roster + snap counts from puntandrally and
-    update config/rosters/{team}.yaml's `starters` block in place. Returns
-    {"team", "status": "ok"|"failed", "changes": [...], "error": str|None}.
-    On failure, the existing file (if any) is left untouched -- never
-    overwritten with a guess. `browser_fetch` should be a
-    fetch_puntandrally.browser_session() fetch when populating many teams
-    (see populate_all_rosters), so they share one browser process."""
+    update config/rosters/{team}.yaml's `starters` block in place. Each
+    starter entry carries `name` plus, where available, `jersey`,
+    `class_year` (FR/SO/JR/SR/GR), and `snaps_multi_year` (a
+    DEFAULT_SNAP_HISTORY_YEARS-season sum, not a true career total --
+    see fetch_puntandrally.fetch_snap_history's docstring). Returns
+    {"team", "status": "ok"|"failed", "changes": [...], "error": str|None,
+    "warnings": [...]} -- warnings covers any prior season whose
+    multi-year snap fetch failed (that season is just excluded from the
+    sum, not a hard failure of this whole call). On failure, the existing
+    file (if any) is left untouched -- never overwritten with a guess.
+    `browser_fetch` should be a fetch_puntandrally.browser_session()
+    fetch when populating many teams (see populate_all_rosters), so they
+    share one browser process."""
     try:
         ol_section, dl_section = fetch_puntandrally.fetch_roster(team, year, browser_fetch=browser_fetch)
     except fetch_puntandrally.PuntAndRallyFetchError as exc:
-        return {"team": team, "status": "failed", "changes": [], "error": str(exc)}
+        return {"team": team, "status": "failed", "changes": [], "error": str(exc), "warnings": []}
 
     ol_names = fetch_puntandrally.starters_for_group(ol_section.players, fetch_puntandrally.OL_STARTER_COUNTS)
     dl_names = fetch_puntandrally.dl_starters_for_group(dl_section.players)
-    new_starters = {"OL": [{"name": n} for n in ol_names], "DL": [{"name": n} for n in dl_names]}
+
+    # Multi-year snaps: reuse this year's already-fetched players (no
+    # extra live fetch for `year` itself) and only fetch the PRIOR years
+    # live, merging into one multi-year total per player -- see
+    # fetch_puntandrally.fetch_snap_history's own docstring for why this
+    # isn't a true career total.
+    prior_years = fetch_puntandrally.DEFAULT_SNAP_HISTORY_YEARS - 1
+    snap_history = fetch_puntandrally.fetch_snap_history(team, year - 1, years=prior_years, browser_fetch=browser_fetch)
+    multi_year_snaps = dict(snap_history.totals)
+    for player in ol_section.players + dl_section.players:
+        if player.snaps is not None:
+            multi_year_snaps[player.name] = multi_year_snaps.get(player.name, 0) + player.snaps
+
+    ol_by_name = {p.name: p for p in ol_section.players}
+    dl_by_name = {p.name: p for p in dl_section.players}
+
+    def _starter_entry(name: str, by_name: dict) -> dict:
+        entry = {"name": name}
+        player = by_name.get(name)
+        if player is not None:
+            if player.jersey is not None:
+                entry["jersey"] = player.jersey
+            if player.class_year is not None:
+                entry["class_year"] = player.class_year
+        if name in multi_year_snaps:
+            entry["snaps_multi_year"] = multi_year_snaps[name]
+        return entry
+
+    new_starters = {
+        "OL": [_starter_entry(n, ol_by_name) for n in ol_names],
+        "DL": [_starter_entry(n, dl_by_name) for n in dl_names],
+    }
 
     existing = _load_roster_yaml(team) or {}
     changes = _diff_starters(existing.get("starters"), new_starters)
@@ -167,7 +205,7 @@ def populate_roster(
     ROSTERS_DIR.mkdir(parents=True, exist_ok=True)
     (ROSTERS_DIR / f"{team}.yaml").write_text(yaml.safe_dump(updated, sort_keys=False))
 
-    return {"team": team, "status": "ok", "changes": changes, "error": None}
+    return {"team": team, "status": "ok", "changes": changes, "error": None, "warnings": snap_history.warnings}
 
 
 def populate_all_rosters(teams: list[str], year: int, today: str, browser_fetch=None) -> list[dict]:
@@ -331,6 +369,7 @@ def run_week(
         "roster_results": roster_results,
         "roster_failures": [r for r in roster_results if r["status"] == "failed"],
         "roster_changes": [r for r in roster_results if r["status"] == "ok" and r["changes"]],
+        "roster_warnings": [r for r in roster_results if r.get("warnings")],
     }
 
 
@@ -351,6 +390,11 @@ def print_summary(summary: dict) -> None:
         for r in summary["roster_changes"]:
             for c in r["changes"]:
                 print(f"    - {r['team']} {c}")
+    if summary["roster_warnings"]:
+        print(f"  {len(summary['roster_warnings'])} team(s) have a partial multi-year snap total (one or more prior seasons failed to fetch):")
+        for r in summary["roster_warnings"]:
+            for w in r["warnings"]:
+                print(f"    - {w}")
 
 
 if __name__ == "__main__":

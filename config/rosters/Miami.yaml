@@ -3,13 +3,40 @@ updated_by_human_at: '2026-09-16'
 starters:
   OL:
   - name: Matthew McCoy
+    jersey: '78'
+    class_year: SR
+    snaps_multi_year: 1355
   - name: Samson Okunlola
+    jersey: '63'
+    class_year: JR
+    snaps_multi_year: 646
   - name: Max Buchanan
+    jersey: '66'
+    class_year: SO
+    snaps_multi_year: 134
   - name: Jackson Cantwell
+    jersey: '79'
+    class_year: FR
+    snaps_multi_year: 60
   - name: Ryan Rodriguez
+    jersey: '76'
+    class_year: SR
+    snaps_multi_year: 221
   DL:
   - name: Marquise Lightfoot
+    jersey: '8'
+    class_year: JR
+    snaps_multi_year: 361
   - name: Ahmad Moten Sr.
+    jersey: '99'
+    class_year: SR
+    snaps_multi_year: 828
   - name: Justin Scott
+    jersey: '5'
+    class_year: JR
+    snaps_multi_year: 680
   - name: Damon Wilson II
+    jersey: '10'
+    class_year: SR
+    snaps_multi_year: 61
 roster_source: puntandrally.com (live fetch via run_week.py)

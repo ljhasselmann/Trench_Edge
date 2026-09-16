@@ -145,3 +145,31 @@ def test_slugify_handles_special_characters():
     assert fetch_matchups._slugify("Miami (OH)") == "miami-oh"
     assert fetch_matchups._slugify("Texas A&M") == "texas-a-m"
     assert fetch_matchups._slugify("Wake Forest") == "wake-forest"
+
+
+def test_extract_game_result_returns_points_for_completed_game():
+    game = {"homeTeam": "Wake Forest", "awayTeam": "Miami", "completed": True, "homePoints": 14, "awayPoints": 34}
+    assert fetch_matchups.extract_game_result(game) == {"home_points": 14, "away_points": 34}
+
+
+def test_extract_game_result_returns_none_for_incomplete_game():
+    game = {"homeTeam": "Wake Forest", "awayTeam": "Miami", "completed": False, "homePoints": None, "awayPoints": None}
+    assert fetch_matchups.extract_game_result(game) is None
+
+
+def test_extract_game_result_returns_none_for_completed_but_missing_points():
+    # Malformed/partial CFBD row -- never guess a score.
+    game = {"homeTeam": "Wake Forest", "awayTeam": "Miami", "completed": True, "homePoints": None, "awayPoints": 34}
+    assert fetch_matchups.extract_game_result(game) is None
+
+
+def test_fetch_game_results_keys_by_away_home_and_skips_incomplete(monkeypatch):
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    games = [
+        {"homeTeam": "Wake Forest", "awayTeam": "Miami", "completed": True, "homePoints": 14, "awayPoints": 34},
+        {"homeTeam": "Georgia", "awayTeam": "Arkansas", "completed": False, "homePoints": None, "awayPoints": None},
+        {"homeTeam": None, "awayTeam": "Some FCS Team", "completed": True, "homePoints": 0, "awayPoints": 0},
+    ]
+    session = _FakeSession(games_response=_FakeResponse(200, games))
+    results = fetch_matchups.fetch_game_results(2026, 3, session=session)
+    assert results == {("Miami", "Wake Forest"): {"home_points": 14, "away_points": 34}}

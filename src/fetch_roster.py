@@ -52,6 +52,9 @@ class StarterWeight:
     weight_lbs: Optional[float]
     confidence: str  # "confirmed" (matched live roster) or "estimated" (human-supplied only)
     source: str
+    jersey: Optional[str] = None
+    class_year: Optional[str] = None  # "FR" | "SO" | "JR" | "SR" | "GR"
+    snaps_multi_year: Optional[int] = None  # multi-season sum from fetch_puntandrally, NOT a true career total
 
 
 @dataclass
@@ -145,7 +148,11 @@ def compute_mass_inputs(
                 weight = live_player.get("weight")
                 if weight is None:
                     inputs.warnings.append(f"{name} ({team}, {group_key}) matched live roster but has no listed weight")
-                bucket.append(StarterWeight(name=name, weight_lbs=weight, confidence="confirmed", source="cfbd_roster"))
+                bucket.append(StarterWeight(
+                    name=name, weight_lbs=weight, confidence="confirmed", source="cfbd_roster",
+                    jersey=entry.get("jersey"), class_year=entry.get("class_year"),
+                    snaps_multi_year=entry.get("snaps_multi_year"),
+                ))
                 if live_player.get("position") not in tag_set:
                     inputs.warnings.append(
                         f"{name} ({team}) listed as starting {group_key} in config, but CFBD "
@@ -159,6 +166,8 @@ def compute_mass_inputs(
                 bucket.append(StarterWeight(
                     name=name, weight_lbs=entry["weight"], confidence="estimated",
                     source=entry.get("source", "manual"),
+                    jersey=entry.get("jersey"), class_year=entry.get("class_year"),
+                    snaps_multi_year=entry.get("snaps_multi_year"),
                 ))
             else:
                 inputs.warnings.append(

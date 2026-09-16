@@ -22,6 +22,21 @@ FALLBACK_CSV = (
     '"0-1","28-22-1","55.9%"\n'
 )
 
+# Real schedule-half row, captured live 2026-09-16 (FBS Week 3 tab) --
+# same tab VALID_CSV's ratings-half row comes from, just the columns to
+# the left that fetch_fbs_week_table doesn't touch.
+SCHEDULE_CSV = (
+    '"Date","Time (ET)","Game","Proj. winner","Proj. margin","Win prob.","Proj. score (rounded)",'
+    '"Spread","ATS Pick","Spread diff","O/U","O/U pick","O/U diff","",'
+    '"Team","Conference","Rec.","SP+","Rk","Off. SP+","Rk","Def. SP+","Rk","ST SP+","Rk","LW","LW Rk"\n'
+    '"18-Sep","7:30 PM","Miami-FL at Wake Forest","Miami-FL","19.7","89%","34-14",'
+    '"Miami-FL -22.5","Wake Forest","2.8","55.5","Under","-7.3","",'
+    '"Miami-FL","ACC","2-0","25.6","4","37.2","10","11.9","4","0.3","42","1","5"\n'
+    '"17-Sep","7:30 PM","Portland State at Oregon","","","","",'
+    '"","","","","","","",'
+    '"Wake Forest","ACC","2-0","3.4","62","25.3","79","22.0","47","0.0","75","2","67"\n'
+)
+
 
 class _FakeResponse:
     def __init__(self, status_code, text):
@@ -93,3 +108,55 @@ def test_compute_sp_plus_gap_reuses_prefetched_table_without_refetching():
 
     gap = fetch_sp_plus.compute_sp_plus_gap("Miami", "Wake Forest", 3, table=table, session=_ExplodingSession())
     assert round(gap, 1) == 22.2
+
+
+def test_fetch_week_lines_parses_real_spread_and_ats_pick():
+    session = _FakeSession(_FakeResponse(200, SCHEDULE_CSV))
+    lines = fetch_sp_plus.fetch_week_lines(3, session=session)
+
+    miami_wake = next(l for l in lines if {l.away_team, l.home_team} == {"Miami-FL", "Wake Forest"})
+    assert miami_wake.away_team == "Miami-FL"
+    assert miami_wake.home_team == "Wake Forest"
+    assert miami_wake.favorite == "Miami-FL"
+    assert miami_wake.spread == 22.5
+    assert miami_wake.ats_pick == "Wake Forest"  # Connelly's model picks the underdog to cover
+    assert miami_wake.proj_margin == 19.7
+    assert miami_wake.over_under == 55.5
+    assert miami_wake.ou_pick == "Under"
+
+
+def test_fetch_week_lines_handles_game_with_no_line_posted():
+    session = _FakeSession(_FakeResponse(200, SCHEDULE_CSV))
+    lines = fetch_sp_plus.fetch_week_lines(3, session=session)
+
+    fcs_game = next(l for l in lines if {l.away_team, l.home_team} == {"Portland State", "Oregon"})
+    assert fcs_game.favorite is None
+    assert fcs_game.spread is None
+    assert fcs_game.ats_pick is None
+
+
+def test_find_game_line_resolves_aliases_and_either_order():
+    session = _FakeSession(_FakeResponse(200, SCHEDULE_CSV))
+    lines = fetch_sp_plus.fetch_week_lines(3, session=session)
+
+    # CFBD's canonical names ("Miami", "Wake Forest"), not the sheet's own
+    # spelling ("Miami-FL") -- find_game_line must resolve the alias.
+    line = fetch_sp_plus.find_game_line(lines, "Miami", "Wake Forest")
+    assert line is not None
+    assert line.spread == 22.5
+
+    # order-independent
+    line_reversed = fetch_sp_plus.find_game_line(lines, "Wake Forest", "Miami")
+    assert line_reversed is line
+
+
+def test_find_game_line_returns_none_when_not_found():
+    session = _FakeSession(_FakeResponse(200, SCHEDULE_CSV))
+    lines = fetch_sp_plus.fetch_week_lines(3, session=session)
+    assert fetch_sp_plus.find_game_line(lines, "Texas", "Ohio State") is None
+
+
+def test_parse_spread_handles_blank_and_real_values():
+    assert fetch_sp_plus._parse_spread("Miami-FL -22.5") == ("Miami-FL", 22.5)
+    assert fetch_sp_plus._parse_spread("") is None
+    assert fetch_sp_plus._parse_spread("   ") is None

@@ -21,6 +21,15 @@ not merge with config/teams.yaml's hand-curated entries or write
 anything to disk -- that's run_week.py's job, kept separate so this
 module stays pure discovery, testable against a mocked schedule/rankings
 fixture with no file I/O.
+
+Real final scores, for backtesting (scripts/backfill_game_results.py):
+CFBD's /games response already carries `homePoints`/`awayPoints`/
+`completed` on every row -- confirmed live against a real completed 2026
+week-1 game (TCU 10, North Carolina 15, `completed: True`) -- but
+derive_matchups() only ever reads homeTeam/awayTeam and drops the rest.
+extract_game_result()/fetch_game_results() read those same fields from
+the same /games call fetch_fbs_schedule() already makes, so backfilling
+results needs no new CFBD endpoint.
 """
 
 from __future__ import annotations
@@ -115,6 +124,37 @@ def derive_matchups(games: list[dict], top25: set, year: int, week: int) -> list
             "week": week,
         })
     return matchups
+
+
+def extract_game_result(game: dict) -> Optional[dict]:
+    """{"home_points", "away_points"} for a completed game with real
+    points on both sides; None for anything else (not yet played, or a
+    malformed row) -- never a fabricated result."""
+    if not game.get("completed"):
+        return None
+    home_points = game.get("homePoints")
+    away_points = game.get("awayPoints")
+    if home_points is None or away_points is None:
+        return None
+    return {"home_points": home_points, "away_points": away_points}
+
+
+def fetch_game_results(year: int, week: int, session: Optional[requests.Session] = None) -> dict:
+    """{(awayTeam, homeTeam): {"home_points", "away_points"}} for every
+    COMPLETED game that week -- keyed the same way derive_matchups()
+    builds a label (team_a=away, team_b=home), so a caller can look up a
+    matchup's real result by its own team_a/team_b. Games not yet played
+    are simply absent, not included with a null/guessed score."""
+    games = fetch_fbs_schedule(year, week, session=session)
+    results = {}
+    for game in games:
+        home, away = game.get("homeTeam"), game.get("awayTeam")
+        if not home or not away:
+            continue
+        result = extract_game_result(game)
+        if result is not None:
+            results[(away, home)] = result
+    return results
 
 
 def discover_matchups(year: int, week: int, session: Optional[requests.Session] = None) -> list[dict]:
