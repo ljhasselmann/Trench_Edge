@@ -1,0 +1,15 @@
+team: Michigan State
+starters:
+  OL:
+  - name: Ben Murawski
+  - name: Conner Moore
+  - name: Trent Fraley
+  - name: Nick Sharpe
+  - name: Rakeem Johnson
+  DL:
+  - name: Isaac Smith
+  - name: Ben Roberts
+  - name: Eli Coenen
+  - name: Kenny Soares Jr.
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

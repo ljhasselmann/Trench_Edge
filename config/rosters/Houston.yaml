@@ -1,0 +1,13 @@
+team: Houston
+starters:
+  OL:
+  - name: Alvin Ebosele
+  - name: Shadre Hurst
+  - name: Anthony Boswell
+  - name: McKenzie Agnello
+  - name: Drew Terrill
+  DL:
+  - name: De'Marion Thomas
+  - name: Khalil Laufau
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

@@ -1,0 +1,15 @@
+team: Texas Tech
+starters:
+  OL:
+  - name: Howard Sampson
+  - name: Hunter Zambrano
+  - name: Sheridan Wilson
+  - name: Jordan Church
+  - name: Jacob Ponton
+  DL:
+  - name: Trey White
+  - name: Mateen Ibirogba
+  - name: A.J. Holmes Jr.
+  - name: Adam Trick
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

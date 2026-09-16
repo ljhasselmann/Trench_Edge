@@ -1,0 +1,15 @@
+team: USC
+starters:
+  OL:
+  - name: Elijah Paige
+  - name: Hayden Treter
+  - name: Tobias Raymond
+  - name: Alani Noa
+  - name: Justin Tauanuu
+  DL:
+  - name: Luke Wafle
+  - name: Alex VanSumeren
+  - name: Jide Abasiri
+  - name: Kameryn Crawford
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

@@ -1,0 +1,501 @@
+
+<div class="trench-edge-game">
+<style>
+.trench-edge-game { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; max-width: 680px; }
+.trench-edge-game h1 { font-size: 20px; margin: 0 0 4px 0; }
+.trench-edge-game .te-game-subtitle { color: #52514e; font-size: 13px; margin: 0 0 20px 0; }
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .trench-edge-game .te-game-subtitle { color: #c3c2b7; }
+}
+:root[data-theme="dark"] .trench-edge-game .te-game-subtitle { color: #c3c2b7; }
+.trench-edge-game .te-direction { margin-bottom: 24px; }
+</style>
+
+<h1>West Virginia vs Virginia &mdash; Trench Edge</h1>
+<p class="te-game-subtitle">Both trench directions scored for this game.</p>
+
+<div class="te-direction">
+
+
+<div class="trench-edge-widget">
+<style>
+.trench-edge-widget {
+  color-scheme: light;
+  --te-surface:      #fcfcfb;
+  --te-text-primary: #0b0b0b;
+  --te-text-secondary: #52514e;
+  --te-muted:        #898781;
+  --te-gridline:     #e1e0d9;
+  --te-baseline:     #c3c2b7;
+  --te-border:       rgba(11,11,11,0.10);
+  --te-blue:         #2a78d6;
+  --te-red:          #e34948;
+  --te-neutral:      #f0efec;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--te-text-primary);
+  background: var(--te-surface);
+  max-width: 640px;
+  padding: 20px;
+  border: 1px solid var(--te-border);
+  border-radius: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .trench-edge-widget {
+    color-scheme: dark;
+    --te-surface: #1a1a19;
+    --te-text-primary: #ffffff;
+    --te-text-secondary: #c3c2b7;
+    --te-muted: #898781;
+    --te-gridline: #2c2c2a;
+    --te-baseline: #383835;
+    --te-border: rgba(255,255,255,0.10);
+    --te-blue: #3987e5;
+    --te-red: #e66767;
+    --te-neutral: #383835;
+  }
+}
+:root[data-theme="dark"] .trench-edge-widget {
+  color-scheme: dark;
+  --te-surface: #1a1a19;
+  --te-text-primary: #ffffff;
+  --te-text-secondary: #c3c2b7;
+  --te-muted: #898781;
+  --te-gridline: #2c2c2a;
+  --te-baseline: #383835;
+  --te-border: rgba(255,255,255,0.10);
+  --te-blue: #3987e5;
+  --te-red: #e66767;
+  --te-neutral: #383835;
+}
+.trench-edge-widget h2, .trench-edge-widget h3 { margin: 0 0 4px 0; }
+.trench-edge-widget .te-subtitle { color: var(--te-text-secondary); font-size: 13px; margin: 0 0 20px 0; }
+.trench-edge-widget .te-muted { color: var(--te-muted); }
+.trench-edge-widget section { margin-bottom: 24px; }
+.trench-edge-widget .te-stat-tiles { display: flex; gap: 12px; flex-wrap: wrap; }
+.trench-edge-widget .te-stat-tile { flex: 1; min-width: 140px; padding: 12px; background: var(--te-neutral); border-radius: 6px; }
+.trench-edge-widget .te-stat-tile .te-label { font-size: 12px; color: var(--te-text-secondary); margin-bottom: 4px; }
+.trench-edge-widget .te-stat-tile .te-value { font-size: 24px; font-weight: 600; }
+.trench-edge-widget table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 12px; }
+.trench-edge-widget th { text-align: left; color: var(--te-text-secondary); font-weight: 500; font-size: 12px; border-bottom: 1px solid var(--te-gridline); padding: 4px 8px 4px 0; }
+.trench-edge-widget td { padding: 4px 8px 4px 0; border-bottom: 1px solid var(--te-gridline); font-variant-numeric: tabular-nums; }
+.trench-edge-widget .te-badge { font-size: 11px; color: var(--te-text-secondary); }
+.trench-edge-widget .te-legend { display: flex; gap: 16px; font-size: 12px; color: var(--te-text-secondary); margin-bottom: 12px; }
+.trench-edge-widget .te-legend-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+.trench-edge-widget .te-bar-row { display: grid; grid-template-columns: 100px 1fr 56px; align-items: center; gap: 8px; margin-bottom: 10px; }
+.trench-edge-widget .te-bar-label { font-size: 13px; }
+.trench-edge-widget .te-bar-track { display: flex; height: 16px; background: var(--te-gridline); border-radius: 4px; overflow: hidden; }
+.trench-edge-widget .te-bar-half { flex: 1; display: flex; }
+.trench-edge-widget .te-bar-half-left { justify-content: flex-end; }
+.trench-edge-widget .te-bar-half-right { justify-content: flex-start; }
+.trench-edge-widget .te-bar-center { width: 2px; background: var(--te-baseline); }
+.trench-edge-widget .te-bar-fill { height: 100%; }
+.trench-edge-widget .te-bar-fill-blue { background: var(--te-blue); border-radius: 0 4px 4px 0; }
+.trench-edge-widget .te-bar-fill-red { background: var(--te-red); border-radius: 4px 0 0 4px; }
+.trench-edge-widget .te-bar-value { font-size: 13px; font-variant-numeric: tabular-nums; text-align: right; }
+.trench-edge-widget .te-bar-unavailable { align-items: center; justify-content: center; }
+.trench-edge-widget .te-unavailable-text { font-size: 11px; color: var(--te-muted); }
+.trench-edge-widget .te-composite-verdict { font-size: 15px; margin-top: 4px; }
+.trench-edge-widget .te-caveats ul { margin: 4px 0 0 0; padding-left: 18px; font-size: 13px; color: var(--te-text-secondary); }
+.trench-edge-widget .te-caveats li { margin-bottom: 4px; }
+.trench-edge-widget footer { font-size: 11px; color: var(--te-muted); border-top: 1px solid var(--te-gridline); padding-top: 12px; }
+</style>
+
+<header>
+  <h2>West Virginia OL vs Virginia DL</h2>
+  <p class="te-subtitle">2026-wk03-west-virginia-virginia-a &middot; 2026 season &middot; generated 2026-09-16 03:50 UTC</p>
+</header>
+
+<section class="te-stat-tiles">
+  <div class="te-stat-tile">
+    <div class="te-label">West Virginia OL avg weight</div>
+    <div class="te-value">306 lbs</div>
+  </div>
+  <div class="te-stat-tile">
+    <div class="te-label">Virginia DL avg weight</div>
+    <div class="te-value">296 lbs</div>
+  </div>
+  <div class="te-stat-tile">
+    <div class="te-label">Weight differential</div>
+    <div class="te-value">+10 lbs</div>
+  </div>
+</section>
+
+<section class="te-starters">
+  <h3>West Virginia starting OL</h3>
+  
+  <table>
+    <tr><th>Player</th><th>Weight</th><th>Confidence</th></tr>
+    
+    <tr>
+      <td>Kevin Brown</td>
+      <td>294 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Nick Krahe</td>
+      <td>312 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Wes King</td>
+      <td>309 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Amare Grayson</td>
+      <td>306 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Carsten Casady</td>
+      <td>310 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+  </table>
+  
+
+  <h3>Virginia starting DL</h3>
+  
+  <table>
+    <tr><th>Player</th><th>Weight</th><th>Confidence</th></tr>
+    
+    <tr>
+      <td>Anthony Britton</td>
+      <td>308 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Jason Hammond</td>
+      <td>284 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+  </table>
+  
+</section>
+
+<section class="te-subscores">
+  <h3>Subscores</h3>
+  <div class="te-legend">
+    <span><span class="te-legend-swatch" style="background: var(--te-blue);"></span>Favors West Virginia</span>
+    <span><span class="te-legend-swatch" style="background: var(--te-red);"></span>Favors Virginia</span>
+  </div>
+  
+<div class="te-bar-row">
+  <div class="te-bar-label">Mass</div>
+  
+    
+    <div class="te-bar-track">
+      <div class="te-bar-half te-bar-half-left">
+        
+      </div>
+      <div class="te-bar-center"></div>
+      <div class="te-bar-half te-bar-half-right">
+        <div class="te-bar-fill te-bar-fill-blue" style="width: 10.2%;"></div>
+      </div>
+    </div>
+    <div class="te-bar-value">+1.0</div>
+  
+</div>
+
+  
+<div class="te-bar-row">
+  <div class="te-bar-label">Push</div>
+  
+    
+    <div class="te-bar-track">
+      <div class="te-bar-half te-bar-half-left">
+        <div class="te-bar-fill te-bar-fill-red" style="width: 19.4%;"></div>
+      </div>
+      <div class="te-bar-center"></div>
+      <div class="te-bar-half te-bar-half-right">
+        
+      </div>
+    </div>
+    <div class="te-bar-value">-1.9</div>
+  
+</div>
+
+  
+<div class="te-bar-row">
+  <div class="te-bar-label">Continuity</div>
+  
+    <div class="te-bar-track te-bar-unavailable">
+      <span class="te-unavailable-text">data unavailable</span>
+    </div>
+    <div class="te-bar-value te-muted">&mdash;</div>
+  
+</div>
+
+</section>
+
+<section class="te-composite">
+  <h3>Composite</h3>
+  
+    <p class="te-muted">Not computed this run &mdash; see caveats below.</p>
+  
+</section>
+
+
+<section class="te-caveats">
+  <h3>Caveats</h3>
+  <ul>
+    <li>[West Virginia Continuity] config/rosters/West Virginia.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it</li><li>[West Virginia Continuity] config/rosters/West Virginia.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season</li><li>[Virginia Continuity] config/rosters/Virginia.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it</li><li>[Virginia Continuity] config/rosters/Virginia.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season</li><li>Composite not computed -- missing: Continuity</li>
+  </ul>
+</section>
+
+
+<footer>
+  Source: collegefootballdata.com (Tier 1 stats, roster, talent) + human-maintained depth-chart config &middot; generated 2026-09-16 03:50 UTC
+</footer>
+</div>
+</div>
+<div class="te-direction">
+
+
+<div class="trench-edge-widget">
+<style>
+.trench-edge-widget {
+  color-scheme: light;
+  --te-surface:      #fcfcfb;
+  --te-text-primary: #0b0b0b;
+  --te-text-secondary: #52514e;
+  --te-muted:        #898781;
+  --te-gridline:     #e1e0d9;
+  --te-baseline:     #c3c2b7;
+  --te-border:       rgba(11,11,11,0.10);
+  --te-blue:         #2a78d6;
+  --te-red:          #e34948;
+  --te-neutral:      #f0efec;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--te-text-primary);
+  background: var(--te-surface);
+  max-width: 640px;
+  padding: 20px;
+  border: 1px solid var(--te-border);
+  border-radius: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .trench-edge-widget {
+    color-scheme: dark;
+    --te-surface: #1a1a19;
+    --te-text-primary: #ffffff;
+    --te-text-secondary: #c3c2b7;
+    --te-muted: #898781;
+    --te-gridline: #2c2c2a;
+    --te-baseline: #383835;
+    --te-border: rgba(255,255,255,0.10);
+    --te-blue: #3987e5;
+    --te-red: #e66767;
+    --te-neutral: #383835;
+  }
+}
+:root[data-theme="dark"] .trench-edge-widget {
+  color-scheme: dark;
+  --te-surface: #1a1a19;
+  --te-text-primary: #ffffff;
+  --te-text-secondary: #c3c2b7;
+  --te-muted: #898781;
+  --te-gridline: #2c2c2a;
+  --te-baseline: #383835;
+  --te-border: rgba(255,255,255,0.10);
+  --te-blue: #3987e5;
+  --te-red: #e66767;
+  --te-neutral: #383835;
+}
+.trench-edge-widget h2, .trench-edge-widget h3 { margin: 0 0 4px 0; }
+.trench-edge-widget .te-subtitle { color: var(--te-text-secondary); font-size: 13px; margin: 0 0 20px 0; }
+.trench-edge-widget .te-muted { color: var(--te-muted); }
+.trench-edge-widget section { margin-bottom: 24px; }
+.trench-edge-widget .te-stat-tiles { display: flex; gap: 12px; flex-wrap: wrap; }
+.trench-edge-widget .te-stat-tile { flex: 1; min-width: 140px; padding: 12px; background: var(--te-neutral); border-radius: 6px; }
+.trench-edge-widget .te-stat-tile .te-label { font-size: 12px; color: var(--te-text-secondary); margin-bottom: 4px; }
+.trench-edge-widget .te-stat-tile .te-value { font-size: 24px; font-weight: 600; }
+.trench-edge-widget table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 12px; }
+.trench-edge-widget th { text-align: left; color: var(--te-text-secondary); font-weight: 500; font-size: 12px; border-bottom: 1px solid var(--te-gridline); padding: 4px 8px 4px 0; }
+.trench-edge-widget td { padding: 4px 8px 4px 0; border-bottom: 1px solid var(--te-gridline); font-variant-numeric: tabular-nums; }
+.trench-edge-widget .te-badge { font-size: 11px; color: var(--te-text-secondary); }
+.trench-edge-widget .te-legend { display: flex; gap: 16px; font-size: 12px; color: var(--te-text-secondary); margin-bottom: 12px; }
+.trench-edge-widget .te-legend-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+.trench-edge-widget .te-bar-row { display: grid; grid-template-columns: 100px 1fr 56px; align-items: center; gap: 8px; margin-bottom: 10px; }
+.trench-edge-widget .te-bar-label { font-size: 13px; }
+.trench-edge-widget .te-bar-track { display: flex; height: 16px; background: var(--te-gridline); border-radius: 4px; overflow: hidden; }
+.trench-edge-widget .te-bar-half { flex: 1; display: flex; }
+.trench-edge-widget .te-bar-half-left { justify-content: flex-end; }
+.trench-edge-widget .te-bar-half-right { justify-content: flex-start; }
+.trench-edge-widget .te-bar-center { width: 2px; background: var(--te-baseline); }
+.trench-edge-widget .te-bar-fill { height: 100%; }
+.trench-edge-widget .te-bar-fill-blue { background: var(--te-blue); border-radius: 0 4px 4px 0; }
+.trench-edge-widget .te-bar-fill-red { background: var(--te-red); border-radius: 4px 0 0 4px; }
+.trench-edge-widget .te-bar-value { font-size: 13px; font-variant-numeric: tabular-nums; text-align: right; }
+.trench-edge-widget .te-bar-unavailable { align-items: center; justify-content: center; }
+.trench-edge-widget .te-unavailable-text { font-size: 11px; color: var(--te-muted); }
+.trench-edge-widget .te-composite-verdict { font-size: 15px; margin-top: 4px; }
+.trench-edge-widget .te-caveats ul { margin: 4px 0 0 0; padding-left: 18px; font-size: 13px; color: var(--te-text-secondary); }
+.trench-edge-widget .te-caveats li { margin-bottom: 4px; }
+.trench-edge-widget footer { font-size: 11px; color: var(--te-muted); border-top: 1px solid var(--te-gridline); padding-top: 12px; }
+</style>
+
+<header>
+  <h2>Virginia OL vs West Virginia DL</h2>
+  <p class="te-subtitle">2026-wk03-west-virginia-virginia-b &middot; 2026 season &middot; generated 2026-09-16 03:50 UTC</p>
+</header>
+
+<section class="te-stat-tiles">
+  <div class="te-stat-tile">
+    <div class="te-label">Virginia OL avg weight</div>
+    <div class="te-value">317 lbs</div>
+  </div>
+  <div class="te-stat-tile">
+    <div class="te-label">West Virginia DL avg weight</div>
+    <div class="te-value">292 lbs</div>
+  </div>
+  <div class="te-stat-tile">
+    <div class="te-label">Weight differential</div>
+    <div class="te-value">+25 lbs</div>
+  </div>
+</section>
+
+<section class="te-starters">
+  <h3>Virginia starting OL</h3>
+  
+  <table>
+    <tr><th>Player</th><th>Weight</th><th>Confidence</th></tr>
+    
+    <tr>
+      <td>McKale Boley</td>
+      <td>329 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Noah Josey</td>
+      <td>315 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Drake Metcalf</td>
+      <td>304 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Makilan Thomas</td>
+      <td>317 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Monroe Mills</td>
+      <td>322 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+  </table>
+  
+
+  <h3>West Virginia starting DL</h3>
+  
+  <table>
+    <tr><th>Player</th><th>Weight</th><th>Confidence</th></tr>
+    
+    <tr>
+      <td>Nate Gabriel</td>
+      <td>295 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>Corey McIntyre Jr.</td>
+      <td>290 lbs</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+  </table>
+  
+</section>
+
+<section class="te-subscores">
+  <h3>Subscores</h3>
+  <div class="te-legend">
+    <span><span class="te-legend-swatch" style="background: var(--te-blue);"></span>Favors Virginia</span>
+    <span><span class="te-legend-swatch" style="background: var(--te-red);"></span>Favors West Virginia</span>
+  </div>
+  
+<div class="te-bar-row">
+  <div class="te-bar-label">Mass</div>
+  
+    
+    <div class="te-bar-track">
+      <div class="te-bar-half te-bar-half-left">
+        
+      </div>
+      <div class="te-bar-center"></div>
+      <div class="te-bar-half te-bar-half-right">
+        <div class="te-bar-fill te-bar-fill-blue" style="width: 24.9%;"></div>
+      </div>
+    </div>
+    <div class="te-bar-value">+2.5</div>
+  
+</div>
+
+  
+<div class="te-bar-row">
+  <div class="te-bar-label">Push</div>
+  
+    
+    <div class="te-bar-track">
+      <div class="te-bar-half te-bar-half-left">
+        
+      </div>
+      <div class="te-bar-center"></div>
+      <div class="te-bar-half te-bar-half-right">
+        <div class="te-bar-fill te-bar-fill-blue" style="width: 19.4%;"></div>
+      </div>
+    </div>
+    <div class="te-bar-value">+1.9</div>
+  
+</div>
+
+  
+<div class="te-bar-row">
+  <div class="te-bar-label">Continuity</div>
+  
+    <div class="te-bar-track te-bar-unavailable">
+      <span class="te-unavailable-text">data unavailable</span>
+    </div>
+    <div class="te-bar-value te-muted">&mdash;</div>
+  
+</div>
+
+</section>
+
+<section class="te-composite">
+  <h3>Composite</h3>
+  
+    <p class="te-muted">Not computed this run &mdash; see caveats below.</p>
+  
+</section>
+
+
+<section class="te-caveats">
+  <h3>Caveats</h3>
+  <ul>
+    <li>[West Virginia Continuity] config/rosters/West Virginia.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it</li><li>[West Virginia Continuity] config/rosters/West Virginia.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season</li><li>[Virginia Continuity] config/rosters/Virginia.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it</li><li>[Virginia Continuity] config/rosters/Virginia.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season</li><li>Composite not computed -- missing: Continuity</li>
+  </ul>
+</section>
+
+
+<footer>
+  Source: collegefootballdata.com (Tier 1 stats, roster, talent) + human-maintained depth-chart config &middot; generated 2026-09-16 03:50 UTC
+</footer>
+</div>
+</div>
+</div>

@@ -1,0 +1,13 @@
+team: Missouri
+starters:
+  OL:
+  - name: Cayden Green
+  - name: Tristan Wilson
+  - name: Dominick Giudice
+  - name: Curtis Peagler
+  - name: Luke Work
+  DL:
+  - name: Marquis Gracial
+  - name: Jalen Marshall
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

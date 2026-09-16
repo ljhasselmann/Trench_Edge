@@ -1,0 +1,15 @@
+team: Louisville
+starters:
+  OL:
+  - name: Lance Robinson
+  - name: Eryx Daugherty
+  - name: Evan Wibberley
+  - name: Johnnie Brown III
+  - name: Cason Henry
+  DL:
+  - name: AJ Green
+  - name: Joshua Donald
+  - name: Daylen Russell
+  - name: Clev Lubin
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

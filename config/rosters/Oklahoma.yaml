@@ -1,0 +1,15 @@
+team: Oklahoma
+starters:
+  OL:
+  - name: Michael Fasusi
+  - name: Eddy Pierre-Louis
+  - name: Caleb Nitta
+  - name: Heath Ozaeta
+  - name: E'Marion Harris
+  DL:
+  - name: Taylor Wein
+  - name: Jayden Jackson
+  - name: David Stone
+  - name: Adepoju Adebawore
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

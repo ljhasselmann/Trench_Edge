@@ -1,0 +1,13 @@
+team: Colorado State
+starters:
+  OL:
+  - name: Toriyan Johnson
+  - name: Braden Hales
+  - name: Phillip Ocon
+  - name: Zach Smith
+  - name: John Holthaus
+  DL:
+  - name: Robby Harrison
+  - name: Jack Moran
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

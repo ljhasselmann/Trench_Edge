@@ -1,0 +1,15 @@
+team: BYU
+starters:
+  OL:
+  - name: Paki Finau
+  - name: Sonny Makasini
+  - name: Bruce Mitchell
+  - name: Kyle Sfarcioc
+  - name: Andrew Gentry
+  DL:
+  - name: Bodie Schoonover
+  - name: Justin Kirkland
+  - name: Keanu Tanuvasa
+  - name: Tausili Akana
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

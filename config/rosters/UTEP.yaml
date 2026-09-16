@@ -1,0 +1,13 @@
+team: UTEP
+starters:
+  OL:
+  - name: Tyler Roberts
+  - name: Jaymon Lamb
+  - name: Brian Williams Jr.
+  - name: Omoruyi Aliu-Otokiti
+  - name: Grayson Johnson
+  DL:
+  - name: Ashton Coker
+  - name: Elijah Fields
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

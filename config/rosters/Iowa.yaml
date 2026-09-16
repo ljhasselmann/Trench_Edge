@@ -1,0 +1,15 @@
+team: Iowa
+starters:
+  OL:
+  - name: Trevor Lauck
+  - name: Leighton Jones
+  - name: Cael Winter
+  - name: Kade Pieper
+  - name: Jack Dotzler
+  DL:
+  - name: Kenneth Merrieweather
+  - name: Will Hubert
+  - name: Bryce Hawthorne
+  - name: Iose Epenesa
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

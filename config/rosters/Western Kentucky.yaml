@@ -1,0 +1,15 @@
+team: Western Kentucky
+starters:
+  OL:
+  - name: Tai Ray
+  - name: Nonso Omezi
+  - name: Alec Johnson
+  - name: Rhett Larson
+  - name: Karsten Upchurch
+  DL:
+  - name: LaTrevion Thompson
+  - name: Kiawan Murphy
+  - name: Zeiqui Lawton
+  - name: Nathan Gonzales
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

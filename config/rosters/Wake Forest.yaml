@@ -1,32 +1,15 @@
-# Researched by the Trench Edge weekly Routine, 2026-09-15 (manual test fire,
-# CORRECTED after ourlads.com became reachable via plain requests -- see
-# fetch_ourlads.py). Source: https://www.ourlads.com/ncaa-football-depth-charts/depth-chart/wake-forest/92430,
-# a live-maintained depth chart.
-#
-# This replaces an earlier, wrong version of this file based on WebSearch
-# snippets of a preview article. Real corrections, not just a refresh:
-#   - Wake Forest's D-line front is actually 4 starters (NT/DT/LDE/RDE),
-#     not the 3 names the earlier search-based research found.
-#   - Gabe Kirschke IS on the current roster and IS the starting LDE --
-#     the earlier version excluded him as "not on CFBD's roster," but that
-#     was a name-spelling mismatch: the preview article spelled it
-#     "Krischke", CFBD (and ourlads) spell it "Kirschke". Real lesson:
-#     an exact-name lookup miss can mean a misspelled source, not
-#     necessarily a departed player -- worth a second check before
-#     concluding someone's gone.
-#   - Tyler Walton and Sydir Mitchell, listed as starters in the earlier
-#     version, are both backups per the real depth chart (Walton is
-#     LDE's backup, Mitchell is NT's 4th-string).
-#
-# All 4 names cross-checked against CFBD's live /roster (2026-09-15): all
-# present, tagged DL, weights come from fetch_roster.py's automatic CFBD
-# cross-reference (not hand-supplied here).
 team: Wake Forest
-updated_by_human_at: "2026-09-15"
+updated_by_human_at: '2026-09-16'
 starters:
-  OL: []
+  OL:
+  - name: Tolu Olajide
+  - name: Ryan Berger
+  - name: John Ohnegian
+  - name: Jack Hines
+  - name: Aidan Martin
   DL:
-    - name: "Zach Lohavichan"
-    - name: "Dallas Afalava"
-    - name: "Gabe Kirschke"
-    - name: "Langston Hardy"
+  - name: Gabe Kirschke
+  - name: Zach Lohavichan
+  - name: Dallas Afalava
+  - name: Langston Hardy
+roster_source: ourlads.com (live fetch via run_week.py)

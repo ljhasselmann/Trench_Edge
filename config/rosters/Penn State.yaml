@@ -1,0 +1,15 @@
+team: Penn State
+starters:
+  OL:
+  - name: Malachi Goodman
+  - name: Trevor Buhr
+  - name: Brock Riker
+  - name: Cooper Cousins
+  - name: Anthony Donkoh
+  DL:
+  - name: Yvan Kemajou
+  - name: Armstrong Nnodim
+  - name: Keanu Williams
+  - name: Ikenna Ezeogu
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

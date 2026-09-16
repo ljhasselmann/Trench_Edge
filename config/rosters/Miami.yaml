@@ -1,22 +1,15 @@
-# Researched by the Trench Edge weekly Routine, 2026-09-15 (manual test fire,
-# re-verified after ourlads.com became reachable via plain requests -- see
-# fetch_ourlads.py). Source: https://www.ourlads.com/ncaa-football-depth-charts/depth-chart/miami/91073,
-# a live-maintained depth chart, not a dated preview article. Confirms the
-# same 5 starters an earlier ~17-day-old preview-article source had
-# already found, and confirms Jackson Cantwell (a true freshman OL on the
-# live CFBD roster) is NOT currently a starter here -- resolves the
-# open question the previous version of this file flagged.
-#
-# All 5 names cross-checked against CFBD's live /roster (2026-09-15): all
-# present, tagged OL, weights come from fetch_roster.py's automatic CFBD
-# cross-reference (not hand-supplied here).
 team: Miami
-updated_by_human_at: "2026-09-15"
+updated_by_human_at: '2026-09-16'
 starters:
   OL:
-    - name: "Samson Okunlola"
-    - name: "Seuseu Alofaituli"
-    - name: "Ryan Rodriguez"
-    - name: "Max Buchanan"
-    - name: "Matthew McCoy"
-  DL: []
+  - name: Samson Okunlola
+  - name: Seuseu Alofaituli
+  - name: Ryan Rodriguez
+  - name: Max Buchanan
+  - name: Matthew McCoy
+  DL:
+  - name: Damon Wilson II
+  - name: Justin Scott
+  - name: Ahmad Moten Sr.
+  - name: Marquise Lightfoot
+roster_source: ourlads.com (live fetch via run_week.py)

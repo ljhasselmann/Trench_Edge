@@ -1,0 +1,145 @@
+{
+  "matchup_label": "2026-wk03-portland-state-oregon",
+  "team_a": "Portland State",
+  "team_b": "Oregon",
+  "year": 2026,
+  "generated_at": "2026-09-16 03:49 UTC",
+  "direction_a": {
+    "matchup_label": "2026-wk03-portland-state-oregon-a",
+    "team_a": "Portland State",
+    "team_b": "Oregon",
+    "side": "team_a_ol_vs_team_b_dl",
+    "year": 2026,
+    "generated_at": "2026-09-16 03:49 UTC",
+    "mass": {
+      "team_a_avg_weight": null,
+      "team_b_avg_weight": 316.0,
+      "weight_diff_lbs": null,
+      "score": null,
+      "team_a_starters": [],
+      "team_b_starters": [
+        {
+          "name": "A'Mauri Washington",
+          "weight_lbs": 330,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Bear Alexander",
+          "weight_lbs": 302,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        }
+      ]
+    },
+    "push": {
+      "available": false,
+      "score": null,
+      "sp_plus_gap": null,
+      "raw": {
+        "Oregon_defense_stuff_rate": 0.136986301369863,
+        "Oregon_defense_line_yards": 2.9383561643835616
+      }
+    },
+    "continuity": {
+      "team_a_returning": null,
+      "team_b_returning": null,
+      "net_returning": null,
+      "score": null,
+      "team_a_driver": null,
+      "team_a_note": null,
+      "team_b_driver": null,
+      "team_b_note": null
+    },
+    "composite": null,
+    "warnings": [
+      "Live SP+ fetch failed ('Portland State' (looked up as 'Portland State') not found in the SP+ sheet's FBS Week 3 tab. Closest names in the sheet: ['Colorado State', 'Utah State', 'Penn State']. If one of these is really 'Portland State', add it to TEAM_NAME_ALIASES in fetch_sp_plus.py.); using config/teams.yaml's stored sp_plus_gap=None instead",
+      "[Portland State Mass] config/rosters/Portland State.yaml does not exist -- no human-confirmed starter list, Mass cannot be computed for this team. Copy _template.yaml and fill it in.",
+      "[Portland State Continuity] Portland State not present in CFBD's 2026 /talent list",
+      "[Portland State Continuity] config/rosters/Portland State.yaml does not exist -- returning-starter count unavailable",
+      "[Portland State Tier1] fetch failed: CFBD returned an empty result for team='Portland State' year=2026",
+      "[Oregon Continuity] config/rosters/Oregon.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it",
+      "[Oregon Continuity] config/rosters/Oregon.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season",
+      "sp_plus_gap unavailable (no 'week' set for a live fetch and no fallback value in config/teams.yaml) -- Push unavailable (see README.md's SP+ source)",
+      "Composite not computed -- missing: Mass, Push, Continuity"
+    ]
+  },
+  "direction_b": {
+    "matchup_label": "2026-wk03-portland-state-oregon-b",
+    "team_a": "Oregon",
+    "team_b": "Portland State",
+    "side": "team_b_ol_vs_team_a_dl",
+    "year": 2026,
+    "generated_at": "2026-09-16 03:49 UTC",
+    "mass": {
+      "team_a_avg_weight": 319.2,
+      "team_b_avg_weight": null,
+      "weight_diff_lbs": null,
+      "score": null,
+      "team_a_starters": [
+        {
+          "name": "Ziyare Addison",
+          "weight_lbs": 315,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Douglas Utu",
+          "weight_lbs": 335,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Iapani Laloulu",
+          "weight_lbs": 329,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Michael Bennett III",
+          "weight_lbs": 302,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Fox Crader",
+          "weight_lbs": 315,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        }
+      ],
+      "team_b_starters": []
+    },
+    "push": {
+      "available": false,
+      "score": null,
+      "sp_plus_gap": null,
+      "raw": {
+        "Oregon_offense_stuff_rate": 0.13725490196078433,
+        "Oregon_offense_line_yards": 3.2
+      }
+    },
+    "continuity": {
+      "team_a_returning": null,
+      "team_b_returning": null,
+      "net_returning": null,
+      "score": null,
+      "team_a_driver": null,
+      "team_a_note": null,
+      "team_b_driver": null,
+      "team_b_note": null
+    },
+    "composite": null,
+    "warnings": [
+      "Live SP+ fetch failed ('Portland State' (looked up as 'Portland State') not found in the SP+ sheet's FBS Week 3 tab. Closest names in the sheet: ['Colorado State', 'Utah State', 'Penn State']. If one of these is really 'Portland State', add it to TEAM_NAME_ALIASES in fetch_sp_plus.py.); using config/teams.yaml's stored sp_plus_gap=None instead",
+      "[Portland State Mass] config/rosters/Portland State.yaml does not exist -- no human-confirmed starter list, Mass cannot be computed for this team. Copy _template.yaml and fill it in.",
+      "[Portland State Continuity] Portland State not present in CFBD's 2026 /talent list",
+      "[Portland State Continuity] config/rosters/Portland State.yaml does not exist -- returning-starter count unavailable",
+      "[Portland State Tier1] fetch failed: CFBD returned an empty result for team='Portland State' year=2026",
+      "[Oregon Continuity] config/rosters/Oregon.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it",
+      "[Oregon Continuity] config/rosters/Oregon.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season",
+      "sp_plus_gap unavailable (no 'week' set for a live fetch and no fallback value in config/teams.yaml) -- Push unavailable (see README.md's SP+ source)",
+      "Composite not computed -- missing: Mass, Push, Continuity"
+    ]
+  }
+}

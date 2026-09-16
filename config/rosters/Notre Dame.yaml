@@ -1,0 +1,15 @@
+team: Notre Dame
+starters:
+  OL:
+  - name: Will Black
+  - name: Anthonie Knapp
+  - name: Ashton Craig
+  - name: Sullivan Absher
+  - name: Guerby Lambert
+  DL:
+  - name: Bryce Young
+  - name: Jason Onye
+  - name: Armel Mukam
+  - name: Boubacar Traore
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

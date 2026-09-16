@@ -1,0 +1,15 @@
+team: Utah
+starters:
+  OL:
+  - name: Zereoue Williams
+  - name: Solatoa Moea'i
+  - name: Alex Harrison
+  - name: Keith Olson
+  - name: Cedric Jefferson
+  DL:
+  - name: Lance Holtzclaw
+  - name: Jireh Moe
+  - name: Karson Kaufusi
+  - name: Ethan Day
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

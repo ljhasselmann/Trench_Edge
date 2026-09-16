@@ -1,0 +1,113 @@
+year: 2026
+matchups:
+- label: 2026-wk03-buffalo-penn-state
+  team_a: Buffalo
+  team_b: Penn State
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-byu-colorado-state
+  team_a: BYU
+  team_b: Colorado State
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-florida-state-alabama
+  team_a: Florida State
+  team_b: Alabama
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-georgia-arkansas
+  team_a: Georgia
+  team_b: Arkansas
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-houston-texas-tech
+  team_a: Houston
+  team_b: Texas Tech
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-kennesaw-state-tennessee
+  team_a: Kennesaw State
+  team_b: Tennessee
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-kent-state-ohio-state
+  team_a: Kent State
+  team_b: Ohio State
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-kentucky-texas-a-m
+  team_a: Kentucky
+  team_b: Texas A&M
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-lsu-ole-miss
+  team_a: LSU
+  team_b: Ole Miss
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-miami-wake-forest
+  team_a: Miami
+  team_b: Wake Forest
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+  sp_plus_gap: 22.2
+- label: 2026-wk03-michigan-state-notre-dame
+  team_a: Michigan State
+  team_b: Notre Dame
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-new-mexico-oklahoma
+  team_a: New Mexico
+  team_b: Oklahoma
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-northern-iowa-iowa
+  team_a: Northern Iowa
+  team_b: Iowa
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-portland-state-oregon
+  team_a: Portland State
+  team_b: Oregon
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-smu-louisville
+  team_a: SMU
+  team_b: Louisville
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-troy-missouri
+  team_a: Troy
+  team_b: Missouri
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-usc-rutgers
+  team_a: USC
+  team_b: Rutgers
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-utah-state-utah
+  team_a: Utah State
+  team_b: Utah
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-utep-michigan
+  team_a: UTEP
+  team_b: Michigan
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-utsa-texas
+  team_a: UTSA
+  team_b: Texas
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-west-virginia-virginia
+  team_a: West Virginia
+  team_b: Virginia
+  side: team_a_ol_vs_team_b_dl
+  week: 3
+- label: 2026-wk03-western-kentucky-indiana
+  team_a: Western Kentucky
+  team_b: Indiana
+  side: team_a_ol_vs_team_b_dl
+  week: 3

@@ -1,0 +1,15 @@
+team: Michigan
+starters:
+  OL:
+  - name: Blake Frazier
+  - name: Evan Link
+  - name: Jake Guarnera
+  - name: Brady Norton
+  - name: Andrew Sprague
+  DL:
+  - name: Dom Nichols
+  - name: Trey Pierce
+  - name: Enow Etta
+  - name: John Daley
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

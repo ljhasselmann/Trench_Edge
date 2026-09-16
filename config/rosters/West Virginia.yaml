@@ -1,0 +1,13 @@
+team: West Virginia
+starters:
+  OL:
+  - name: Kevin Brown
+  - name: Nick Krahe
+  - name: Wes King
+  - name: Amare Grayson
+  - name: Carsten Casady
+  DL:
+  - name: Nate Gabriel
+  - name: Corey McIntyre Jr.
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

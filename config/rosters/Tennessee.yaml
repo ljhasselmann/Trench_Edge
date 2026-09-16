@@ -1,0 +1,13 @@
+team: Tennessee
+starters:
+  OL:
+  - name: David Sanders Jr.
+  - name: Wendell Moe Jr.
+  - name: Sam Pendleton
+  - name: Jesse Perry
+  - name: Ory Williams
+  DL:
+  - name: Xavier Gilliam
+  - name: Daevin Hobbs
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

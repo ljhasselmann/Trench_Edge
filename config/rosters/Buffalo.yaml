@@ -1,0 +1,15 @@
+team: Buffalo
+starters:
+  OL:
+  - name: Gabriel Arena
+  - name: Thomas Barr
+  - name: Nino Francavilla
+  - name: Jackson Bellamy
+  - name: Nathan Natoli
+  DL:
+  - name: Logan Goodwin
+  - name: Cornell Evans
+  - name: Christopher Climes
+  - name: Will Clark
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

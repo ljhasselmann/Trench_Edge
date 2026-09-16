@@ -1,0 +1,15 @@
+team: New Mexico
+starters:
+  OL:
+  - name: Cole Millward
+  - name: Malik Aliane
+  - name: Kaden Robnett
+  - name: Jaymar Tasi
+  - name: Tyler Lawrence
+  DL:
+  - name: Darren Agu
+  - name: Brian Booker
+  - name: Xavier Slayton
+  - name: Albert Tuakalau
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

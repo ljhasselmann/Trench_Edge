@@ -1,0 +1,13 @@
+team: Florida State
+starters:
+  OL:
+  - name: Xavier Chaplin
+  - name: Paul Bowling
+  - name: Bradyn Welch-Joiner
+  - name: Nate Pabst
+  - name: Chimdia Nwaiwu
+  DL:
+  - name: Daniel Lyons
+  - name: Mandrell Desir
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

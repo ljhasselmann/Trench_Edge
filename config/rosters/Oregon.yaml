@@ -1,0 +1,13 @@
+team: Oregon
+starters:
+  OL:
+  - name: Ziyare Addison
+  - name: Douglas Utu
+  - name: Iapani Laloulu
+  - name: Michael Bennett III
+  - name: Fox Crader
+  DL:
+  - name: A'Mauri Washington
+  - name: Bear Alexander
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

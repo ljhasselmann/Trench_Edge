@@ -1,0 +1,15 @@
+team: LSU
+starters:
+  OL:
+  - name: Jordan Seaton
+  - name: Bo Bordelon
+  - name: Braelin Moore
+  - name: Aliou Bah
+  - name: Weston Davis
+  DL:
+  - name: Jordan Ross
+  - name: Deuce Geralds
+  - name: Stephiylan Green
+  - name: Princewill Umanmielen
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

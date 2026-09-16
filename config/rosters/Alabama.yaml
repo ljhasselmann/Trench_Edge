@@ -1,0 +1,13 @@
+team: Alabama
+starters:
+  OL:
+  - name: Jackson Lloyd
+  - name: William Sanders
+  - name: Racin Delgatty
+  - name: Michael Carroll
+  - name: Jayvin James
+  DL:
+  - name: Terrance Green
+  - name: Kedrick Bingley-Jones
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

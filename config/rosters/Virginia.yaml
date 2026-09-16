@@ -1,0 +1,13 @@
+team: Virginia
+starters:
+  OL:
+  - name: McKale Boley
+  - name: Noah Josey
+  - name: Drake Metcalf
+  - name: Makilan Thomas
+  - name: Monroe Mills
+  DL:
+  - name: Anthony Britton
+  - name: Jason Hammond
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

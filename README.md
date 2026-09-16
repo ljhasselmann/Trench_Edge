@@ -147,23 +147,86 @@ maps repo-wide names to the sheet's; a lookup miss raises with the closest
 sheet names found, specifically so a new mismatch is easy to diagnose and
 add rather than silently guessed at.
 
-No team roster files (`config/rosters/{team}.yaml`) are committed — I
-don't have real depth-chart knowledge of any team's actual current
-starters, and fabricating one would put false information about real
-players in the repo.
+`config/rosters/{team}.yaml` files for a real week's slate are now
+populated automatically from live ourlads.com depth charts by
+`src/run_week.py` (see below) — no hand-fabricated starters. The two
+exceptions this session found (Northern Iowa, Portland State — both FCS
+opponents of a ranked team, genuinely outside ourlads's FBS-only index)
+need a human or WebSearch fallback, same as any other ourlads miss.
+
+## Scaling to a full week — `src/run_week.py`
+
+Everything above (`fetch_cfbd.py`, `fetch_roster.py`, `fetch_talent.py`,
+`fetch_sp_plus.py`, `render_widget.py`) scores **one matchup, one
+direction**. `src/run_week.py` is the deterministic orchestrator that
+scales that to **every Top-25-involving game in a week, scored in both
+trench directions** ("four corners"):
+
+- `src/fetch_matchups.py` discovers the week's slate live (`GET /games` +
+  `GET /rankings`'s "AP Top 25" poll) — live-verified at 22 games/week
+  (2026 week 3) out of 75 total FBS games, keeping any game with at least
+  one ranked team. Merges with `config/teams.yaml`'s hand-curated entries
+  by label (a human-pinned entry wins on a collision).
+- `src/fetch_ourlads.py` fetches live depth charts from ourlads.com
+  (plain `requests` — reachable that way even though this environment's
+  `WebFetch` tool has an independent egress gate that a domain-allowlist
+  change doesn't reach) for every unique team across the week, and
+  `run_week.py` writes each team's `config/rosters/{team}.yaml` `starters`
+  block directly. `prior_season_starters` / `continuity_note` are **not**
+  touched — those stay a once-per-season human field.
+- `render_widget.build_both_directions()` scores each game both ways
+  (`team_a` OL vs `team_b` DL, and the reverse) from one fetch per team,
+  not one fetch per direction. **Live-verified** (2026 week 3, Miami vs
+  Wake Forest): Push is the exact negation between directions (+4.4 /
+  -4.4), Mass and the starter lists differ correctly per direction.
+- One bad matchup (unresolvable name, a CFBD error) is caught and
+  reported — it never aborts the rest of the week's run. Same for one
+  team's ourlads lookup failing.
+- Roster changes are detected by diffing the freshly-fetched starter list
+  against `config/rosters/{team}.yaml`'s *own current contents*, right
+  before overwriting it — no search through `history/*.json` needed.
+
+```
+python3 src/run_week.py --year 2026 --week 3
+# -> config/matchups/2026-wk03.yaml (discovered + hand-curated, merged)
+# -> config/rosters/{team}.yaml updated for every team in the week
+# -> output/2026-wk03/{matchup-label}.html (one page per game, both directions)
+# -> output/2026-wk03/index.html (all games, one table)
+# -> history/2026-wk03/{matchup-label}.json (both directions nested)
+# -> printed summary: matchups rendered/failed, teams needing manual
+#    roster research, teams with a starter change since last run
+```
+
+**Live-verified at full week-3 2026 scale**: 22/22 matchups rendered, 0
+failed; 2 teams (both FCS opponents of a ranked team) flagged for manual
+roster research; roster-diff correctly caught a real depth-chart change
+(Wake Forest's DL order shifted since the prior run). Composite renders
+as `None` with explicit caveats for every game so far, not a fabricated
+number — every newly-populated team is still missing the once-per-season
+`prior_season_starters`/`continuity_note` fields a human has to set (see
+`_template.yaml`); Mass and Push both compute and render correctly in
+the meantime.
 
 ## Running the tests
 
 ```
 pip install -r requirements.txt pytest
-python3 -m pytest tests/ -v   # 44 tests, all passing
+python3 -m pytest tests/ -v   # 87 tests, all passing
 ```
 
 ## Weekly usage
 
+**Scaled (recommended) — every Top-25-involving game, both directions:**
+
 ```
-# 1. For each team in this week's matchup, copy the template and fill in
-#    real starters from actual depth-chart reporting:
+python3 src/run_week.py --year 2026 --week 3
+```
+
+**Single hand-picked matchup, one direction — the original ad hoc tool:**
+
+```
+# 1. Copy the template and fill in real starters from actual depth-chart
+#    reporting (run_week.py above does this automatically at scale):
 cp config/rosters/_template.yaml "config/rosters/Miami.yaml"
 
 # 2. Set this week's matchup in config/teams.yaml (label/team_a/team_b/side/
@@ -171,7 +234,7 @@ cp config/rosters/_template.yaml "config/rosters/Miami.yaml"
 #    just the fallback if that fetch fails.
 
 # 3. Render:
-python3 src/render_widget.py 2026-wk03-miami-wake
+python3 src/render_widget.py 2026-wk03-miami-wake-forest
 # -> output/latest.html, history/{label}.json, plus any caveats printed to stderr
 ```
 

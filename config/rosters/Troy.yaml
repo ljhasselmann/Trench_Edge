@@ -1,0 +1,13 @@
+team: Troy
+starters:
+  OL:
+  - name: Darion Rivers
+  - name: Luke Petit
+  - name: Tyler Cappi
+  - name: Patrick Screws Jr.
+  - name: Jordon Jones
+  DL:
+  - name: Kam Curry
+  - name: Ty Clemons
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

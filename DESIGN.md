@@ -36,19 +36,40 @@ trench-edge/
   .gitignore                  .env, /history/*.json (or keep history, TBD)
   config/
     weights.yaml               Mass/Push/Continuity weights, tunable
-    teams.yaml                 this week's matchup(s) to score
+    teams.yaml                 hand-curated matchup(s) to score/override
+    matchups/
+      2026-wk03.yaml            this week's discovered + merged matchups
+    rosters/
+      _template.yaml            schema for a per-team roster file
+      {team}.yaml                starters (weekly) + prior_season_starters/
+                                  continuity_note (once per season, human-set)
   src/
     fetch_cfbd.py               pulls Tier 1 advanced stats from CFBD
     fetch_roster.py             pulls or reads cached OL/DL starter weights
     fetch_talent.py             pulls Tier 2 talent/returning-production data
+    fetch_sp_plus.py            pulls Push (overall SP+ differential)
+    fetch_ourlads.py            live depth charts (deterministic roster source)
+    fetch_matchups.py           discovers this week's Top-25-involving games
+    team_names.py                canonical team-name alias reconciliation
     compute_composite.py        applies the scoring formula, normalizes inputs
-    render_widget.py            generates the HTML output from a template
+    render_widget.py            fetch/combine split; renders one matchup,
+                                  one game (both directions), or the index
+    run_week.py                  orchestrator: discovery -> rosters -> render
+                                  for a whole week, per Section 7
+  scripts/
+    check_team_name_coverage.py  offline diagnostic, run before scale-out
   templates/
-    widget.html.jinja           matches the visual style already established
+    widget.html.jinja           one trench direction (OL vs DL)
+    game.html.jinja              one game, both directions
+    index.html.jinja             one week, every game, summary table
   history/
-    2026-wk03-miami-wake.json   one snapshot per matchup per week
+    2026-wk03/
+      {matchup-label}.json       one snapshot per game per week, both directions
   output/
-    latest.html                 most recent rendered widget
+    latest.html                 most recent single-matchup ad hoc render
+    2026-wk03/
+      {matchup-label}.html       one page per game, both directions
+      index.html                 the week's summary page
   DESIGN.md                     this file
   README.md                     quickstart for a human picking this up cold
 ```
@@ -187,23 +208,46 @@ originally assumed: a **Routine** (`create_trigger`), a cron-scheduled
 trigger that can either resume a persistent session or spawn a fresh one
 per firing.
 
-- **Trigger:** weekly, **Thursday** (not Tuesday as originally drafted —
-  depth charts publish later than assumed), 8am US Eastern. Self-bound to
-  a persistent session rather than a fresh one per firing, so a run can
-  still report back into the same conversation and (rarely) ask a
-  question — see below.
-- **Fully automatic roster research, not human confirmation.** An earlier
-  draft of this Routine blocked every run on a human confirming that
-  week's starters before proceeding. Superseded: the Routine now
-  web-searches for confirmed starters (depth charts, beat-writer previews)
-  itself, diffs the result against the most recent prior snapshot in
-  `history/*.json` (matched by team name, not matchup label, since
-  opponents change weekly), and writes `config/rosters/{team}.yaml`
-  directly — flagging any position change or new name explicitly in the
-  run summary and commit message rather than confirming before acting.
-  Weight confirmation still only ever comes from matching CFBD's live
-  `/roster` (Section 4b); the Routine never marks anything `confirmed`
-  itself.
+- **Scope: every Top-25-involving FBS game, not one hand-picked matchup,
+  scored in both trench directions.** `src/fetch_matchups.py` discovers
+  the week's slate live (`GET /games` + `GET /rankings`'s "AP Top 25"
+  poll) and keeps a game if either team is ranked — live-verified at
+  ~22 games/week out of ~75 total FBS games. Every discovered game is
+  scored as "four corners": both `team_a`-OL-vs-`team_b`-DL and the
+  reverse direction, since a game isn't fully characterized by only one
+  side's trench matchup. `config/teams.yaml` entries for the same
+  year/week are merged in (a human-pinned entry wins on a label
+  collision) rather than replaced — see `src/run_week.py`.
+- **Deterministic roster research first, WebSearch only as a bounded
+  fallback — not WebSearch-first for every team.** An earlier draft of
+  this section had the Routine web-search every team's starters itself
+  each week. Superseded: `src/fetch_ourlads.py` fetches live depth charts
+  directly from ourlads.com (confirmed live, covers 137 of 138 FBS teams
+  under `fetch_ourlads.TEAM_NAME_ALIASES`; only Washington State is
+  genuinely absent from ourlads's index, not just misnamed) via plain
+  `requests` — reachable that way even though this environment's
+  `WebFetch` tool has an independent egress gate that doesn't pick up a
+  domain allowlist change. `src/run_week.py` calls this for every unique
+  team across the week's matchups (deterministic, ~45 teams/week, a
+  0.75s courtesy delay between calls) and writes
+  `config/rosters/{team}.yaml`'s `starters` block directly. Only a team
+  ourlads can't resolve (name miss, page-structure change) falls back to
+  the Routine doing WebSearch/WebFetch research itself — bounded to an
+  explicit short list `run_week.py` reports, not agentic judgment across
+  every team every week.
+  `prior_season_starters` / `continuity_note` are **not** touched by this
+  automatic path — those stay a once-per-season human field, per
+  `_template.yaml`; weight/`confirmed` status still only ever comes from
+  matching CFBD's live `/roster` (Section 4b).
+- **Roster-diff simplification: compare against the team's own current
+  config file, not a `history/*.json` search.** The original design
+  described diffing against "the most recent prior snapshot in
+  `history/*.json`, matched by team name" — an expensive, fragile search
+  once there are dozens of teams and files across many weeks.
+  `run_week.py` instead diffs the freshly-fetched starter list against
+  `config/rosters/{team}.yaml`'s *current* contents, right before
+  overwriting it — O(1) per team, no search needed, and reported in the
+  run summary.
 - **Push (SP+) is a live fetch too, not a manual paste.** Originally
   thought to need Claude's Drive connector, which this org can't grant to
   a Routine at all (`create_trigger`'s `connectors` parameter is rejected
@@ -214,40 +258,50 @@ per firing.
   Section 5 and its own docstring for the real gotchas that took — a
   different, dynamically-named redirect host, and a nonexistent-tab
   request that silently returns the wrong tab's data instead of erroring).
-  So the Routine no longer needs to interrupt for this either, as long as
-  `week` is kept current in `config/teams.yaml` for each matchup.
-- **What's left for a human, then:** effectively nothing on a normal week.
-  The Routine only surfaces something to the conversation when a roster
-  diff looks worth a second look, a live fetch fails and falls back to a
-  possibly-stale config value, or `config/teams.yaml` has no matchup
-  configured for the week at all.
+  `run_week.py` fetches the whole week's SP+ table and CFBD's talent list
+  **once per run**, not once per matchup, and passes them to every
+  matchup's scoring call.
+- **What's left for a human, then:** effectively nothing on a normal
+  week. `run_week.py`'s printed summary — matchups discovered/rendered/
+  failed, teams needing manual roster research, teams with a starter
+  change since last run — is what the Routine reads and folds into its
+  commit message; a human (or the Routine's WebSearch fallback) only
+  steps in for the specific teams/matchups that summary flags.
 - **Repository:** this repo, on the environment's already-checked-out
   working copy — not a fresh clone per firing, since the Routine is
-  session-bound rather than fresh-session. `history/` and `output/` still
-  get committed every run regardless, so the record doesn't depend on
-  session persistence either way.
+  session-bound rather than fresh-session. `output/{year}-wk{week:02d}/`
+  and `history/{year}-wk{week:02d}/` (one file per game, both directions
+  nested) still get committed every run regardless, so the record doesn't
+  depend on session persistence either way.
 - **Network access:** confirmed resolved for this project's environment —
-  `api.collegefootballdata.com` and `docs.google.com` are both allowlisted,
-  `CFBD_API_KEY` is set. A Routine fired with no explicit `environment_id`
-  inherits the calling session's environment, so it reuses this config
-  automatically; no separate setup needed unless a new environment is
-  created later.
+  `api.collegefootballdata.com`, `docs.google.com`, and `ourlads.com` are
+  all allowlisted for plain `requests` calls, `CFBD_API_KEY` is set. A
+  Routine fired with no explicit `environment_id` inherits the calling
+  session's environment, so it reuses this config automatically; no
+  separate setup needed unless a new environment is created later. (A
+  third candidate roster source, puntandrally.com, was checked live and
+  is **not** currently reachable — a hard proxy-level policy denial, not
+  a code-side problem — so it isn't wired in; ourlads alone is the
+  roster source until/unless that's resolved in a future environment.)
 - **Secrets:** `CFBD_API_KEY` lives in the environment, never in the
-  Routine's prompt or committed to the repo. `fetch_sp_plus.py` needs no
-  key at all — the sheet's `gviz` endpoint is unauthenticated.
-- **Routine prompt (current, not a draft):** "For each matchup in
-  `config/teams.yaml`: web-search for this week's confirmed starting
-  OL/DL, diff against the most recent prior `history/*.json` snapshot for
-  that team and flag any change, and update `config/rosters/{team}.yaml`
-  with sourced names only (never a fabricated one) — weight/`confirmed`
-  status still comes only from matching CFBD's live roster, never set by
-  the Routine itself. Then run `fetch_cfbd.py` / `fetch_roster.py` /
-  `fetch_talent.py` as needed and `render_widget.py` (which fetches Push
-  from `fetch_sp_plus.py` automatically) to produce `output/latest.html`
-  and a `history/` snapshot, commit and push, and call out in the commit
-  message any roster diff, fallback to a cached/estimated value, or
-  anything still missing. Stop and ask rather than push a broken or empty
-  report if CFBD is unreachable or no matchup is configured."
+  Routine's prompt or committed to the repo. `fetch_sp_plus.py` and
+  `fetch_ourlads.py` need no key at all — both are unauthenticated.
+- **Routine prompt (current, not a draft):** "Run
+  `python3 src/run_week.py --year <current season> --week <this week's
+  number>`. It discovers every Top-25-involving FBS game, populates
+  `config/rosters/{team}.yaml` for every team from live ourlads.com depth
+  charts, scores each game in both trench directions, and writes
+  `output/{year}-wk{week:02d}/` (one page per game plus an index) and
+  `history/{year}-wk{week:02d}/`. Read its printed summary: for any team
+  it reports as needing manual roster research (ourlads lookup failed),
+  web-search for that team's current starting OL/DL yourself and update
+  `config/rosters/{team}.yaml` with sourced names only (never fabricated),
+  then re-run. Commit and push `output/`, `history/`, and any
+  `config/rosters/`/`config/matchups/` changes, calling out in the commit
+  message the run summary's counts, any team that needed manual research,
+  and any starter change it flagged. Stop and ask rather than push a
+  broken or empty report if CFBD is unreachable or the week has zero
+  discovered matchups."
 
 ## 8. Open questions / future work
 

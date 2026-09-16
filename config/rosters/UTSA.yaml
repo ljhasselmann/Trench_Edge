@@ -1,0 +1,14 @@
+team: UTSA
+starters:
+  OL:
+  - name: Jonah Miller
+  - name: Ben Rios
+  - name: Luke Lapeze
+  - name: Darrell Jones
+  - name: Jaylen Garth
+  DL:
+  - name: Tai Leonard
+  - name: Jameian Buxton
+  - name: Jeremiah Bailey
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

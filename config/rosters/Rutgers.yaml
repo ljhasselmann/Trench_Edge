@@ -1,0 +1,15 @@
+team: Rutgers
+starters:
+  OL:
+  - name: Tyler Needham
+  - name: Chris Vigna
+  - name: Terrence Salami
+  - name: Kwabena Asamoah
+  - name: Moshood Giwa
+  DL:
+  - name: Sekou Kromah
+  - name: Rondo Porter
+  - name: Keshon Griffin
+  - name: Malachi Davis
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

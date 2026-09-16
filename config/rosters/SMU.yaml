@@ -1,0 +1,15 @@
+team: SMU
+starters:
+  OL:
+  - name: PJ Williams
+  - name: Alex Woods
+  - name: Joshua Bates
+  - name: Addison Nichols
+  - name: Andrew Chamblee
+  DL:
+  - name: Tavion Atkinson
+  - name: Malcolm Alcorn-Crowder
+  - name: Christian Davis
+  - name: Ira Singleton IV
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

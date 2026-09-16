@@ -1,0 +1,13 @@
+team: Arkansas
+starters:
+  OL:
+  - name: Kavion Broussard
+  - name: Malachi Breland
+  - name: Caden Kitler
+  - name: Kobe Branham
+  - name: Bryant Williams
+  DL:
+  - name: Carlon Jones
+  - name: Hunter Osborne
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

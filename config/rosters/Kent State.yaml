@@ -1,0 +1,15 @@
+team: Kent State
+starters:
+  OL:
+  - name: Tyler Meadows
+  - name: Dustyn Morell
+  - name: Ben Midea
+  - name: William Johnson III
+  - name: Mofe Adewole
+  DL:
+  - name: Antonio Bottiggi
+  - name: Josue Cordoba
+  - name: Thomas Aden
+  - name: Jaihien Roy
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

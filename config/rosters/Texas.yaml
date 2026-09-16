@@ -1,0 +1,13 @@
+team: Texas
+starters:
+  OL:
+  - name: Trevor Goosby
+  - name: Laurence Seymore III
+  - name: Connor Robertson
+  - name: Brandon Baker
+  - name: Melvin Siani
+  DL:
+  - name: Ian Geffrard
+  - name: Hero Kanu
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

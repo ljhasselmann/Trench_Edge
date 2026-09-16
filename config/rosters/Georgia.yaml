@@ -1,0 +1,13 @@
+team: Georgia
+starters:
+  OL:
+  - name: Earnest Greene III
+  - name: Dontrell Glover
+  - name: Drew Bobo
+  - name: Zykie Helton
+  - name: Juan Gaston
+  DL:
+  - name: Jordan Hall
+  - name: Elijah Griffin
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

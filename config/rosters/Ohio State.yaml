@@ -1,0 +1,15 @@
+team: Ohio State
+starters:
+  OL:
+  - name: Ian Moore
+  - name: Luke Montgomery
+  - name: Carson Hinzman
+  - name: Austin Siereveld
+  - name: Phillip Daniels
+  DL:
+  - name: Kenyatta Jackson Jr.
+  - name: John Walker
+  - name: Eddrick Houston
+  - name: Beau Atkinson
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

@@ -1,0 +1,13 @@
+team: Kennesaw State
+starters:
+  OL:
+  - name: JaDarious Lee
+  - name: Precious Ekeh
+  - name: Mateo Guevara
+  - name: Mike Wallace Jr.
+  - name: Nikola Milovac
+  DL:
+  - name: Jackson Cooper
+  - name: Jaiden Grimes
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

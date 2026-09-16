@@ -1,0 +1,15 @@
+team: Texas A&M
+starters:
+  OL:
+  - name: Tyree Adams
+  - name: Blake Ivy
+  - name: Mark Nabou Jr.
+  - name: Trovon Baugh
+  - name: Wilkin Formby
+  DL:
+  - name: T.J. Searcy
+  - name: CJ Mims
+  - name: DJ Hicks
+  - name: Marco Jones
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)

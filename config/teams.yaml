@@ -7,7 +7,11 @@
 # in progress (2 games played) -- this is the actual current slate.
 year: 2026
 matchups:
-  - label: 2026-wk03-miami-wake
+  # label must match fetch_matchups.py's auto-discovery convention
+  # ({year}-wk{week:02d}-{slug(away)}-{slug(home)}, away=team_a, home=team_b)
+  # so run_week.py's merge (dedupe by label) treats this as an override for
+  # the real discovered game, not a duplicate entry under a different label.
+  - label: 2026-wk03-miami-wake-forest
     team_a: Miami
     team_b: Wake Forest
     side: team_a_ol_vs_team_b_dl

@@ -1,0 +1,197 @@
+{
+  "matchup_label": "2026-wk03-kentucky-texas-a-m",
+  "team_a": "Kentucky",
+  "team_b": "Texas A&M",
+  "year": 2026,
+  "generated_at": "2026-09-16 03:49 UTC",
+  "direction_a": {
+    "matchup_label": "2026-wk03-kentucky-texas-a-m-a",
+    "team_a": "Kentucky",
+    "team_b": "Texas A&M",
+    "side": "team_a_ol_vs_team_b_dl",
+    "year": 2026,
+    "generated_at": "2026-09-16 03:49 UTC",
+    "mass": {
+      "team_a_avg_weight": 324.0,
+      "team_b_avg_weight": 281.5,
+      "weight_diff_lbs": 42.5,
+      "score": 4.25,
+      "team_a_starters": [
+        {
+          "name": "Lance Heard",
+          "weight_lbs": 325,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Olaus Alinen",
+          "weight_lbs": 329,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Coleton Price",
+          "weight_lbs": 308,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Tegra Tshabola",
+          "weight_lbs": 329,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Malachi Wood",
+          "weight_lbs": 329,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        }
+      ],
+      "team_b_starters": [
+        {
+          "name": "T.J. Searcy",
+          "weight_lbs": 260,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "CJ Mims",
+          "weight_lbs": 312,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "DJ Hicks",
+          "weight_lbs": 293,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Marco Jones",
+          "weight_lbs": 261,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        }
+      ]
+    },
+    "push": {
+      "available": true,
+      "score": -3.6,
+      "sp_plus_gap": -18.0,
+      "raw": {
+        "Kentucky_offense_stuff_rate": 0.1935483870967742,
+        "Kentucky_offense_line_yards": 3.109677419354839,
+        "Texas A&M_defense_stuff_rate": 0.25,
+        "Texas A&M_defense_line_yards": 2.2442307692307693
+      }
+    },
+    "continuity": {
+      "team_a_returning": null,
+      "team_b_returning": null,
+      "net_returning": null,
+      "score": null,
+      "team_a_driver": null,
+      "team_a_note": null,
+      "team_b_driver": null,
+      "team_b_note": null
+    },
+    "composite": null,
+    "warnings": [
+      "[Kentucky Continuity] config/rosters/Kentucky.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it",
+      "[Kentucky Continuity] config/rosters/Kentucky.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season",
+      "[Texas A&M Continuity] config/rosters/Texas A&M.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it",
+      "[Texas A&M Continuity] config/rosters/Texas A&M.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season",
+      "Composite not computed -- missing: Continuity"
+    ]
+  },
+  "direction_b": {
+    "matchup_label": "2026-wk03-kentucky-texas-a-m-b",
+    "team_a": "Texas A&M",
+    "team_b": "Kentucky",
+    "side": "team_b_ol_vs_team_a_dl",
+    "year": 2026,
+    "generated_at": "2026-09-16 03:49 UTC",
+    "mass": {
+      "team_a_avg_weight": 318.2,
+      "team_b_avg_weight": 324.5,
+      "weight_diff_lbs": -6.300000000000011,
+      "score": -0.6300000000000011,
+      "team_a_starters": [
+        {
+          "name": "Tyree Adams",
+          "weight_lbs": 305,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Blake Ivy",
+          "weight_lbs": 324,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Mark Nabou Jr.",
+          "weight_lbs": 307,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Trovon Baugh",
+          "weight_lbs": 335,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Wilkin Formby",
+          "weight_lbs": 320,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        }
+      ],
+      "team_b_starters": [
+        {
+          "name": "Jamarrion Harkless",
+          "weight_lbs": 346,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        },
+        {
+          "name": "Tavion Gadson",
+          "weight_lbs": 303,
+          "confidence": "confirmed",
+          "source": "cfbd_roster"
+        }
+      ]
+    },
+    "push": {
+      "available": true,
+      "score": 3.6,
+      "sp_plus_gap": 18.0,
+      "raw": {
+        "Texas A&M_offense_stuff_rate": 0.14814814814814814,
+        "Texas A&M_offense_line_yards": 3.208641975308642,
+        "Kentucky_defense_stuff_rate": 0.1935483870967742,
+        "Kentucky_defense_line_yards": 2.6016129032258064
+      }
+    },
+    "continuity": {
+      "team_a_returning": null,
+      "team_b_returning": null,
+      "net_returning": null,
+      "score": null,
+      "team_a_driver": null,
+      "team_a_note": null,
+      "team_b_driver": null,
+      "team_b_note": null
+    },
+    "composite": null,
+    "warnings": [
+      "[Kentucky Continuity] config/rosters/Kentucky.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it",
+      "[Kentucky Continuity] config/rosters/Kentucky.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season",
+      "[Texas A&M Continuity] config/rosters/Texas A&M.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it",
+      "[Texas A&M Continuity] config/rosters/Texas A&M.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season",
+      "Composite not computed -- missing: Continuity"
+    ]
+  }
+}

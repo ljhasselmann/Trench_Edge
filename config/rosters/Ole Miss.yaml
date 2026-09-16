@@ -1,0 +1,13 @@
+team: Ole Miss
+starters:
+  OL:
+  - name: Terez Davis
+  - name: Delano Townsend
+  - name: Brycen Sanders
+  - name: Patrick Kutas
+  - name: Tommy Kinsler IV
+  DL:
+  - name: Jamarious Brown
+  - name: Will Echoles
+updated_by_human_at: '2026-09-16'
+roster_source: ourlads.com (live fetch via run_week.py)
