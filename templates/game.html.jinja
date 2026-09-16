@@ -1,0 +1,28 @@
+{#
+Four corners (DESIGN.md Section 8): one game, both trench directions.
+Wraps two renders of widget.html.jinja (unchanged, still a single-
+direction partial) under one game-level header, rather than making the
+widget template itself direction-aware.
+#}
+<div class="trench-edge-game">
+<style>
+.trench-edge-game { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; max-width: 680px; }
+.trench-edge-game h1 { font-size: 20px; margin: 0 0 4px 0; }
+.trench-edge-game .te-game-subtitle { color: #52514e; font-size: 13px; margin: 0 0 20px 0; }
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .trench-edge-game .te-game-subtitle { color: #c3c2b7; }
+}
+:root[data-theme="dark"] .trench-edge-game .te-game-subtitle { color: #c3c2b7; }
+.trench-edge-game .te-direction { margin-bottom: 24px; }
+</style>
+
+<h1>{{ team_a }} vs {{ team_b }} &mdash; Trench Edge</h1>
+<p class="te-game-subtitle">Both trench directions scored for this game.</p>
+
+<div class="te-direction">
+{% with ctx = ctx_a %}{% include "widget.html.jinja" %}{% endwith %}
+</div>
+<div class="te-direction">
+{% with ctx = ctx_b %}{% include "widget.html.jinja" %}{% endwith %}
+</div>
+</div>

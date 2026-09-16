@@ -156,8 +156,13 @@ def team_sp_plus(team: str, week: int, table: Optional[dict] = None, session: Op
     return table[sheet_name]
 
 
-def compute_sp_plus_gap(team_a: str, team_b: str, week: int, session: Optional[requests.Session] = None) -> float:
-    table = fetch_fbs_week_table(week, session=session)
+def compute_sp_plus_gap(
+    team_a: str, team_b: str, week: int, table: Optional[dict] = None, session: Optional[requests.Session] = None
+) -> float:
+    """table lets a caller scoring many matchups in one run fetch the whole
+    week's table once (fetch_fbs_week_table covers all FBS teams already)
+    and reuse it, instead of re-fetching per matchup."""
+    table = table if table is not None else fetch_fbs_week_table(week, session=session)
     a = team_sp_plus(team_a, week, table=table)
     b = team_sp_plus(team_b, week, table=table)
     return a.sp_plus - b.sp_plus

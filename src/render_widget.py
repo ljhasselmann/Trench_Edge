@@ -1,9 +1,25 @@
 """Render the Trench Edge widget (DESIGN.md Section 6).
 
-build_context() is the orchestrator: it calls fetch_cfbd, fetch_roster, and
-fetch_talent for one matchup (as configured in config/teams.yaml) and
-assembles everything render() needs. render() itself is pure templating
--- no network -- so it's testable without CFBD access.
+Split into a fetch layer and a combine layer, specifically so four-corners
+scoring (both OL-vs-DL directions for one game) doesn't double the
+network cost. `fetch_team_data(team, year, ...)` fetches everything Mass/
+Continuity/Tier1 need for one team -- and it already fetches BOTH sides
+(OL and DL weight, offense and defense stats) for that team, since
+compute_mass_inputs/compute_continuity_inputs/fetch_team_trench_stats all
+do that regardless of which "side" of a matchup the team plays. So
+scoring both directions of a game only means calling fetch_team_data once
+per team (twice total) and combining that same data twice, not fetching
+twice as much.
+
+`combine_context(...)` is the pure, no-network layer that decides which
+team is playing OL and which is playing DL for a given `side`, and builds
+one `WidgetContext` from two already-fetched `TeamData`s. `build_context()`
+(single direction, matches this module's original contract -- existing
+CLI and tests keep working unchanged) and `build_both_directions()` (both
+directions, one game) are both thin wrappers over fetch + combine.
+
+`render()` itself is pure templating -- no network -- so it's testable
+without CFBD access.
 
 PUSH comes from fetch_sp_plus.py when `week` is set on the matchup in
 config/teams.yaml -- a live fetch of Bill Connelly's weekly SP+ sheet via
@@ -43,6 +59,8 @@ from jinja2 import Environment, FileSystemLoader
 
 import yaml
 
+import requests
+
 import fetch_sp_plus
 from fetch_cfbd import fetch_team_trench_stats
 from fetch_roster import compute_mass_inputs
@@ -69,78 +87,126 @@ class WidgetContext:
     warnings: list[str] = field(default_factory=list)
 
 
-def build_context(matchup: dict, year: int) -> WidgetContext:
-    team_a = matchup["team_a"]
-    team_b = matchup["team_b"]
+@dataclass
+class TeamData:
+    """Everything Mass/Continuity/Tier1 need for one team -- both sides
+    (OL and DL weight, offense and defense stats), since the underlying
+    fetches (compute_mass_inputs, compute_continuity_inputs,
+    fetch_team_trench_stats) all compute both regardless of which side of
+    a matchup this team plays. Fetching this once per team (not once per
+    matchup direction) is what makes four-corners scoring not double the
+    network cost -- see module docstring."""
+
+    team: str
+    mass: object  # fetch_roster.MassInputs
+    continuity: object  # fetch_talent.TalentInputs
+    tier1: Optional[object]  # fetch_cfbd.TeamAdvancedStats, None if the fetch failed
+    warnings: list[str] = field(default_factory=list)
+
+
+def fetch_team_data(
+    team: str, year: int, talent_table: Optional[dict] = None, session: Optional[requests.Session] = None
+) -> TeamData:
     warnings: list[str] = []
 
-    mass_a = compute_mass_inputs(team_a, year)
-    mass_b = compute_mass_inputs(team_b, year)
-    warnings += [f"[{team_a} Mass] {w}" for w in mass_a.warnings]
-    warnings += [f"[{team_b} Mass] {w}" for w in mass_b.warnings]
+    mass = compute_mass_inputs(team, year, session=session)
+    warnings += [f"[{team} Mass] {w}" for w in mass.warnings]
 
-    mass_score = None
-    weight_diff = None
-    if mass_a.avg_ol_weight is not None and mass_b.avg_dl_weight is not None:
-        weight_diff = mass_a.avg_ol_weight - mass_b.avg_dl_weight
-        mass_score = normalize_mass(weight_diff)
+    continuity = compute_continuity_inputs(team, year, talent_table=talent_table, session=session)
+    warnings += [f"[{team} Continuity] {w}" for w in continuity.warnings]
 
-    continuity_a = compute_continuity_inputs(team_a, year)
-    continuity_b = compute_continuity_inputs(team_b, year)
-    warnings += [f"[{team_a} Continuity] {w}" for w in continuity_a.warnings]
-    warnings += [f"[{team_b} Continuity] {w}" for w in continuity_b.warnings]
-
-    continuity_score = None
-    net_returning = None
-    if continuity_a.returning_ol_starters is not None and continuity_b.returning_dl_starters is not None:
-        net_returning = continuity_a.returning_ol_starters - continuity_b.returning_dl_starters
-        continuity_score = normalize_continuity(net_returning)
-
-    # Tier 1 fetch is still pulled for the record even though Push doesn't
-    # use it (see module docstring) -- these numbers stay useful context.
     try:
-        stats_a = fetch_team_trench_stats(team_a, year)
-        stats_b = fetch_team_trench_stats(team_b, year)
-        push_raw = {
-            f"{team_a}_offense_stuff_rate": stats_a.offense.stuff_rate,
-            f"{team_a}_offense_line_yards": stats_a.offense.line_yards,
-            f"{team_b}_defense_stuff_rate": stats_b.defense.stuff_rate,
-            f"{team_b}_defense_line_yards": stats_b.defense.line_yards,
-        }
-        warnings += [f"[{team_a} Tier1] {w}" for w in stats_a.offense.warnings]
-        warnings += [f"[{team_b} Tier1] {w}" for w in stats_b.defense.warnings]
+        tier1 = fetch_team_trench_stats(team, year, session=session)
+        warnings += [f"[{team} Tier1 offense] {w}" for w in tier1.offense.warnings]
+        warnings += [f"[{team} Tier1 defense] {w}" for w in tier1.defense.warnings]
     except Exception as exc:  # noqa: BLE001 -- surface as a warning, never crash the render
-        push_raw = {}
-        warnings.append(f"Tier 1 fetch failed: {exc}")
+        tier1 = None
+        warnings.append(f"[{team} Tier1] fetch failed: {exc}")
 
-    sp_plus_gap = None
+    return TeamData(team=team, mass=mass, continuity=continuity, tier1=tier1, warnings=warnings)
+
+
+def _resolve_sp_plus_gap(
+    matchup: dict, team_a: str, team_b: str, sp_plus_table: Optional[dict] = None, session: Optional[requests.Session] = None
+) -> tuple[Optional[float], list[str]]:
+    """The forward-direction gap (team_a.SP+ - team_b.SP+). combine_context
+    negates it itself for the reverse direction -- SP+ diff is symmetric
+    by construction, so this only ever needs computing once per matchup."""
+    warnings: list[str] = []
     week = matchup.get("week")
     if week is not None:
         try:
-            sp_plus_gap = fetch_sp_plus.compute_sp_plus_gap(team_a, team_b, week)
+            gap = fetch_sp_plus.compute_sp_plus_gap(team_a, team_b, week, table=sp_plus_table, session=session)
         except Exception as exc:  # noqa: BLE001 -- fall back to config, never crash the render
             fallback = matchup.get("sp_plus_gap")
             warnings.append(f"Live SP+ fetch failed ({exc}); using config/teams.yaml's stored sp_plus_gap={fallback!r} instead")
-            sp_plus_gap = fallback
+            gap = fallback
     else:
-        sp_plus_gap = matchup.get("sp_plus_gap")
-        if sp_plus_gap is not None:
+        gap = matchup.get("sp_plus_gap")
+        if gap is not None:
             warnings.append("No 'week' set for this matchup -- used config/teams.yaml's static sp_plus_gap instead of a live SP+ fetch")
+    return gap, warnings
 
-    push_score = None
-    if sp_plus_gap is not None:
-        push_score = normalize_push(sp_plus_gap)
+
+def combine_context(
+    matchup_label: str,
+    team_a: str,
+    team_b: str,
+    side: str,
+    year: int,
+    team_a_data: TeamData,
+    team_b_data: TeamData,
+    sp_plus_gap: Optional[float],
+    weights: dict,
+) -> WidgetContext:
+    """Pure, no-network: decides which team is playing OL and which is
+    playing DL for `side`, and builds one WidgetContext from two already-
+    fetched TeamData. WidgetContext.team_a/team_b mean "the OL team"/"the
+    DL team" for THIS direction (matching widget.html.jinja's "{{ ctx.team_a }}
+    OL vs {{ ctx.team_b }} DL" heading) -- not necessarily the matchup's
+    own team_a/team_b, which is why the reverse direction swaps them."""
+    warnings = list(team_a_data.warnings) + list(team_b_data.warnings)
+
+    if side == "team_a_ol_vs_team_b_dl":
+        ol_data, dl_data = team_a_data, team_b_data
+        gap = sp_plus_gap
+    elif side == "team_b_ol_vs_team_a_dl":
+        ol_data, dl_data = team_b_data, team_a_data
+        gap = -sp_plus_gap if sp_plus_gap is not None else None
     else:
+        raise ValueError(f"unknown side {side!r}")
+    ol_label, dl_label = ol_data.team, dl_data.team
+
+    mass_score = None
+    weight_diff = None
+    if ol_data.mass.avg_ol_weight is not None and dl_data.mass.avg_dl_weight is not None:
+        weight_diff = ol_data.mass.avg_ol_weight - dl_data.mass.avg_dl_weight
+        mass_score = normalize_mass(weight_diff)
+
+    continuity_score = None
+    net_returning = None
+    if ol_data.continuity.returning_ol_starters is not None and dl_data.continuity.returning_dl_starters is not None:
+        net_returning = ol_data.continuity.returning_ol_starters - dl_data.continuity.returning_dl_starters
+        continuity_score = normalize_continuity(net_returning)
+
+    push_score = normalize_push(gap) if gap is not None else None
+    if push_score is None:
         warnings.append(
             "sp_plus_gap unavailable (no 'week' set for a live fetch and no fallback "
             "value in config/teams.yaml) -- Push unavailable (see README.md's SP+ source)"
         )
 
+    push_raw = {}
+    if ol_data.tier1 is not None:
+        push_raw[f"{ol_label}_offense_stuff_rate"] = ol_data.tier1.offense.stuff_rate
+        push_raw[f"{ol_label}_offense_line_yards"] = ol_data.tier1.offense.line_yards
+    if dl_data.tier1 is not None:
+        push_raw[f"{dl_label}_defense_stuff_rate"] = dl_data.tier1.defense.stuff_rate
+        push_raw[f"{dl_label}_defense_line_yards"] = dl_data.tier1.defense.line_yards
+
     composite = None
     if mass_score is not None and push_score is not None and continuity_score is not None:
-        with open(WEIGHTS_FILE) as f:
-            weights = yaml.safe_load(f)
-        result = compute_composite(weight_diff, sp_plus_gap, net_returning, weights)
+        result = compute_composite(weight_diff, gap, net_returning, weights)
         composite = {"value": result.composite, "verdict": result.verdict}
     else:
         missing = [
@@ -150,34 +216,81 @@ def build_context(matchup: dict, year: int) -> WidgetContext:
         warnings.append(f"Composite not computed -- missing: {', '.join(missing)}")
 
     return WidgetContext(
-        matchup_label=matchup["label"],
-        team_a=team_a,
-        team_b=team_b,
-        side=matchup["side"],
+        matchup_label=matchup_label,
+        team_a=ol_label,
+        team_b=dl_label,
+        side=side,
         year=year,
         generated_at=_dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         mass={
-            "team_a_avg_weight": mass_a.avg_ol_weight,
-            "team_b_avg_weight": mass_b.avg_dl_weight,
+            "team_a_avg_weight": ol_data.mass.avg_ol_weight,
+            "team_b_avg_weight": dl_data.mass.avg_dl_weight,
             "weight_diff_lbs": weight_diff,
             "score": mass_score,
-            "team_a_starters": mass_a.ol_starters,
-            "team_b_starters": mass_b.dl_starters,
+            "team_a_starters": ol_data.mass.ol_starters,
+            "team_b_starters": dl_data.mass.dl_starters,
         },
-        push={"available": push_score is not None, "score": push_score, "sp_plus_gap": sp_plus_gap, "raw": push_raw},
+        push={"available": push_score is not None, "score": push_score, "sp_plus_gap": gap, "raw": push_raw},
         continuity={
-            "team_a_returning": continuity_a.returning_ol_starters,
-            "team_b_returning": continuity_b.returning_dl_starters,
+            "team_a_returning": ol_data.continuity.returning_ol_starters,
+            "team_b_returning": dl_data.continuity.returning_dl_starters,
             "net_returning": net_returning,
             "score": continuity_score,
-            "team_a_driver": continuity_a.continuity_driver,
-            "team_a_note": continuity_a.continuity_note,
-            "team_b_driver": continuity_b.continuity_driver,
-            "team_b_note": continuity_b.continuity_note,
+            "team_a_driver": ol_data.continuity.continuity_driver,
+            "team_a_note": ol_data.continuity.continuity_note,
+            "team_b_driver": dl_data.continuity.continuity_driver,
+            "team_b_note": dl_data.continuity.continuity_note,
         },
         composite=composite,
         warnings=warnings,
     )
+
+
+def build_context(
+    matchup: dict, year: int, sp_plus_table: Optional[dict] = None, talent_table: Optional[dict] = None
+) -> WidgetContext:
+    """Single direction -- this module's original contract, unchanged for
+    the existing CLI and any caller that only wants one side scored."""
+    team_a = matchup["team_a"]
+    team_b = matchup["team_b"]
+    side = matchup.get("side", "team_a_ol_vs_team_b_dl")
+
+    team_a_data = fetch_team_data(team_a, year, talent_table=talent_table)
+    team_b_data = fetch_team_data(team_b, year, talent_table=talent_table)
+    sp_plus_gap, sp_warnings = _resolve_sp_plus_gap(matchup, team_a, team_b, sp_plus_table=sp_plus_table)
+
+    with open(WEIGHTS_FILE) as f:
+        weights = yaml.safe_load(f)
+
+    ctx = combine_context(matchup["label"], team_a, team_b, side, year, team_a_data, team_b_data, sp_plus_gap, weights)
+    ctx.warnings = sp_warnings + ctx.warnings
+    return ctx
+
+
+def build_both_directions(
+    matchup: dict, year: int, sp_plus_table: Optional[dict] = None, talent_table: Optional[dict] = None
+) -> tuple[WidgetContext, WidgetContext]:
+    """Four corners: both OL-vs-DL directions for one game. Fetches each
+    team's data exactly once (not once per direction) -- see module
+    docstring."""
+    team_a = matchup["team_a"]
+    team_b = matchup["team_b"]
+    label = matchup["label"]
+
+    team_a_data = fetch_team_data(team_a, year, talent_table=talent_table)
+    team_b_data = fetch_team_data(team_b, year, talent_table=talent_table)
+    sp_plus_gap, sp_warnings = _resolve_sp_plus_gap(matchup, team_a, team_b, sp_plus_table=sp_plus_table)
+
+    with open(WEIGHTS_FILE) as f:
+        weights = yaml.safe_load(f)
+
+    ctx_a = combine_context(f"{label}-a", team_a, team_b, "team_a_ol_vs_team_b_dl", year, team_a_data, team_b_data, sp_plus_gap, weights)
+    ctx_a.warnings = sp_warnings + ctx_a.warnings
+
+    ctx_b = combine_context(f"{label}-b", team_a, team_b, "team_b_ol_vs_team_a_dl", year, team_a_data, team_b_data, sp_plus_gap, weights)
+    ctx_b.warnings = sp_warnings + ctx_b.warnings
+
+    return ctx_a, ctx_b
 
 
 def render(context: WidgetContext) -> str:
@@ -220,6 +333,43 @@ def write_history_snapshot(context: WidgetContext, history_dir: Path) -> Path:
     history_dir.mkdir(parents=True, exist_ok=True)
     path = history_dir / f"{context.matchup_label}.json"
     path.write_text(json.dumps(context_to_history_dict(context), indent=2))
+    return path
+
+
+def render_game(game_label: str, team_a: str, team_b: str, ctx_a: WidgetContext, ctx_b: WidgetContext) -> str:
+    """One page per game with both directions (DESIGN.md Section 8's
+    "four corners" -- a game isn't fully scored with just one direction).
+    widget.html.jinja itself stays a single-direction partial, unchanged;
+    game.html.jinja wraps two renders of it."""
+    env = Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)), autoescape=True)
+    template = env.get_template("game.html.jinja")
+    return template.render(game_label=game_label, team_a=team_a, team_b=team_b, ctx_a=ctx_a, ctx_b=ctx_b)
+
+
+def game_to_history_dict(game_label: str, team_a: str, team_b: str, year: int, ctx_a: WidgetContext, ctx_b: WidgetContext) -> dict:
+    """One history file per game, both directions nested -- not two
+    separate files. team_a/team_b here are the game's own identity
+    (e.g. away/home), distinct from ctx_a/ctx_b's team_a/team_b, which
+    mean "the OL team"/"the DL team" for that specific direction."""
+    return {
+        "matchup_label": game_label,
+        "team_a": team_a,
+        "team_b": team_b,
+        "year": year,
+        "generated_at": ctx_a.generated_at,
+        "direction_a": context_to_history_dict(ctx_a),
+        "direction_b": context_to_history_dict(ctx_b),
+    }
+
+
+def write_game_history_snapshot(
+    game_label: str, team_a: str, team_b: str, year: int, ctx_a: WidgetContext, ctx_b: WidgetContext, history_dir: Path
+) -> Path:
+    import json
+
+    history_dir.mkdir(parents=True, exist_ok=True)
+    path = history_dir / f"{game_label}.json"
+    path.write_text(json.dumps(game_to_history_dict(game_label, team_a, team_b, year, ctx_a, ctx_b), indent=2))
     return path
 
 

@@ -90,9 +90,9 @@ class _FakeContinuity:
 
 
 def test_build_context_flags_missing_composite_without_sp_plus_gap(monkeypatch):
-    monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year: _FakeMass(avg_ol=320, avg_dl=290))
-    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year: _FakeContinuity(ol=3, dl=2))
-    monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year: TeamAdvancedStats(
+    monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year, **kw: _FakeMass(avg_ol=320, avg_dl=290))
+    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year, **kw: _FakeContinuity(ol=3, dl=2))
+    monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year, **kw: TeamAdvancedStats(
         team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}
     ))
 
@@ -107,9 +107,9 @@ def test_build_context_flags_missing_composite_without_sp_plus_gap(monkeypatch):
 
 
 def test_build_context_computes_full_composite_with_sp_plus_gap(monkeypatch):
-    monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year: _FakeMass(avg_ol=320, avg_dl=290))
-    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year: _FakeContinuity(ol=3, dl=2))
-    monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year: TeamAdvancedStats(
+    monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year, **kw: _FakeMass(avg_ol=320, avg_dl=290))
+    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year, **kw: _FakeContinuity(ol=3, dl=2))
+    monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year, **kw: TeamAdvancedStats(
         team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}
     ))
 
@@ -127,12 +127,12 @@ def test_build_context_computes_full_composite_with_sp_plus_gap(monkeypatch):
 
 
 def test_build_context_prefers_live_sp_plus_fetch_when_week_is_set(monkeypatch):
-    monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year: _FakeMass(avg_ol=320, avg_dl=290))
-    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year: _FakeContinuity(ol=3, dl=2))
-    monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year: TeamAdvancedStats(
+    monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year, **kw: _FakeMass(avg_ol=320, avg_dl=290))
+    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year, **kw: _FakeContinuity(ol=3, dl=2))
+    monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year, **kw: TeamAdvancedStats(
         team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}
     ))
-    monkeypatch.setattr(render_widget.fetch_sp_plus, "compute_sp_plus_gap", lambda a, b, week: 30.0)
+    monkeypatch.setattr(render_widget.fetch_sp_plus, "compute_sp_plus_gap", lambda a, b, week, **kw: 30.0)
 
     ctx = render_widget.build_context({
         "label": "test", "team_a": "Miami", "team_b": "Wake Forest",
@@ -144,13 +144,13 @@ def test_build_context_prefers_live_sp_plus_fetch_when_week_is_set(monkeypatch):
 
 
 def test_build_context_falls_back_to_config_when_live_sp_plus_fetch_fails(monkeypatch):
-    monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year: _FakeMass(avg_ol=320, avg_dl=290))
-    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year: _FakeContinuity(ol=3, dl=2))
-    monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year: TeamAdvancedStats(
+    monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year, **kw: _FakeMass(avg_ol=320, avg_dl=290))
+    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year, **kw: _FakeContinuity(ol=3, dl=2))
+    monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year, **kw: TeamAdvancedStats(
         team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}
     ))
 
-    def _raise(a, b, week):
+    def _raise(a, b, week, **kw):
         raise render_widget.fetch_sp_plus.SPPlusFetchError("tab not published yet")
     monkeypatch.setattr(render_widget.fetch_sp_plus, "compute_sp_plus_gap", _raise)
 
@@ -164,16 +164,16 @@ def test_build_context_falls_back_to_config_when_live_sp_plus_fetch_fails(monkey
 
 
 def test_build_context_handles_tier1_fetch_failure_without_crashing(monkeypatch):
-    monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year: _FakeMass())
-    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year: _FakeContinuity())
+    monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year, **kw: _FakeMass())
+    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year, **kw: _FakeContinuity())
 
-    def _raise(team, year):
+    def _raise(team, year, **kw):
         raise RuntimeError("network down")
     monkeypatch.setattr(render_widget, "fetch_team_trench_stats", _raise)
 
     ctx = render_widget.build_context({"label": "test", "team_a": "Miami", "team_b": "Wake Forest", "side": "team_a_ol_vs_team_b_dl"}, 2026)
 
-    assert any("Tier 1 fetch failed" in w for w in ctx.warnings)
+    assert any("Tier1] fetch failed" in w for w in ctx.warnings)
     assert ctx.mass["score"] is None
 
 
@@ -198,3 +198,87 @@ def test_write_history_snapshot_creates_history_dir_if_missing(tmp_path):
     history_dir = tmp_path / "nested" / "history"
     path = write_history_snapshot(ctx, history_dir)
     assert path.exists()
+
+
+def test_build_both_directions_fetches_each_team_exactly_once(monkeypatch):
+    call_counts = {"Miami": 0, "Wake Forest": 0}
+
+    def _fake_mass(team, year, **kw):
+        call_counts[team] += 1
+        return _FakeMass(avg_ol=320, avg_dl=290)
+
+    monkeypatch.setattr(render_widget, "compute_mass_inputs", _fake_mass)
+    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year, **kw: _FakeContinuity(ol=3, dl=2))
+    monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year, **kw: TeamAdvancedStats(
+        team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}
+    ))
+    monkeypatch.setattr(render_widget.fetch_sp_plus, "compute_sp_plus_gap", lambda a, b, week, **kw: 22.2)
+
+    matchup = {
+        "label": "test-game", "team_a": "Miami", "team_b": "Wake Forest",
+        "side": "team_a_ol_vs_team_b_dl", "week": 3,
+    }
+    render_widget.build_both_directions(matchup, 2026)
+
+    # Once per team, not once per direction (would be 2 each if fetch_team_data
+    # were called separately per direction instead of reused).
+    assert call_counts == {"Miami": 1, "Wake Forest": 1}
+
+
+def test_build_both_directions_reverse_push_is_negation_and_teams_swap(monkeypatch):
+    monkeypatch.setattr(render_widget, "compute_mass_inputs", lambda team, year, **kw: _FakeMass(avg_ol=320, avg_dl=290))
+    monkeypatch.setattr(render_widget, "compute_continuity_inputs", lambda team, year, **kw: _FakeContinuity(ol=3, dl=2))
+    monkeypatch.setattr(render_widget, "fetch_team_trench_stats", lambda team, year, **kw: TeamAdvancedStats(
+        team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}
+    ))
+    monkeypatch.setattr(render_widget.fetch_sp_plus, "compute_sp_plus_gap", lambda a, b, week, **kw: 22.2)
+
+    matchup = {
+        "label": "test-game", "team_a": "Miami", "team_b": "Wake Forest",
+        "side": "team_a_ol_vs_team_b_dl", "week": 3,
+    }
+    ctx_a, ctx_b = render_widget.build_both_directions(matchup, 2026)
+
+    # Direction A: Miami OL vs Wake Forest DL (matches the matchup's own side).
+    assert ctx_a.team_a == "Miami" and ctx_a.team_b == "Wake Forest"
+    assert ctx_a.side == "team_a_ol_vs_team_b_dl"
+    assert round(ctx_a.push["sp_plus_gap"], 4) == 22.2
+
+    # Direction B: Wake Forest OL vs Miami DL -- teams swap, push negates.
+    assert ctx_b.team_a == "Wake Forest" and ctx_b.team_b == "Miami"
+    assert ctx_b.side == "team_b_ol_vs_team_a_dl"
+    assert round(ctx_b.push["sp_plus_gap"], 4) == -22.2
+    assert round(ctx_b.push["score"], 4) == -round(ctx_a.push["score"], 4)
+
+    assert ctx_a.matchup_label == "test-game-a"
+    assert ctx_b.matchup_label == "test-game-b"
+
+
+def test_render_game_includes_both_directions():
+    ctx_a = _sample_context(team_a="Miami", team_b="Wake Forest", matchup_label="g-a")
+    ctx_b = _sample_context(team_a="Wake Forest", team_b="Miami", matchup_label="g-b")
+    html = render_widget.render_game("test-game", "Miami", "Wake Forest", ctx_a, ctx_b)
+    assert html.count("starting OL") == 2  # both directions' widget partials rendered
+    assert "Miami OL vs Wake Forest DL" in html
+    assert "Wake Forest OL vs Miami DL" in html
+
+
+def test_game_to_history_dict_nests_both_directions():
+    ctx_a = _sample_context(team_a="Miami", team_b="Wake Forest", matchup_label="g-a")
+    ctx_b = _sample_context(team_a="Wake Forest", team_b="Miami", matchup_label="g-b")
+    data = render_widget.game_to_history_dict("test-game", "Miami", "Wake Forest", 2026, ctx_a, ctx_b)
+
+    assert data["matchup_label"] == "test-game"
+    assert data["team_a"] == "Miami"
+    assert data["team_b"] == "Wake Forest"
+    assert data["direction_a"]["matchup_label"] == "g-a"
+    assert data["direction_b"]["matchup_label"] == "g-b"
+
+
+def test_write_game_history_snapshot(tmp_path):
+    ctx_a = _sample_context(matchup_label="g-a")
+    ctx_b = _sample_context(matchup_label="g-b")
+    path = render_widget.write_game_history_snapshot("test-game", "Miami", "Wake Forest", 2026, ctx_a, ctx_b, tmp_path)
+    assert path == tmp_path / "test-game.json"
+    data = json.loads(path.read_text())
+    assert data["direction_a"]["team_a"] == "Miami"

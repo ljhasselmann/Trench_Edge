@@ -81,3 +81,15 @@ def test_compute_sp_plus_gap():
     session = _FakeSession(_FakeResponse(200, VALID_CSV))
     gap = fetch_sp_plus.compute_sp_plus_gap("Miami", "Wake Forest", 3, session=session)
     assert round(gap, 1) == 22.2
+
+
+def test_compute_sp_plus_gap_reuses_prefetched_table_without_refetching():
+    session = _FakeSession(_FakeResponse(200, VALID_CSV))
+    table = fetch_sp_plus.fetch_fbs_week_table(3, session=session)
+
+    class _ExplodingSession:
+        def get(self, *a, **k):
+            raise AssertionError("should not fetch again -- a table was already provided")
+
+    gap = fetch_sp_plus.compute_sp_plus_gap("Miami", "Wake Forest", 3, table=table, session=_ExplodingSession())
+    assert round(gap, 1) == 22.2

@@ -105,3 +105,39 @@ def test_compute_continuity_inputs_missing_prior_season_block(monkeypatch, tmp_p
     assert result.returning_ol_starters is None
     assert any("prior_season_starters" in w for w in result.warnings)
     assert any("continuity_note" in w for w in result.warnings)
+
+
+def test_fetch_talent_table_returns_all_teams_in_one_call(monkeypatch):
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    session = _FakeSession(_FakeResponse(200, TALENT_ROWS))
+    table = fetch_talent.fetch_talent_table(2026, session=session)
+    assert table == {"Georgia": 1003.67, "Miami": 885.94}
+
+
+def test_fetch_team_talent_reuses_prefetched_table_without_refetching(monkeypatch):
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    table = {"Miami": 885.94}
+
+    class _ExplodingSession:
+        def get(self, *a, **k):
+            raise AssertionError("should not fetch again -- a table was already provided")
+
+    assert fetch_talent.fetch_team_talent("Miami", 2026, table=table, session=_ExplodingSession()) == 885.94
+
+
+def test_compute_continuity_inputs_reuses_prefetched_talent_table(monkeypatch, tmp_path):
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    _write_config(tmp_path, monkeypatch, {
+        "team": "Miami",
+        "updated_by_human_at": "2026-09-14",
+        "starters": {"OL": [], "DL": []},
+    })
+
+    class _ExplodingSession:
+        def get(self, *a, **k):
+            raise AssertionError("should not fetch again -- a table was already provided")
+
+    result = fetch_talent.compute_continuity_inputs(
+        "Miami", 2026, talent_table={"Miami": 885.94}, session=_ExplodingSession()
+    )
+    assert result.talent_composite == 885.94

@@ -56,11 +56,12 @@ class TalentInputs:
     warnings: list[str] = field(default_factory=list)
 
 
-def fetch_team_talent(team: str, year: int, session: Optional[requests.Session] = None) -> Optional[float]:
-    """Fetch CFBD's team-wide talent composite. Returns None (with the
-    caller expected to warn) if the team isn't in that year's list --
-    CFBD's talent composite only covers teams with enough recruiting data,
-    so a small/new program can legitimately be absent."""
+def fetch_talent_table(year: int, session: Optional[requests.Session] = None) -> dict:
+    """Fetch CFBD's entire /talent list for a year in one call, as
+    {team: talent}. /talent has no `team` query param -- it always
+    returns every team -- so fetch_team_talent() was re-fetching this
+    same full list once per team it was asked about. A caller scoring
+    many matchups in one run should fetch this once and reuse it."""
     api_key = get_api_key()
     http = session or requests
     try:
@@ -77,10 +78,21 @@ def fetch_team_talent(team: str, year: int, session: Optional[requests.Session] 
         raise CFBDRequestError(f"CFBD returned HTTP {response.status_code} for /talent year={year}: {response.text[:500]}")
 
     rows = response.json() or []
-    for row in rows:
-        if row.get("team") == team:
-            return row.get("talent")
-    return None
+    return {row["team"]: row["talent"] for row in rows if "team" in row}
+
+
+def fetch_team_talent(
+    team: str, year: int, table: Optional[dict] = None, session: Optional[requests.Session] = None
+) -> Optional[float]:
+    """Fetch CFBD's team-wide talent composite. Returns None (with the
+    caller expected to warn) if the team isn't in that year's list --
+    CFBD's talent composite only covers teams with enough recruiting data,
+    so a small/new program can legitimately be absent.
+
+    table lets a caller scoring many teams reuse one fetch_talent_table()
+    call instead of re-fetching the full list per team."""
+    table = table if table is not None else fetch_talent_table(year, session=session)
+    return table.get(team)
 
 
 def _count_returning(current: list[dict], prior: list[dict]) -> int:
@@ -89,11 +101,13 @@ def _count_returning(current: list[dict], prior: list[dict]) -> int:
     return len(current_names & prior_names)
 
 
-def compute_continuity_inputs(team: str, year: int, session: Optional[requests.Session] = None) -> TalentInputs:
+def compute_continuity_inputs(
+    team: str, year: int, talent_table: Optional[dict] = None, session: Optional[requests.Session] = None
+) -> TalentInputs:
     inputs = TalentInputs(team=team)
 
     try:
-        inputs.talent_composite = fetch_team_talent(team, year, session=session)
+        inputs.talent_composite = fetch_team_talent(team, year, table=talent_table, session=session)
         if inputs.talent_composite is None:
             inputs.warnings.append(f"{team} not present in CFBD's {year} /talent list")
     except CFBDRequestError as exc:
