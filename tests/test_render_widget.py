@@ -284,6 +284,21 @@ def test_write_game_history_snapshot(tmp_path):
     assert data["direction_a"]["team_a"] == "Miami"
 
 
+def test_game_index_entry_from_history_matches_the_live_entry(tmp_path):
+    ctx_a = _sample_context(matchup_label="g-a", composite={"value": 2.2, "verdict": "slight-to-moderate edge"}, warnings=["a warning"])
+    ctx_b = _sample_context(matchup_label="g-b", composite=None, warnings=["b warning 1", "b warning 2"])
+
+    live_entry = render_widget.game_index_entry(
+        "test-game", "Miami", "Wake Forest", "test-game.html", {"Miami"}, ctx_a, ctx_b
+    )
+
+    path = render_widget.write_game_history_snapshot("test-game", "Miami", "Wake Forest", 2026, ctx_a, ctx_b, tmp_path)
+    history = json.loads(path.read_text())
+    reused_entry = render_widget.game_index_entry_from_history(history, "test-game.html", {"Miami"})
+
+    assert reused_entry == live_entry
+
+
 def test_game_index_entry_counts_warnings_from_both_directions():
     ctx_a = _sample_context(warnings=["a warning"])
     ctx_b = _sample_context(warnings=["b warning 1", "b warning 2"])

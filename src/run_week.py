@@ -168,6 +168,22 @@ def populate_all_rosters(
     return results
 
 
+def _reuse_from_history(label: str, hist_dir: Path, top25: set) -> Optional[dict]:
+    """Load an already-written history/{label}.json for a matchup this run
+    is skipping (outside --teams/--matchups) and rebuild its index entry
+    from it -- zero network calls. Returns None if no prior snapshot
+    exists (nothing to reuse), so the caller falls back to a fresh render
+    rather than silently dropping the game from the index."""
+    path = hist_dir / f"{label}.json"
+    if not path.exists():
+        return None
+    import json
+
+    history = json.loads(path.read_text())
+    href = f"{label}.html"
+    return render_widget.game_index_entry_from_history(history, href, top25)
+
+
 def render_all_games(
     matchups: list[dict],
     year: int,
@@ -175,9 +191,18 @@ def render_all_games(
     sp_plus_table: Optional[dict],
     talent_table: Optional[dict],
     top25: set,
+    active_labels: Optional[set] = None,
 ) -> tuple[list[dict], list[dict]]:
     """Returns (index_entries, failures). One bad matchup is caught and
-    reported -- never aborts rendering the rest of the week."""
+    reported -- never aborts rendering the rest of the week.
+
+    active_labels: when given, only matchups whose label is in this set
+    are actually re-rendered (fresh CFBD/ourlads-derived data); every
+    other matchup reuses its existing history/{label}.json snapshot for
+    the index instead of being re-fetched -- see _reuse_from_history().
+    A matchup with no prior snapshot is always rendered fresh regardless
+    of active_labels, since there's nothing to reuse. None (the default)
+    renders every matchup fresh, unchanged from the original behavior."""
     week_dir_name = f"{year}-wk{week:02d}"
     out_dir = OUTPUT_DIR / week_dir_name
     hist_dir = HISTORY_DIR / week_dir_name
@@ -187,6 +212,14 @@ def render_all_games(
     failures = []
     for m in matchups:
         label = m["label"]
+
+        if active_labels is not None and label not in active_labels:
+            reused = _reuse_from_history(label, hist_dir, top25)
+            if reused is not None:
+                index_entries.append(reused)
+                continue
+            # no prior snapshot to reuse -- fall through and render fresh
+
         try:
             ctx_a, ctx_b = render_widget.build_both_directions(
                 m, year, sp_plus_table=sp_plus_table, talent_table=talent_table
@@ -202,13 +235,38 @@ def render_all_games(
     return index_entries, failures
 
 
+def _active_labels(matchups: list[dict], only_teams: Optional[list[str]], only_matchups: Optional[list[str]]) -> Optional[set]:
+    """Which matchup labels a --teams/--matchups filter selects. None
+    means "no filter, everything is active" -- callers must treat that
+    as full-week behavior, not an empty set (empty would mean nothing
+    renders, which is never what an unset filter should mean)."""
+    if not only_teams and not only_matchups:
+        return None
+    team_set = set(only_teams or [])
+    label_set = set(only_matchups or [])
+    return {
+        m["label"] for m in matchups
+        if m["label"] in label_set or m["team_a"] in team_set or m["team_b"] in team_set
+    }
+
+
 def run_week(
     year: int,
     week: int,
     session: Optional[requests.Session] = None,
     skip_roster: bool = False,
     today: Optional[str] = None,
+    only_teams: Optional[list[str]] = None,
+    only_matchups: Optional[list[str]] = None,
 ) -> dict:
+    """only_teams / only_matchups: restrict roster population and
+    rendering to matchups touching these teams or matching these labels
+    -- a fix-up pass after manual roster research (DESIGN.md Section 7's
+    WebSearch fallback) doesn't need to re-populate and re-render all
+    ~45 teams / 22 games again, just the handful that changed. Every
+    other matchup's index entry is reused from its existing history
+    snapshot (see render_all_games). Leave both None (the default) for
+    the original full-week behavior, unchanged."""
     today = today or _dt.date.today().isoformat()
 
     games = fetch_matchups.fetch_fbs_schedule(year, week, session=session)
@@ -218,9 +276,14 @@ def run_week(
     matchups = merge_matchups(discovered, hand_curated)
     write_matchups_config(matchups, year, week)
 
+    active_labels = _active_labels(matchups, only_teams, only_matchups)
+    roster_teams = unique_teams(matchups) if active_labels is None else unique_teams(
+        [m for m in matchups if m["label"] in active_labels]
+    )
+
     roster_results: list[dict] = []
     if not skip_roster:
-        roster_results = populate_all_rosters(unique_teams(matchups), today, session=session)
+        roster_results = populate_all_rosters(roster_teams, today, session=session)
 
     try:
         sp_plus_table = fetch_sp_plus.fetch_fbs_week_table(week, session=session)
@@ -232,7 +295,7 @@ def run_week(
     except Exception:  # noqa: BLE001 -- each matchup's own talent fetch will warn per-team
         talent_table = None
 
-    index_entries, failures = render_all_games(matchups, year, week, sp_plus_table, talent_table, top25)
+    index_entries, failures = render_all_games(matchups, year, week, sp_plus_table, talent_table, top25, active_labels=active_labels)
 
     week_label = f"{year}, Week {week}"
     index_html = render_widget.render_index(week_label, index_entries)
@@ -276,6 +339,8 @@ if __name__ == "__main__":
     parser.add_argument("--year", type=int, default=None, help="Defaults to the current UTC calendar year")
     parser.add_argument("--week", type=int, default=None, help="Defaults to CFBD's current week for --year, via GET /calendar")
     parser.add_argument("--skip-roster", action="store_true", help="Skip live ourlads roster population (use existing config/rosters/*.yaml as-is)")
+    parser.add_argument("--teams", default=None, help="Comma-separated team names -- only populate rosters for and re-render matchups touching these teams; every other matchup reuses its existing history snapshot for the index. For a fix-up pass after manual roster research, not a first run.")
+    parser.add_argument("--matchups", default=None, help="Comma-separated matchup labels -- same restriction as --teams, by label instead of team name.")
     args = parser.parse_args()
 
     year = args.year if args.year is not None else _dt.datetime.now(_dt.timezone.utc).year
@@ -283,6 +348,9 @@ if __name__ == "__main__":
     if args.week is None:
         print(f"--week not given -- auto-detected week {week} for {year} via CFBD's /calendar")
 
-    result = run_week(year, week, skip_roster=args.skip_roster)
+    only_teams = [t.strip() for t in args.teams.split(",")] if args.teams else None
+    only_matchups = [m.strip() for m in args.matchups.split(",")] if args.matchups else None
+
+    result = run_week(year, week, skip_roster=args.skip_roster, only_teams=only_teams, only_matchups=only_matchups)
     print_summary(result)
     sys.exit(1 if result["rendered_count"] == 0 and result["matchup_count"] > 0 else 0)

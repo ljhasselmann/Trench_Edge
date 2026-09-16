@@ -172,3 +172,96 @@ def test_run_week_skip_roster_leaves_existing_files_untouched(monkeypatch, tmp_p
 
     assert result["roster_results"] == []
     assert (rosters_dir / "Miami.yaml").read_text() == existing_text
+
+
+def test_active_labels_none_when_no_filter_given():
+    matchups = [{"label": "a", "team_a": "X", "team_b": "Y"}]
+    assert run_week._active_labels(matchups, None, None) is None
+    assert run_week._active_labels(matchups, [], []) is None
+
+
+def test_active_labels_matches_by_team_or_label():
+    matchups = [
+        {"label": "2026-wk01-miami-wake-forest", "team_a": "Miami", "team_b": "Wake Forest"},
+        {"label": "2026-wk01-texas-ohio-state", "team_a": "Texas", "team_b": "Ohio State"},
+        {"label": "2026-wk01-badteama-badteamb", "team_a": "BadTeamA", "team_b": "BadTeamB"},
+    ]
+    by_team = run_week._active_labels(matchups, ["Ohio State"], None)
+    assert by_team == {"2026-wk01-texas-ohio-state"}
+
+    by_label = run_week._active_labels(matchups, None, ["2026-wk01-badteama-badteamb"])
+    assert by_label == {"2026-wk01-badteama-badteamb"}
+
+
+def test_run_week_teams_filter_only_renders_filtered_matchups_on_second_pass(monkeypatch, tmp_path):
+    _patch_dirs(monkeypatch, tmp_path)
+    _patch_network(monkeypatch)
+
+    call_labels = []
+
+    def _counting_build_both_directions(matchup, year, sp_plus_table=None, talent_table=None):
+        call_labels.append(matchup["label"])
+        return _fake_build_both_directions(matchup, year, sp_plus_table=sp_plus_table, talent_table=talent_table)
+
+    monkeypatch.setattr(run_week.render_widget, "build_both_directions", _counting_build_both_directions)
+
+    # First pass: full run, no filter -- seeds history/*.json for every matchup.
+    first = run_week.run_week(2026, 1, today="2026-09-16")
+    assert first["rendered_count"] == 2  # badteama fails to render, same as the existing full-run test
+    assert sorted(call_labels) == [
+        "2026-wk01-badteama-badteamb",  # attempted, then raises inside -- caught as a failure
+        "2026-wk01-miami-wake-forest",
+        "2026-wk01-texas-ohio-state",
+    ]
+
+    # Second pass: filtered to just Miami's game -- Texas/Ohio State must NOT
+    # be re-rendered (reused from the history snapshot the first pass wrote),
+    # but must still appear in the index. badteama has no history to reuse
+    # (it always fails), so it's always re-attempted regardless of filter --
+    # that's the intended fallback, not a filter leak.
+    call_labels.clear()
+    second = run_week.run_week(2026, 1, today="2026-09-17", only_teams=["Miami"])
+
+    assert sorted(call_labels) == ["2026-wk01-badteama-badteamb", "2026-wk01-miami-wake-forest"]
+    assert "2026-wk01-texas-ohio-state" not in call_labels  # reused, not re-rendered
+    assert second["rendered_count"] == 2  # index still has both surviving games (one fresh, one reused)
+
+
+def test_run_week_teams_filter_only_populates_rosters_for_filtered_teams(monkeypatch, tmp_path):
+    _patch_dirs(monkeypatch, tmp_path)
+    _patch_network(monkeypatch)
+
+    # Seed history so the second pass has something to reuse.
+    run_week.run_week(2026, 1, today="2026-09-16")
+
+    result = run_week.run_week(2026, 1, today="2026-09-17", only_teams=["Miami"])
+
+    roster_teams = {r["team"] for r in result["roster_results"]}
+    assert roster_teams == {"Miami", "Wake Forest"}  # only Miami's own matchup's teams
+    assert "Texas" not in roster_teams
+    assert "Ohio State" not in roster_teams
+
+
+def test_run_week_teams_filter_falls_back_to_fresh_render_without_prior_history(monkeypatch, tmp_path):
+    _patch_dirs(monkeypatch, tmp_path)
+    _patch_network(monkeypatch)
+
+    call_labels = []
+
+    def _counting_build_both_directions(matchup, year, sp_plus_table=None, talent_table=None):
+        call_labels.append(matchup["label"])
+        return _fake_build_both_directions(matchup, year, sp_plus_table=sp_plus_table, talent_table=talent_table)
+
+    monkeypatch.setattr(run_week.render_widget, "build_both_directions", _counting_build_both_directions)
+
+    # No prior run at all -- a --teams filter on a cold history/ directory
+    # must still render every matchup that has no snapshot to reuse,
+    # rather than silently dropping it from the index.
+    result = run_week.run_week(2026, 1, today="2026-09-16", only_teams=["Miami"])
+
+    assert sorted(call_labels) == [
+        "2026-wk01-badteama-badteamb",
+        "2026-wk01-miami-wake-forest",
+        "2026-wk01-texas-ohio-state",
+    ]
+    assert result["rendered_count"] == 2

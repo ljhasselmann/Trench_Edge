@@ -391,6 +391,25 @@ def game_index_entry(
     }
 
 
+def game_index_entry_from_history(history: dict, href: str, top25_teams: set) -> dict:
+    """Same shape as game_index_entry(), reconstructed from an already-
+    written history/{label}.json (game_to_history_dict's output) instead
+    of live WidgetContexts. Lets a partial re-render (run_week.py's
+    --teams/--matchups filter) rebuild the index's untouched rows from
+    disk -- zero network calls -- instead of either re-fetching everything
+    or dropping those games from the index."""
+    return {
+        "label": history["matchup_label"],
+        "team_a": history["team_a"],
+        "team_b": history["team_b"],
+        "href": href,
+        "top25_teams": top25_teams,
+        "direction_a": history["direction_a"]["composite"],
+        "direction_b": history["direction_b"]["composite"],
+        "warning_count": len(history["direction_a"]["warnings"]) + len(history["direction_b"]["warnings"]),
+    }
+
+
 def render_index(week_label: str, games: list[dict]) -> str:
     """games: a list of game_index_entry() dicts."""
     env = Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)), autoescape=True)
