@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Trench Edge — {{ week_label }}</title>
+<style>
+  body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: #fcfcfb; color: #0b0b0b; margin: 0; padding: 24px; }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) body { background: #1a1a19; color: #ffffff; }
+  }
+  :root[data-theme="dark"] body { background: #1a1a19; color: #ffffff; }
+  h1 { font-size: 22px; margin: 0 0 4px 0; }
+  .te-index-subtitle { color: #52514e; font-size: 13px; margin: 0 0 20px 0; }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .te-index-subtitle { color: #c3c2b7; }
+  }
+  :root[data-theme="dark"] .te-index-subtitle { color: #c3c2b7; }
+  table { width: 100%; max-width: 900px; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; font-weight: 500; font-size: 12px; color: #52514e; border-bottom: 1px solid #e1e0d9; padding: 6px 10px 6px 0; }
+  td { padding: 8px 10px 8px 0; border-bottom: 1px solid #e1e0d9; vertical-align: top; }
+  .te-badge { font-size: 11px; color: #898781; }
+  .te-warn { color: #898781; font-size: 12px; }
+  a { color: #2a78d6; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<h1>Trench Edge &mdash; {{ week_label }}</h1>
+<p class="te-index-subtitle">{{ games|length }} game(s) scored, both trench directions each.</p>
+
+<table>
+<tr>
+  <th>Matchup</th>
+  <th>Direction A</th>
+  <th>Direction B</th>
+  <th>Notes</th>
+</tr>
+{% for game in games %}
+<tr>
+  <td>
+    <a href="{{ game.href }}">{{ game.team_a }}{% if game.team_a in game.top25_teams %} <span class="te-badge">(Top 25)</span>{% endif %} vs {{ game.team_b }}{% if game.team_b in game.top25_teams %} <span class="te-badge">(Top 25)</span>{% endif %}</a>
+  </td>
+  <td>
+    {% if game.direction_a %}{{ "%+.1f"|format(game.direction_a.value) }} &mdash; {{ game.direction_a.verdict }}{% else %}<span class="te-warn">not computed</span>{% endif %}
+  </td>
+  <td>
+    {% if game.direction_b %}{{ "%+.1f"|format(game.direction_b.value) }} &mdash; {{ game.direction_b.verdict }}{% else %}<span class="te-warn">not computed</span>{% endif %}
+  </td>
+  <td>
+    {% if game.warning_count %}<span class="te-warn">{{ game.warning_count }} caveat(s)</span>{% endif %}
+  </td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>

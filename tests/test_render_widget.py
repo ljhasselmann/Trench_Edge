@@ -282,3 +282,34 @@ def test_write_game_history_snapshot(tmp_path):
     assert path == tmp_path / "test-game.json"
     data = json.loads(path.read_text())
     assert data["direction_a"]["team_a"] == "Miami"
+
+
+def test_game_index_entry_counts_warnings_from_both_directions():
+    ctx_a = _sample_context(warnings=["a warning"])
+    ctx_b = _sample_context(warnings=["b warning 1", "b warning 2"])
+    entry = render_widget.game_index_entry(
+        "test-game", "Miami", "Wake Forest", "test-game.html", {"Miami"}, ctx_a, ctx_b
+    )
+    assert entry["warning_count"] == 3
+    assert entry["top25_teams"] == {"Miami"}
+    assert entry["href"] == "test-game.html"
+
+
+def test_render_index_links_and_badges_ranked_teams():
+    ctx_a = _sample_context(composite={"value": 2.2, "verdict": "slight-to-moderate edge"})
+    ctx_b = _sample_context(composite=None, warnings=["Composite not computed -- missing: Mass"])
+    entry = render_widget.game_index_entry(
+        "2026-wk03-miami-wake-forest", "Miami", "Wake Forest", "2026-wk03-miami-wake-forest.html", {"Miami"}, ctx_a, ctx_b
+    )
+    html = render_widget.render_index("2026, Week 3", [entry])
+
+    assert "Miami" in html and "Wake Forest" in html
+    assert "(Top 25)" in html
+    assert '<a href="2026-wk03-miami-wake-forest.html">' in html
+    assert "+2.2" in html and "slight-to-moderate edge" in html
+    assert "not computed" in html  # direction_b has no composite
+
+
+def test_render_index_handles_empty_week():
+    html = render_widget.render_index("2026, Week 0", [])
+    assert "0 game(s)" in html

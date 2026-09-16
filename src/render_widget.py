@@ -373,6 +373,31 @@ def write_game_history_snapshot(
     return path
 
 
+def game_index_entry(
+    game_label: str, team_a: str, team_b: str, href: str, top25_teams: set, ctx_a: WidgetContext, ctx_b: WidgetContext
+) -> dict:
+    """One row's worth of data for render_index() -- the caller (run_week.py)
+    builds a list of these across a week's games rather than hand-assembling
+    the template context itself."""
+    return {
+        "label": game_label,
+        "team_a": team_a,
+        "team_b": team_b,
+        "href": href,
+        "top25_teams": top25_teams,
+        "direction_a": ctx_a.composite,
+        "direction_b": ctx_b.composite,
+        "warning_count": len(ctx_a.warnings) + len(ctx_b.warnings),
+    }
+
+
+def render_index(week_label: str, games: list[dict]) -> str:
+    """games: a list of game_index_entry() dicts."""
+    env = Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)), autoescape=True)
+    template = env.get_template("index.html.jinja")
+    return template.render(week_label=week_label, games=games)
+
+
 if __name__ == "__main__":
     import argparse
     import sys
