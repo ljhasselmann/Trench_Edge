@@ -11,8 +11,23 @@ sidesteps that gate entirely.
 Team name -> ourlads URL isn't guessable (e.g. Miami is
 depth-chart/miami/91073) -- fetch_team_index() parses it live from
 ourlads's own team-picker page rather than hardcoding a lookup table that
-would drift. Confirmed live: ourlads's team names match CFBD's convention
-("Miami", not "Miami-FL" like the SP+ sheet) -- no alias map needed here.
+would drift. ourlads's team names mostly match CFBD's convention ("Miami",
+not "Miami-FL" like the SP+ sheet) -- but not always: checked live at full
+scale (scripts/check_team_name_coverage.py, all 138 CFBD FBS teams) and
+found 6 real mismatches (TEAM_NAME_ALIASES below), the same class of
+problem fetch_sp_plus.py already has, just smaller. The earlier claim here
+that no alias map was needed was based on checking only 2 teams (Miami,
+Wake Forest) and didn't hold at scale.
+
+ONE TEAM IS GENUINELY MISSING, not mismatched: ourlads's index has no
+Washington State entry under any name (confirmed live -- its "Washington"
+entry is the actual University of Washington, a different school; ourlads
+happens to also list a "FCS & Small College NFL Prospects" catch-all
+entry, which is why its total team count coincidentally still matches
+CFBD's 138). Don't alias Washington State to anything -- fetch_depth_chart
+correctly raises OurladsFetchError for it, which is the right outcome; it
+needs the WebSearch/WebFetch fallback path, same as any other genuine
+ourlads miss.
 
 Position row labels are NOT uniform across teams -- they vary by each
 team's actual defensive scheme, confirmed live: Miami's OL is the fixed
@@ -43,6 +58,21 @@ DEFAULT_HEADERS = {"User-Agent": "Mozilla/5.0"}
 
 OL_ROW_LABELS = {"LT", "LG", "C", "RG", "RT", "OT", "OG"}
 DL_ROW_LABELS = {"LDE", "RDE", "LE", "RE", "DT", "NT", "DL", "LDT", "RDT"}
+
+# CFBD's canonical name -> ourlads's own spelling. Seeded live via
+# scripts/check_team_name_coverage.py (2026-09-16); each entry verified by
+# listing ourlads's own team index directly, not just trusting a fuzzy
+# string match (that heuristic mismatched real teams here -- e.g. "NC
+# State" suggested against "Utah State", "Washington State" against
+# "Washington" -- both wrong, different schools).
+TEAM_NAME_ALIASES = {
+    "Hawai'i": "Hawaii",
+    "Miami (OH)": "Miami (Ohio)",
+    "NC State": "North Carolina State",
+    "Ole Miss": "Mississippi",
+    "San José State": "San Jose State",
+    "UL Monroe": "Louisiana-Monroe",
+}
 
 _TEAM_INDEX_PATTERN = re.compile(
     r"alt='([^']+)' class='nfl-dc-mm-logo'.*?depth-chart\.aspx\?s=([a-z0-9-]+)&id=(\d+)", re.S
@@ -95,11 +125,16 @@ def parse_depth_chart(html: str) -> dict:
 
 def fetch_depth_chart(team: str, session: Optional[requests.Session] = None, index: Optional[dict] = None) -> dict:
     index = index if index is not None else fetch_team_index(session=session)
-    if team not in index:
-        suggestions = get_close_matches(team, index.keys(), n=3)
-        raise OurladsFetchError(f"{team!r} not found in ourlads's team index. Closest matches: {suggestions!r}")
+    site_name = TEAM_NAME_ALIASES.get(team, team)
+    if site_name not in index:
+        suggestions = get_close_matches(site_name, index.keys(), n=3)
+        raise OurladsFetchError(
+            f"{team!r} (looked up as {site_name!r}) not found in ourlads's team index. "
+            f"Closest matches: {suggestions!r}. If one of these is really {team!r}, "
+            "add it to TEAM_NAME_ALIASES in fetch_ourlads.py."
+        )
 
-    slug, team_id = index[team]
+    slug, team_id = index[site_name]
     http = session or requests
     url = DEPTH_CHART_URL_TMPL.format(slug=slug, team_id=team_id)
     try:

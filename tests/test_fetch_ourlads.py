@@ -83,3 +83,20 @@ def test_fetch_depth_chart_raises_on_non_200():
     session = _FakeSession(_FakeResponse(500, ""))
     with pytest.raises(fetch_ourlads.OurladsFetchError):
         fetch_ourlads.fetch_depth_chart("Miami", session=session, index={"Miami": ("miami", "91073")})
+
+
+def test_fetch_depth_chart_resolves_known_alias():
+    # CFBD calls this team "NC State"; ourlads spells it out.
+    index = {"North Carolina State": ("nc-state", "12345")}
+    session = _FakeSession(_FakeResponse(200, SAMPLE_CHART_HTML))
+    chart = fetch_ourlads.fetch_depth_chart("NC State", session=session, index=index)
+    assert chart["LT"] == ["Samson Okunlola", "Jamal Meriweather"]
+
+
+def test_fetch_depth_chart_missing_team_error_names_the_resolved_lookup():
+    # A team genuinely absent from ourlads (e.g. Washington State) should
+    # raise clearly, not silently match something else.
+    index = {"Washington": ("washington", "1")}
+    session = _FakeSession(_FakeResponse(200, ""))
+    with pytest.raises(fetch_ourlads.OurladsFetchError, match="Washington State"):
+        fetch_ourlads.fetch_depth_chart("Washington State", session=session, index=index)

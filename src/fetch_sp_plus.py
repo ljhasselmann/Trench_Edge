@@ -46,6 +46,13 @@ elsewhere in this repo (config/teams.yaml, CFBD) to this sheet's name.
 Extend it as new mismatches turn up -- team_sp_plus() raises with the
 closest name matches when a lookup misses, specifically so a new mismatch
 is easy to diagnose and add rather than silently guessed at.
+
+Seeded live via scripts/check_team_name_coverage.py (2026-09-16, all 138
+CFBD FBS teams checked): every entry below is a verified exact match in
+the sheet, not a fuzzy guess -- the coverage script's own get_close_matches
+suggestions included at least one wrong pairing (CFBD's "Louisiana" fuzzy-
+matched to "Louisiana Tech", a different school; the real match, verified
+by listing the sheet's own team names directly, is "UL-Lafayette").
 """
 
 from __future__ import annotations
@@ -66,6 +73,11 @@ EXPECTED_HEADER_MARKERS = ("Off. SP+", "Def. SP+")
 
 TEAM_NAME_ALIASES = {
     "Miami": "Miami-FL",
+    "Miami (OH)": "Miami-OH",
+    "Hawai'i": "Hawaii",
+    "Louisiana": "UL-Lafayette",
+    "San José State": "San Jose State",
+    "UL Monroe": "UL-Monroe",
 }
 
 
