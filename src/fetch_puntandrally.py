@@ -1,6 +1,11 @@
 """Mass -- live rosters + snap counts from puntandrally.com (supplements
-DESIGN.md 4b). Wired into run_week.py as the primary roster source, and
-into fetch_talent.py's Experience metric via its year-parameterized fetch.
+DESIGN.md 4b). Wired into run_week.py as a by-name ENRICHMENT source on
+top of fetch_ourlads.py's authoritative depth chart (jersey, class_year,
+snaps_multi_year), and into fetch_talent.py's Experience metric via its
+year-parameterized fetch. This module briefly stood in as the primary
+depth-chart source itself (its top-N-by-snaps ranking approximating "who
+starts") before that was confirmed live to misrepresent a real starter's
+actual slot -- see DESIGN.md Section 4b and fetch_ourlads.py.
 
 Unlike ourlads.com (src/fetch_ourlads.py, a plain server-rendered site),
 puntandrally.com sits behind Cloudflare's managed JS challenge on every
@@ -54,32 +59,17 @@ player has recorded snaps, or a blank/`&nbsp;` cell when they don't (a
 true-freshman/unproven backup with no game snaps yet -- not a parse
 failure).
 
-Position tags are NOT what fetch_ourlads.py sees. ourlads gives an
-explicit per-slot row label (LT, RT, LG, RG, C); puntandrally only tags
-"T" (both tackles pooled together), "G" (both guards pooled), or "C" --
-plus a generic "OL" tag for unestablished linemen with no recorded snaps
-at any specific spot yet. So `starters_for_group` here ranks by snap
-count *within* each tag and takes the top N for that tag (2 for "T", 2
-for "G", 1 for "C" -- OL_STARTER_COUNTS), rather than ourlads' "first
-listed" per an already-specific slot label.
-
-DL tagging is looser still, and this is a genuine, only partly-verified
-coverage gap (same class of problem fetch_ourlads.py's own docstring
-flags for 3-man vs 4-man fronts): Miami (a 4-3 team) tags edge rushers
-"DE" and interior linemen "DT"/"DL". Wisconsin (a 3-4 team) had ZERO
+Position tags are NOT what fetch_ourlads.py sees, and are no longer used
+to decide who starts (see the module-docstring note above) -- they're
+only carried through for reference. ourlads gives an explicit per-slot
+row label (LT, RT, LG, RG, C); puntandrally only tags "T" (both tackles
+pooled together), "G" (both guards pooled), or "C" -- plus a generic "OL"
+tag for unestablished linemen with no recorded snaps at any specific spot
+yet. DL tagging is looser still: Miami (a 4-3 team) tags edge rushers "DE"
+and interior linemen "DT"/"DL"; Wisconsin (a 3-4 team) had ZERO
 "DE"-tagged players anywhere in its Defensive Line section -- confirmed
-live -- everyone there was "DT" or generic "DL". That almost certainly
-means puntandrally counts a 3-4 team's edge rushers under Linebackers
-instead of Defensive Line, but this module does NOT verify that by
-checking Wisconsin's Linebackers section for edge-rusher-shaped snap/
-pass-rush stats -- so treat "DL front size looks smaller for 3-4 teams"
-as a known, named risk to check before trusting DL starter counts at
-full scale, not a confirmed non-issue. Because of this, DL_STARTER_COUNTS
-is deliberately NOT defined the way OL_STARTER_COUNTS is -- there's no
-safe fixed (DE, DT) split that holds across both scheme families; a
-caller must decide per-team front size before calling starters_for_group
-for DL, which is exactly the kind of judgment call this module leaves to
-its caller rather than guessing.
+live -- everyone there was "DT" or generic "DL", almost certainly because
+puntandrally counts a 3-4 team's edge rushers under Linebackers instead.
 
 Any row whose parenthesized tag falls outside the section's own known set
 (KNOWN_OL_TAGS / KNOWN_DL_TAGS) -- e.g. long snappers tagged "(LS)" show
@@ -102,11 +92,71 @@ caller can never accidentally fetch the wrong season silently.
 from __future__ import annotations
 
 import html
+import os
 import re
+import shutil
+import subprocess
+import tempfile
+import unicodedata
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import Callable, Optional
 from urllib.parse import quote
+
+_NSS_SEEDED = False
+
+
+def _seed_chromium_nss_from_env() -> None:
+    """One-time per process: seed ~/.pki/nssdb with every PEM cert from the
+    CA bundle pointed to by SSL_CERT_FILE or REQUESTS_CA_BUNDLE, so headless
+    Chromium on Linux trusts TLS-intercepting proxies that requests/curl
+    already trust via those env vars. Chromium reads that NSS db for CA
+    trust on Linux — but it doesn't pick up SSL_CERT_FILE/REQUESTS_CA_BUNDLE
+    on its own, hence ERR_CERT_AUTHORITY_INVALID in environments with an
+    egress proxy whose CA is only in those env-var bundles.
+
+    Silent no-op when: neither env var is set, the file doesn't exist,
+    certutil isn't on PATH (libnss3-tools not installed), or any step
+    fails. A seeding failure leaves Chromium's trust store unchanged —
+    callers handle the resulting navigation errors as before, unchanged."""
+    global _NSS_SEEDED
+    if _NSS_SEEDED:
+        return
+    _NSS_SEEDED = True  # set before any exception so we don't retry on failure
+
+    ca_bundle = os.environ.get("SSL_CERT_FILE") or os.environ.get("REQUESTS_CA_BUNDLE")
+    if not ca_bundle or not os.path.exists(ca_bundle):
+        return
+    certutil = shutil.which("certutil")
+    if certutil is None:
+        return
+
+    try:
+        nss_dir = os.path.expanduser("~/.pki/nssdb")
+        os.makedirs(nss_dir, exist_ok=True)
+        db_arg = f"sql:{nss_dir}"
+        if not os.path.exists(os.path.join(nss_dir, "cert9.db")):
+            subprocess.run(
+                [certutil, "-N", "-d", db_arg, "--empty-password"],
+                check=False, capture_output=True, timeout=15,
+            )
+        with open(ca_bundle) as f:
+            bundle = f.read()
+        pem_certs = re.findall(r"-----BEGIN CERTIFICATE-----.*?-----END CERTIFICATE-----", bundle, re.S)
+        for i, pem in enumerate(pem_certs):
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".pem", delete=False) as tf:
+                tf.write(pem)
+                tf_path = tf.name
+            try:
+                subprocess.run(
+                    [certutil, "-A", "-d", db_arg, "-t", "CT,,", "-n", f"env-ca-{i}", "-i", tf_path],
+                    check=False, capture_output=True, timeout=10,
+                )
+            finally:
+                os.unlink(tf_path)
+    except Exception:  # noqa: BLE001 -- seeding failure must not abort the fetch attempt
+        pass
+
 
 TEAM_ROSTER_URL_TMPL = "https://www.puntandrally.com/teamroster.php?year={year}&team={team}"
 TEAM_INDEX_URL = "https://www.puntandrally.com/teamsgrid.php?geturl=roster"
@@ -122,17 +172,6 @@ CONTENT_SELECTOR = ".tr-section-title"
 
 KNOWN_OL_TAGS = {"T", "G", "C", "OL"}
 KNOWN_DL_TAGS = {"DE", "DT", "DL"}
-
-# Standard 5-man offensive line: 2 tackles, 2 guards, 1 center. See module
-# docstring -- there is no equivalent fixed split for DL (front size
-# varies by scheme), so callers must size that themselves per team.
-OL_STARTER_COUNTS = {"T": 2, "G": 2, "C": 1}
-
-# Flat top-N-by-snaps count for DL, regardless of DE/DT/DL tag -- the same
-# simplification run_week.py used to keep privately; promoted here so
-# fetch_talent.py's Experience computation and run_week.py's roster-file
-# writer can never disagree about who counts as this year's DL starters.
-DL_STARTER_COUNT = 4
 
 # Confirmed live 2026-09-16 against puntandrally's own team-roster grid --
 # see module docstring. Left as an empty dict (not removed) so a future
@@ -215,6 +254,7 @@ def _browser_fetch_html(url: str, wait_for_selector: str = CONTENT_SELECTOR) -> 
     browser_session() instead so one browser process serves every fetch."""
     playwright_error, sync_playwright = _import_playwright()
     with sync_playwright() as p:
+        _seed_chromium_nss_from_env()
         browser = p.chromium.launch(headless=True)
         try:
             return _navigate_and_get_html(browser, url, wait_for_selector, playwright_error)
@@ -237,6 +277,7 @@ def browser_session():
     """
     playwright_error, sync_playwright = _import_playwright()
     with sync_playwright() as p:
+        _seed_chromium_nss_from_env()
         browser = p.chromium.launch(headless=True)
         try:
             def fetch(url: str, wait_for_selector: str = CONTENT_SELECTOR) -> str:
@@ -377,33 +418,76 @@ def fetch_snap_history(
     return result
 
 
-def starters_for_group(players: list, starter_counts: dict) -> list:
-    """Top `starter_counts[tag]` names by snap count, per tag. A player
-    with no recorded snaps yet (None) sorts last within its tag -- never
-    guessed into a starting spot ahead of someone with real usage."""
-    by_tag: dict = {}
-    for player in players:
-        by_tag.setdefault(player.position_tag, []).append(player)
-
-    starters = []
-    for tag, count in starter_counts.items():
-        ranked = sorted(by_tag.get(tag, []), key=lambda p: p.snaps if p.snaps is not None else -1, reverse=True)
-        starters.extend(p.name for p in ranked[:count])
-    return starters
+_TRUNCATED_NAME_PATTERN = re.compile(r"^([A-Za-z])\.\s+(.+)$")
 
 
-def dl_starters_for_group(players: list, count: int = DL_STARTER_COUNT) -> list:
-    """Top `count` DL players by snap count, regardless of DE/DT/DL tag.
-    puntandrally's DL tags are too coarse to split by slot the way
-    starters_for_group does for OL -- front size genuinely varies by
-    scheme (a 4-3's 4 down linemen vs. a 3-4's 3), and this module
-    deliberately declines to guess a fixed split (see module docstring).
-    A flat top-N by usage is the simplification every caller of this
-    module shares -- both config/rosters/{team}.yaml's DL list and the
-    Experience metric's DL snap-share lookup use this exact function, so
-    they can never disagree about who counts as this year's DL starters."""
-    ranked = sorted(players, key=lambda p: p.snaps if p.snaps is not None else -1, reverse=True)
-    return [p.name for p in ranked[:count]]
+def resolve_truncated_name(name: str, candidate_full_names: list) -> Optional[str]:
+    """puntandrally truncates a long first name to a single initial on its
+    own snap-count page -- confirmed live: SMU's real 'Malcolm
+    Alcorn-Crowder' is listed there as 'M. Alcorn-Crowder'. An exact-name
+    match against any other source's full name (CFBD's live roster,
+    247Sports) then silently fails, dropping a real starter entirely
+    rather than just missing one field.
+
+    Recovers the real full name by matching the truncated name's initial +
+    surname against `candidate_full_names`. Returns None (never guesses)
+    when zero or more than one candidate matches -- an ambiguous initial
+    must never silently resolve to the wrong player."""
+    match = _TRUNCATED_NAME_PATTERN.match(name.strip())
+    if not match:
+        return None
+    initial, surname = match.group(1).lower(), match.group(2).lower()
+    matches = [
+        full_name for full_name in candidate_full_names
+        if full_name.lower().endswith(surname) and full_name[:1].lower() == initial
+    ]
+    return matches[0] if len(matches) == 1 else None
+
+
+_GENERATIONAL_SUFFIX_PATTERN = re.compile(r"\s+(Jr\.?|Sr\.?|II|III|IV|V)$", re.IGNORECASE)
+
+
+def _normalize_name_variant(name: str) -> str:
+    """Folds away the two other real name-variance gaps confirmed live
+    between puntandrally and CFBD/247Sports: puntandrally drops a
+    trailing generational suffix ('Mike Wallace' for CFBD's 'Mike Wallace
+    Jr.') and strips accent marks ('Andre Otto' for CFBD's real 'André
+    Otto') -- neither is the initial-truncation pattern
+    resolve_truncated_name handles."""
+    stripped = _GENERATIONAL_SUFFIX_PATTERN.sub("", name).strip()
+    folded = unicodedata.normalize("NFKD", stripped).encode("ascii", "ignore").decode("ascii")
+    return folded.lower()
+
+
+def resolve_name_variant(name: str, candidate_full_names: list) -> Optional[str]:
+    """Recovers a real full name when puntandrally's version differs from
+    a candidate only by a dropped generational suffix or stripped accent
+    marks (see _normalize_name_variant) -- returns None (never guesses)
+    unless exactly one candidate normalizes to the same form as `name`."""
+    target = _normalize_name_variant(name)
+    matches = [c for c in candidate_full_names if _normalize_name_variant(c) == target]
+    return matches[0] if len(matches) == 1 else None
+
+
+def resolve_any_name_match(name: str, candidate_full_names: list) -> Optional[str]:
+    """Tries every name-variance recovery this module knows (initial
+    truncation, dropped generational suffix, stripped accent marks) in
+    BOTH directions -- `name` might be the shortened one (puntandrally's
+    own name matched against a fuller source like CFBD or 247Sports) or
+    a candidate might be (e.g. an ourlads-sourced name matched against
+    puntandrally's own, differently-truncated historical spelling).
+    Returns None (never guesses) unless exactly one candidate resolves."""
+    exact = [c for c in candidate_full_names if c.lower() == name.lower()]
+    if len(exact) == 1:
+        return exact[0]
+    resolved = resolve_truncated_name(name, candidate_full_names) or resolve_name_variant(name, candidate_full_names)
+    if resolved is not None:
+        return resolved
+    reverse_matches = [
+        c for c in candidate_full_names
+        if resolve_truncated_name(c, [name]) == name or resolve_name_variant(c, [name]) == name
+    ]
+    return reverse_matches[0] if len(reverse_matches) == 1 else None
 
 
 if __name__ == "__main__":
@@ -419,14 +503,6 @@ if __name__ == "__main__":
     print(json.dumps({
         "team": args.team,
         "year": args.year,
-        "OL": {
-            "players": [vars(p) for p in ol_section.players],
-            "starters": starters_for_group(ol_section.players, OL_STARTER_COUNTS),
-            "warnings": ol_section.warnings,
-        },
-        "DL": {
-            "players": [vars(p) for p in dl_section.players],
-            "starters": dl_starters_for_group(dl_section.players),
-            "warnings": dl_section.warnings,
-        },
+        "OL": {"players": [vars(p) for p in ol_section.players], "warnings": ol_section.warnings},
+        "DL": {"players": [vars(p) for p in dl_section.players], "warnings": dl_section.warnings},
     }, indent=2))
