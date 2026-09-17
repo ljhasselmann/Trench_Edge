@@ -1,0 +1,70 @@
+team: Virginia Tech
+starters:
+  OL:
+  - name: Justin Terry
+    position_tag: LT
+    jersey: '72'
+    class_year: SO
+    snaps_multi_year: 119
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Layth Ghannam
+    position_tag: LG
+    jersey: '56'
+    class_year: JR
+    snaps_multi_year: 859
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Kyle Altuner
+    position_tag: C
+    jersey: '62'
+    class_year: SO
+    snaps_multi_year: 831
+    recruit_rating: 91
+    recruit_stars: 4
+  - name: Montavious Cunningham
+    position_tag: RG
+    jersey: '66'
+    class_year: GR
+    snaps_multi_year: 371
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Aidan Lynch
+    position_tag: RT
+    jersey: '76'
+    class_year: SO
+    snaps_multi_year: 802
+    recruit_rating: 87
+    recruit_stars: 3
+  DL:
+  - name: Cortez Harris
+    position_tag: LDE
+    jersey: '34'
+    class_year: FR
+    snaps_multi_year: 36
+    recruit_rating: 89
+    recruit_stars: 3
+  - name: Elhadj Fall
+    position_tag: LDT
+    jersey: '94'
+    class_year: SR
+    snaps_multi_year: 515
+  - name: Kemari Copeland
+    position_tag: RDT
+    jersey: '13'
+    class_year: SR
+    snaps_multi_year: 562
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Aycen Stevens
+    position_tag: RDE
+    jersey: '42'
+    class_year: JR
+    snaps_multi_year: 229
+    recruit_rating: 88
+    recruit_stars: 3
+offense_scheme: Multiple
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

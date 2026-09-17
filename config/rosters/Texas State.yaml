@@ -1,0 +1,58 @@
+team: Texas State
+starters:
+  OL:
+  - name: Sully Burns
+    position_tag: LT
+    jersey: '68'
+    class_year: SR
+    snaps_multi_year: 1103
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: Rasheed Jackson
+    position_tag: LG
+    jersey: '75'
+    class_year: JR
+    snaps_multi_year: 138
+  - name: Mikel Udengwu
+    position_tag: C
+    jersey: '52'
+    class_year: JR
+    snaps_multi_year: 131
+  - name: Bamidele Badusi
+    position_tag: RG
+    jersey: '77'
+    class_year: JR
+    snaps_multi_year: 116
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: William Boone
+    position_tag: RT
+    jersey: '71'
+    class_year: JR
+    snaps_multi_year: 142
+  DL:
+  - name: Jo'Laison Landry
+    position_tag: LDE
+    jersey: '6'
+    class_year: JR
+    snaps_multi_year: 297
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Chancellor Owens
+    position_tag: LDT
+    jersey: '90'
+    class_year: JR
+    snaps_multi_year: 96
+  - name: Phillip Bradford
+    position_tag: RDT
+    jersey: '44'
+    class_year: JR
+    snaps_multi_year: 77
+  - name: Tymere Jackson
+    position_tag: RDE
+    snaps_multi_year: 492
+offense_scheme: Multiple
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

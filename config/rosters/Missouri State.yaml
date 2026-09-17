@@ -1,0 +1,55 @@
+team: Missouri State
+starters:
+  OL:
+  - name: King Large
+    position_tag: LT
+    jersey: '71'
+    class_year: FR
+    snaps_multi_year: 92
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Matthew Greene
+    position_tag: LG
+    jersey: '54'
+    class_year: JR
+    snaps_multi_year: 1180
+  - name: Isaiah Villanueva
+    position_tag: C
+    jersey: '72'
+    class_year: SR
+    snaps_multi_year: 52
+  - name: Ryan Mitchell
+    position_tag: RG
+    jersey: '55'
+    class_year: SO
+    snaps_multi_year: 95
+  - name: Sebastian Espinoza
+    position_tag: RT
+    jersey: '77'
+    class_year: JR
+    snaps_multi_year: 66
+    recruit_rating: 80
+    recruit_stars: 3
+  DL:
+  - name: Josh Lukusa
+    position_tag: DE
+    jersey: '92'
+    class_year: SR
+    snaps_multi_year: 56
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Gilles Tchio
+    position_tag: NT
+    jersey: '57'
+    class_year: JR
+    snaps_multi_year: 61
+  - name: Tim Brantley Jr.
+    position_tag: DT
+    jersey: '11'
+    class_year: SR
+    snaps_multi_year: 398
+offense_scheme: Multiple Up-Tempo
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

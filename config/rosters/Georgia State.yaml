@@ -1,0 +1,61 @@
+team: Georgia State
+starters:
+  OL:
+  - name: Aidan Andrews
+    position_tag: LT
+    jersey: '71'
+    class_year: FR
+    snaps_multi_year: 125
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Deandre Duffus
+    position_tag: LG
+    jersey: '56'
+    class_year: JR
+    snaps_multi_year: 578
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Tyhler Williams
+    position_tag: C
+    jersey: '54'
+    class_year: SR
+    snaps_multi_year: 1006
+  - name: Gage Stanaland
+    position_tag: RG
+    jersey: '55'
+    class_year: JR
+    snaps_multi_year: 112
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Pherleski Martin
+    position_tag: RT
+    jersey: '74'
+    class_year: FR
+    snaps_multi_year: 201
+    recruit_rating: 84
+    recruit_stars: 3
+  DL:
+  - name: Jabriel Rhodes-Nelson
+    position_tag: DE
+    jersey: '1'
+    class_year: SR
+    snaps_multi_year: 521
+  - name: Alex Mullings
+    position_tag: NT
+    jersey: '52'
+    class_year: SO
+    snaps_multi_year: 116
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: AJ Vaughns
+    position_tag: DT
+    jersey: '92'
+    class_year: SR
+    snaps_multi_year: 47
+    recruit_rating: 82
+    recruit_stars: 3
+offense_scheme: Multiple
+defense_scheme: 3-3-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

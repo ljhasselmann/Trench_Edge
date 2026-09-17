@@ -1,0 +1,46 @@
+team: Middle Tennessee
+starters:
+  OL:
+  - name: Reese Tripp
+    position_tag: LT
+    jersey: '75'
+    class_year: JR
+    snaps_multi_year: 123
+  - name: Adrian Crespin
+    position_tag: LG
+    jersey: '55'
+    class_year: JR
+    snaps_multi_year: 54
+  - name: Chris Moreno
+    position_tag: C
+    jersey: '50'
+    class_year: JR
+    snaps_multi_year: 96
+  - name: Alex Gale
+    position_tag: RG
+    jersey: '63'
+    class_year: SO
+    snaps_multi_year: 437
+  - name: Quentin Butler
+    position_tag: RT
+    jersey: '71'
+    class_year: JR
+    snaps_multi_year: 123
+  DL:
+  - name: Jayden Williams
+    position_tag: DE
+  - name: Felix Hixon
+    position_tag: NT
+    jersey: '91'
+    class_year: SR
+    snaps_multi_year: 372
+  - name: Zeion Simpson-Smith
+    position_tag: DT
+    jersey: '95'
+    class_year: SO
+    snaps_multi_year: 343
+offense_scheme: Spread
+defense_scheme: 3-4
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

@@ -1,0 +1,61 @@
+team: Boston College
+starters:
+  OL:
+  - name: Veguer Jean-Jumeau
+    position_tag: LT
+    jersey: '63'
+    class_year: SO
+    snaps_multi_year: 134
+  - name: Robert Smith IV
+    position_tag: LG
+    jersey: '55'
+    class_year: SO
+    snaps_multi_year: 563
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Michael Crounse
+    position_tag: C
+    jersey: '77'
+    class_year: JR
+    snaps_multi_year: 690
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Judah Pruitt
+    position_tag: RG
+    jersey: '52'
+    class_year: SO
+    snaps_multi_year: 180
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Kristian Phillips
+    position_tag: RT
+    jersey: '71'
+    class_year: SR
+    snaps_multi_year: 140
+    recruit_rating: 82
+    recruit_stars: 3
+  DL:
+  - name: Onye Nwosisi
+    position_tag: DE
+    jersey: '8'
+    class_year: SR
+    snaps_multi_year: 49
+  - name: Chris Marable Jr.
+    position_tag: NT
+    jersey: '6'
+    class_year: JR
+    snaps_multi_year: 491
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: KJ Sampson
+    position_tag: DT
+    jersey: '90'
+    class_year: JR
+    snaps_multi_year: 54
+    recruit_rating: 92
+    recruit_stars: 4
+offense_scheme: Pro Style
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

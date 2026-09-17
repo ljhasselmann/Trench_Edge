@@ -1,0 +1,57 @@
+team: South Alabama
+starters:
+  OL:
+  - name: Reese Osei-Wusu
+    position_tag: LT
+    jersey: '68'
+    class_year: SR
+    snaps_multi_year: 381
+  - name: Jamal Siler
+    position_tag: LG
+    jersey: '64'
+    class_year: JR
+    snaps_multi_year: 177
+  - name: Kenton Jerido
+    position_tag: C
+    jersey: '69'
+    class_year: SR
+    snaps_multi_year: 1565
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: Shalik Hubbard
+    position_tag: RG
+    jersey: '57'
+    class_year: SR
+    snaps_multi_year: 169
+  - name: Ethan Hubbard
+    position_tag: RT
+    jersey: '72'
+    class_year: SR
+    snaps_multi_year: 877
+    recruit_rating: 84
+    recruit_stars: 3
+  DL:
+  - name: Mase Lewis
+    position_tag: DE
+    jersey: '18'
+    class_year: SR
+    snaps_multi_year: 64
+  - name: Stephen Johnson
+    position_tag: NT
+    jersey: '56'
+    class_year: SR
+    snaps_multi_year: 266
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Tyler Carter
+    position_tag: DT
+    jersey: '41'
+    class_year: JR
+    snaps_multi_year: 78
+    recruit_rating: 86
+    recruit_stars: 3
+offense_scheme: Multiple Spread
+defense_scheme: Multiple 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

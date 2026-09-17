@@ -1,4 +1,24 @@
-{% macro diverging_bar(label, value) %}
+{#
+Light "data-journalism meets prediction-market" identity (2026-09-16,
+2nd pass -- the earlier black/cream/tabloid direction and its dark-green
+formation panel didn't hold together). Direction: clean neutral card,
+crisp sans body + tabular monospace numbers, muted grays, each team's
+REAL color (fetch_cfbd.team_colors_from_fbs_teams) used sparingly as an
+accent -- thin bar fills, small swatches, colored numerals -- never a
+big color block. No external font loading (system stack only, so the
+widget never depends on network access to render correctly wherever
+it's embedded). Explicitly light-only, not dark-mode-adaptive: a single
+deliberate look rather than following the host page's theme.
+#}
+{% macro star_rating(rating, stars) %}
+{% if rating is not none %}
+<span class="te-rating"><span class="te-rating-num">{{ rating }}</span>{% if stars is not none %}<span class="te-stars">{% for i in range(5) %}<svg class="te-star" viewBox="0 0 24 24" width="9" height="9"><path d="M12 2.5l2.85 6.34 6.9.6-5.23 4.56 1.58 6.8-6.1-3.72-6.1 3.72 1.58-6.8L2.25 9.44l6.9-.6z" fill="{{ '#111318' if i < stars else 'none' }}" stroke="#111318" stroke-width="1.6"/></svg>{% endfor %}</span>{% endif %}</span>
+{% else %}
+<span class="te-muted">&mdash;</span>
+{% endif %}
+{% endmacro %}
+
+{% macro diverging_bar(label, value, ol_color, dl_color) %}
 <div class="te-bar-row">
   <div class="te-bar-label">{{ label }}</div>
   {% if value is none %}
@@ -8,182 +28,191 @@
     <div class="te-bar-value te-muted">&mdash;</div>
   {% else %}
     {% set pct = (value|abs / 10 * 100)|round(1) %}
+    {% set fill_color = ol_color if value > 0 else dl_color %}
     <div class="te-bar-track">
       <div class="te-bar-half te-bar-half-left">
-        {% if value < 0 %}<div class="te-bar-fill te-bar-fill-red" style="width: {{ pct }}%;"></div>{% endif %}
+        {% if value < 0 %}<div class="te-bar-fill te-bar-fill-left" style="width: {{ pct }}%; background: {{ fill_color }};"></div>{% endif %}
       </div>
       <div class="te-bar-center"></div>
       <div class="te-bar-half te-bar-half-right">
-        {% if value > 0 %}<div class="te-bar-fill te-bar-fill-blue" style="width: {{ pct }}%;"></div>{% endif %}
+        {% if value > 0 %}<div class="te-bar-fill te-bar-fill-right" style="width: {{ pct }}%; background: {{ fill_color }};"></div>{% endif %}
       </div>
     </div>
-    <div class="te-bar-value">{{ "%+.1f"|format(value) }}</div>
+    <div class="te-bar-value" style="color: {{ fill_color }};">{{ "%+.1f"|format(value) }}</div>
   {% endif %}
 </div>
 {% endmacro %}
 
-<div class="trench-edge-widget">
+<div class="trench-edge-widget" style="--te-ol-color: {{ ctx.team_a_color }}; --te-dl-color: {{ ctx.team_b_color }};">
 <style>
 .trench-edge-widget {
+  --te-bg:      #ffffff;
+  --te-panel:   #f7f7f5;
+  --te-ink:     #111318;
+  --te-muted:   #6b6f76;
+  --te-faint:   #9a9ea5;
+  --te-line:    #e6e5e1;
+  --te-track:   #edece8;
   color-scheme: light;
-  --te-surface:      #fcfcfb;
-  --te-text-primary: #0b0b0b;
-  --te-text-secondary: #52514e;
-  --te-muted:        #898781;
-  --te-gridline:     #e1e0d9;
-  --te-baseline:     #c3c2b7;
-  --te-border:       rgba(11,11,11,0.10);
-  --te-blue:         #2a78d6;
-  --te-red:          #e34948;
-  --te-neutral:      #f0efec;
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  color: var(--te-text-primary);
-  background: var(--te-surface);
+  font-family: -apple-system, "Segoe UI", system-ui, Helvetica, Arial, sans-serif;
+  color: var(--te-ink);
+  background: var(--te-bg);
   max-width: 640px;
-  padding: 20px;
-  border: 1px solid var(--te-border);
-  border-radius: 8px;
-}
-@media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) .trench-edge-widget {
-    color-scheme: dark;
-    --te-surface: #1a1a19;
-    --te-text-primary: #ffffff;
-    --te-text-secondary: #c3c2b7;
-    --te-muted: #898781;
-    --te-gridline: #2c2c2a;
-    --te-baseline: #383835;
-    --te-border: rgba(255,255,255,0.10);
-    --te-blue: #3987e5;
-    --te-red: #e66767;
-    --te-neutral: #383835;
-  }
-}
-:root[data-theme="dark"] .trench-edge-widget {
-  color-scheme: dark;
-  --te-surface: #1a1a19;
-  --te-text-primary: #ffffff;
-  --te-text-secondary: #c3c2b7;
-  --te-muted: #898781;
-  --te-gridline: #2c2c2a;
-  --te-baseline: #383835;
-  --te-border: rgba(255,255,255,0.10);
-  --te-blue: #3987e5;
-  --te-red: #e66767;
-  --te-neutral: #383835;
+  border: 1px solid var(--te-line);
+  border-radius: 10px;
+  overflow: hidden;
 }
 .trench-edge-widget h2, .trench-edge-widget h3 { margin: 0 0 4px 0; }
-.trench-edge-widget .te-subtitle { color: var(--te-text-secondary); font-size: 13px; margin: 0 0 20px 0; }
+.trench-edge-widget .te-head { padding: 18px 20px 16px; border-bottom: 1px solid var(--te-line); position: relative; }
+.trench-edge-widget .te-head::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, {{ ctx.team_a_color }} 50%, {{ ctx.team_b_color }} 50%); }
+.trench-edge-widget .te-head h2 { font-size: 19px; font-weight: 700; letter-spacing: -.01em; }
+.trench-edge-widget .te-scheme-line { font-size: 12px; color: var(--te-muted); margin-top: 4px; }
+.trench-edge-widget .te-subtitle { color: var(--te-faint); font-size: 11px; letter-spacing: .03em; margin: 6px 0 0 0; }
+.trench-edge-widget .te-body { padding: 20px; }
 .trench-edge-widget .te-muted { color: var(--te-muted); }
-.trench-edge-widget section { margin-bottom: 24px; }
-.trench-edge-widget .te-stat-tiles { display: flex; gap: 12px; flex-wrap: wrap; }
-.trench-edge-widget .te-stat-tile { flex: 1; min-width: 140px; padding: 12px; background: var(--te-neutral); border-radius: 6px; }
-.trench-edge-widget .te-stat-tile .te-label { font-size: 12px; color: var(--te-text-secondary); margin-bottom: 4px; }
-.trench-edge-widget .te-stat-tile .te-value { font-size: 24px; font-weight: 600; }
-.trench-edge-widget table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 12px; }
-.trench-edge-widget th { text-align: left; color: var(--te-text-secondary); font-weight: 500; font-size: 12px; border-bottom: 1px solid var(--te-gridline); padding: 4px 8px 4px 0; }
-.trench-edge-widget td { padding: 4px 8px 4px 0; border-bottom: 1px solid var(--te-gridline); font-variant-numeric: tabular-nums; }
-.trench-edge-widget .te-badge { font-size: 11px; color: var(--te-text-secondary); }
-.trench-edge-widget .te-legend { display: flex; gap: 16px; font-size: 12px; color: var(--te-text-secondary); margin-bottom: 12px; }
-.trench-edge-widget .te-legend-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
-.trench-edge-widget .te-bar-row { display: grid; grid-template-columns: 100px 1fr 56px; align-items: center; gap: 8px; margin-bottom: 10px; }
-.trench-edge-widget .te-bar-label { font-size: 13px; }
-.trench-edge-widget .te-bar-track { display: flex; height: 16px; background: var(--te-gridline); border-radius: 4px; overflow: hidden; }
+.trench-edge-widget section { margin-bottom: 22px; }
+.trench-edge-widget section:last-child { margin-bottom: 0; }
+.trench-edge-widget .te-section-label { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--te-muted); margin-bottom: 10px; }
+.trench-edge-widget .te-stat-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.trench-edge-widget .te-stat-tile { background: var(--te-panel); border: 1px solid var(--te-line); border-radius: 8px; padding: 12px 14px; }
+.trench-edge-widget .te-stat-tile .te-label { font-size: 11px; color: var(--te-muted); margin-bottom: 6px; }
+.trench-edge-widget .te-stat-tile .te-value { font: 600 20px/1.1 ui-monospace, "SF Mono", "DM Mono", "Roboto Mono", monospace; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.trench-edge-widget .te-rating { display: inline-flex; align-items: center; gap: 4px; }
+.trench-edge-widget .te-rating-num { font: 500 12px/1 ui-monospace, "SF Mono", "DM Mono", "Roboto Mono", monospace; }
+.trench-edge-widget .te-stars { display: inline-flex; align-items: center; }
+.trench-edge-widget .te-legend { display: flex; gap: 16px; font-size: 12px; color: var(--te-muted); margin-bottom: 14px; }
+.trench-edge-widget .te-legend-swatch { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+.trench-edge-widget .te-bar-row { display: grid; grid-template-columns: 92px 1fr 52px; align-items: center; gap: 10px; margin-bottom: 11px; }
+.trench-edge-widget .te-bar-row:last-child { margin-bottom: 0; }
+.trench-edge-widget .te-bar-label { font-size: 12.5px; font-weight: 500; }
+.trench-edge-widget .te-bar-track { display: flex; height: 8px; background: var(--te-track); border-radius: 4px; overflow: hidden; }
 .trench-edge-widget .te-bar-half { flex: 1; display: flex; }
 .trench-edge-widget .te-bar-half-left { justify-content: flex-end; }
 .trench-edge-widget .te-bar-half-right { justify-content: flex-start; }
-.trench-edge-widget .te-bar-center { width: 2px; background: var(--te-baseline); }
+.trench-edge-widget .te-bar-center { width: 1px; background: var(--te-faint); }
 .trench-edge-widget .te-bar-fill { height: 100%; }
-.trench-edge-widget .te-bar-fill-blue { background: var(--te-blue); border-radius: 0 4px 4px 0; }
-.trench-edge-widget .te-bar-fill-red { background: var(--te-red); border-radius: 4px 0 0 4px; }
-.trench-edge-widget .te-bar-value { font-size: 13px; font-variant-numeric: tabular-nums; text-align: right; }
+.trench-edge-widget .te-bar-fill-left { border-radius: 4px 0 0 4px; }
+.trench-edge-widget .te-bar-fill-right { border-radius: 0 4px 4px 0; }
+.trench-edge-widget .te-bar-value { font: 600 13px/1 ui-monospace, "SF Mono", "DM Mono", "Roboto Mono", monospace; text-align: right; font-variant-numeric: tabular-nums; }
 .trench-edge-widget .te-bar-unavailable { align-items: center; justify-content: center; }
-.trench-edge-widget .te-unavailable-text { font-size: 11px; color: var(--te-muted); }
-.trench-edge-widget .te-composite-verdict { font-size: 15px; margin-top: 4px; }
-.trench-edge-widget .te-caveats ul { margin: 4px 0 0 0; padding-left: 18px; font-size: 13px; color: var(--te-text-secondary); }
+.trench-edge-widget .te-unavailable-text { font-size: 10.5px; color: var(--te-faint); }
+.trench-edge-widget .te-composite-card { background: var(--te-panel); border: 1px solid var(--te-line); border-radius: 8px; padding: 14px 16px; }
+.trench-edge-widget .te-composite-card .te-bar-label { font-size: 13px; font-weight: 700; }
+.trench-edge-widget .te-composite-verdict { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px; margin-top: 12px; border: 1px solid; }
+.trench-edge-widget .te-caveats ul { margin: 4px 0 0 0; padding-left: 18px; font-size: 12.5px; color: var(--te-muted); }
 .trench-edge-widget .te-caveats li { margin-bottom: 4px; }
-.trench-edge-widget footer { font-size: 11px; color: var(--te-muted); border-top: 1px solid var(--te-gridline); padding-top: 12px; }
+.trench-edge-widget footer { font-size: 11px; color: var(--te-faint); border-top: 1px solid var(--te-line); padding: 12px 20px; }
+.trench-edge-widget .te-formation {
+  background: var(--te-panel);
+  border: 1px solid var(--te-line);
+  border-radius: 8px;
+  padding: 18px 14px;
+}
+.trench-edge-widget .te-formation-side-label { font-size: 12px; font-weight: 700; text-align: center; margin-bottom: 12px; }
+.trench-edge-widget .te-formation-scheme { color: var(--te-muted); font-weight: 400; }
+.trench-edge-widget .te-formation-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 6px; }
+.trench-edge-widget .te-formation-player { background: var(--te-bg); border: 1px solid var(--te-line); border-top: 3px solid; border-radius: 6px; padding: 10px 4px 9px; text-align: center; box-shadow: 0 1px 2px rgba(17,19,24,.05); min-width: 0; }
+.trench-edge-widget .te-formation-player.te-formation-ol { border-top-color: var(--te-ol-color); }
+.trench-edge-widget .te-formation-player.te-formation-dl { border-top-color: var(--te-dl-color); }
+.trench-edge-widget .te-formation-jersey-badge {
+  width: 28px; height: 28px; margin: 0 auto 6px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font: 700 12px/1 ui-monospace, "SF Mono", "DM Mono", "Roboto Mono", monospace;
+  color: #ffffff; text-shadow: 0 1px 1px rgba(0,0,0,.15); flex-shrink: 0;
+}
+.trench-edge-widget .te-formation-player .te-formation-pos { font: 700 9px/1 -apple-system, sans-serif; letter-spacing: .04em; text-transform: uppercase; color: var(--te-muted); }
+.trench-edge-widget .te-formation-player .te-formation-name { font: 700 9.5px/1.25 -apple-system, sans-serif; margin-top: 3px; overflow-wrap: break-word; }
+.trench-edge-widget .te-formation-player .te-formation-detail { font: 400 8.5px/1.4 ui-monospace, "SF Mono", "DM Mono", "Roboto Mono", monospace; color: var(--te-muted); margin-top: 2px; }
+.trench-edge-widget .te-formation-player .te-formation-rating { margin-top: 5px; }
+.trench-edge-widget .te-formation-los { display: flex; align-items: center; gap: 8px; margin: 16px 0; color: var(--te-faint); font-size: 9.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.trench-edge-widget .te-formation-los::before, .trench-edge-widget .te-formation-los::after { content: ""; flex: 1; height: 1px; background: var(--te-line); }
 </style>
 
-<header>
+<header class="te-head">
   <h2>{{ ctx.team_a }} OL vs {{ ctx.team_b }} DL</h2>
+  {% if ctx.mass.team_a_offense_scheme or ctx.mass.team_b_defense_scheme %}
+  <p class="te-scheme-line">{{ ctx.mass.team_a_offense_scheme or "Scheme unknown" }} vs {{ ctx.mass.team_b_defense_scheme or "scheme unknown" }}</p>
+  {% endif %}
   <p class="te-subtitle">{{ ctx.matchup_label }} &middot; {{ ctx.year }} season &middot; generated {{ ctx.generated_at }}</p>
 </header>
+
+<div class="te-body">
 
 <section class="te-stat-tiles">
   <div class="te-stat-tile">
     <div class="te-label">{{ ctx.team_a }} OL avg weight</div>
-    <div class="te-value">{% if ctx.mass.team_a_avg_weight %}{{ "%.0f"|format(ctx.mass.team_a_avg_weight) }} lbs{% else %}<span class="te-muted">&mdash;</span>{% endif %}</div>
+    <div class="te-value">{% if ctx.mass.team_a_avg_weight %}{{ "%.0f"|format(ctx.mass.team_a_avg_weight) }}<span style="font-size: 11px; color: var(--te-muted); font-weight: 400;"> lbs</span>{% else %}<span class="te-muted">&mdash;</span>{% endif %}</div>
   </div>
   <div class="te-stat-tile">
     <div class="te-label">{{ ctx.team_b }} DL avg weight</div>
-    <div class="te-value">{% if ctx.mass.team_b_avg_weight %}{{ "%.0f"|format(ctx.mass.team_b_avg_weight) }} lbs{% else %}<span class="te-muted">&mdash;</span>{% endif %}</div>
+    <div class="te-value">{% if ctx.mass.team_b_avg_weight %}{{ "%.0f"|format(ctx.mass.team_b_avg_weight) }}<span style="font-size: 11px; color: var(--te-muted); font-weight: 400;"> lbs</span>{% else %}<span class="te-muted">&mdash;</span>{% endif %}</div>
   </div>
   <div class="te-stat-tile">
     <div class="te-label">Weight differential</div>
-    <div class="te-value">{% if ctx.mass.weight_diff_lbs is not none %}{{ "%+.0f"|format(ctx.mass.weight_diff_lbs) }} lbs{% else %}<span class="te-muted">&mdash;</span>{% endif %}</div>
+    <div class="te-value" style="color: {{ (ctx.team_a_color if ctx.mass.weight_diff_lbs > 0 else ctx.team_b_color) if ctx.mass.weight_diff_lbs is not none else 'var(--te-ink)' }};">{% if ctx.mass.weight_diff_lbs is not none %}{{ "%+.0f"|format(ctx.mass.weight_diff_lbs) }}<span style="font-size: 11px; font-weight: 400;"> lbs</span>{% else %}<span class="te-muted">&mdash;</span>{% endif %}</div>
   </div>
 </section>
 
-<section class="te-starters">
-  <h3>{{ ctx.team_a }} starting OL</h3>
-  {% if ctx.mass.team_a_starters %}
-  <table>
-    <tr><th>#</th><th>Player</th><th>Class</th><th>Weight</th><th>Snaps (multi-yr)</th><th>Recruit</th><th>Confidence</th></tr>
-    {% for s in ctx.mass.team_a_starters %}
-    <tr>
-      <td>{% if s.jersey %}#{{ s.jersey }}{% else %}&mdash;{% endif %}</td>
-      <td>{{ s.name }}</td>
-      <td>{% if s.class_year %}{{ s.class_year }}{% else %}&mdash;{% endif %}</td>
-      <td>{% if s.weight_lbs %}{{ s.weight_lbs|int }} lbs{% else %}&mdash;{% endif %}</td>
-      <td>{% if s.snaps_multi_year is not none %}{{ s.snaps_multi_year }}{% else %}&mdash;{% endif %}</td>
-      <td>{% if s.recruit_rating is not none %}{{ s.recruit_rating }}{% if s.recruit_stars is not none %} ({{ s.recruit_stars }}&starf;){% endif %}{% else %}&mdash;{% endif %}</td>
-      <td class="te-badge">{% if s.confidence == "confirmed" %}&check; confirmed{% else %}&asymp; estimated{% endif %}</td>
-    </tr>
-    {% endfor %}
-  </table>
-  {% else %}
-  <p class="te-muted">No starters on record &mdash; see caveats.</p>
-  {% endif %}
-
-  <h3>{{ ctx.team_b }} starting DL</h3>
-  {% if ctx.mass.team_b_starters %}
-  <table>
-    <tr><th>#</th><th>Player</th><th>Class</th><th>Weight</th><th>Snaps (multi-yr)</th><th>Recruit</th><th>Confidence</th></tr>
-    {% for s in ctx.mass.team_b_starters %}
-    <tr>
-      <td>{% if s.jersey %}#{{ s.jersey }}{% else %}&mdash;{% endif %}</td>
-      <td>{{ s.name }}</td>
-      <td>{% if s.class_year %}{{ s.class_year }}{% else %}&mdash;{% endif %}</td>
-      <td>{% if s.weight_lbs %}{{ s.weight_lbs|int }} lbs{% else %}&mdash;{% endif %}</td>
-      <td>{% if s.snaps_multi_year is not none %}{{ s.snaps_multi_year }}{% else %}&mdash;{% endif %}</td>
-      <td>{% if s.recruit_rating is not none %}{{ s.recruit_rating }}{% if s.recruit_stars is not none %} ({{ s.recruit_stars }}&starf;){% endif %}{% else %}&mdash;{% endif %}</td>
-      <td class="te-badge">{% if s.confidence == "confirmed" %}&check; confirmed{% else %}&asymp; estimated{% endif %}</td>
-    </tr>
-    {% endfor %}
-  </table>
-  {% else %}
-  <p class="te-muted">No starters on record &mdash; see caveats.</p>
-  {% endif %}
+<section class="te-formation-section">
+  <div class="te-formation">
+    <div class="te-formation-side-label" style="color: {{ ctx.team_a_color }};">{{ ctx.team_a }} starting OL{% if ctx.mass.team_a_offense_scheme %} <span class="te-formation-scheme">&middot; {{ ctx.mass.team_a_offense_scheme }}</span>{% endif %}</div>
+    {% if ctx.mass.team_a_formation %}
+    <div class="te-formation-row">
+      {% for s in ctx.mass.team_a_formation %}
+      <div class="te-formation-player te-formation-ol">
+        <div class="te-formation-jersey-badge" style="background: {{ ctx.team_a_color }};">{% if s.jersey %}{{ s.jersey }}{% else %}&mdash;{% endif %}</div>
+        <div class="te-formation-pos">{{ s.position_tag if s.position_tag else "OL" }}</div>
+        <div class="te-formation-name">{{ s.name }}</div>
+        <div class="te-formation-detail">{% if s.class_year %}{{ s.class_year }}{% else %}&mdash;{% endif %} &middot; {% if s.weight_lbs %}{{ s.weight_lbs|int }} lbs{% else %}&mdash;{% endif %}</div>
+        <div class="te-formation-detail">{% if s.snaps_multi_year is not none %}{{ s.snaps_multi_year }} snaps{% else %}&mdash;{% endif %}</div>
+        <div class="te-formation-rating">{{ star_rating(s.recruit_rating, s.recruit_stars) }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="te-muted" style="text-align: center; margin: 0;">No starters on record &mdash; see caveats.</p>
+    {% endif %}
+    <div class="te-formation-los">Line of scrimmage</div>
+    {% if ctx.mass.team_b_formation %}
+    <div class="te-formation-row">
+      {% for s in ctx.mass.team_b_formation %}
+      <div class="te-formation-player te-formation-dl">
+        <div class="te-formation-jersey-badge" style="background: {{ ctx.team_b_color }};">{% if s.jersey %}{{ s.jersey }}{% else %}&mdash;{% endif %}</div>
+        <div class="te-formation-pos">{{ s.position_tag if s.position_tag else "DL" }}</div>
+        <div class="te-formation-name">{{ s.name }}</div>
+        <div class="te-formation-detail">{% if s.class_year %}{{ s.class_year }}{% else %}&mdash;{% endif %} &middot; {% if s.weight_lbs %}{{ s.weight_lbs|int }} lbs{% else %}&mdash;{% endif %}</div>
+        <div class="te-formation-detail">{% if s.snaps_multi_year is not none %}{{ s.snaps_multi_year }} snaps{% else %}&mdash;{% endif %}</div>
+        <div class="te-formation-rating">{{ star_rating(s.recruit_rating, s.recruit_stars) }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="te-muted" style="text-align: center; margin: 0;">No starters on record &mdash; see caveats.</p>
+    {% endif %}
+    <div class="te-formation-side-label" style="color: {{ ctx.team_b_color }};">{{ ctx.team_b }} starting DL{% if ctx.mass.team_b_defense_scheme %} <span class="te-formation-scheme">&middot; {{ ctx.mass.team_b_defense_scheme }}</span>{% endif %}</div>
+  </div>
 </section>
 
 <section class="te-subscores">
-  <h3>Subscores</h3>
+  <h3 class="te-section-label">Subscores</h3>
   <div class="te-legend">
-    <span><span class="te-legend-swatch" style="background: var(--te-blue);"></span>Favors {{ ctx.team_a }}</span>
-    <span><span class="te-legend-swatch" style="background: var(--te-red);"></span>Favors {{ ctx.team_b }}</span>
+    <span><span class="te-legend-swatch" style="background: {{ ctx.team_a_color }};"></span>Favors {{ ctx.team_a }}</span>
+    <span><span class="te-legend-swatch" style="background: {{ ctx.team_b_color }};"></span>Favors {{ ctx.team_b }}</span>
   </div>
-  {{ diverging_bar("Mass", ctx.mass.score) }}
-  {{ diverging_bar("Push", ctx.push.score) }}
-  {{ diverging_bar("Experience", ctx.experience.score) }}
-  {{ diverging_bar("Recruiting", ctx.recruiting.score) }}
+  {{ diverging_bar("Mass", ctx.mass.score, ctx.team_a_color, ctx.team_b_color) }}
+  {{ diverging_bar("Push", ctx.push.score, ctx.team_a_color, ctx.team_b_color) }}
+  {{ diverging_bar("Experience", ctx.experience.score, ctx.team_a_color, ctx.team_b_color) }}
+  {{ diverging_bar("Recruiting", ctx.recruiting.score, ctx.team_a_color, ctx.team_b_color) }}
 </section>
 
 <section class="te-composite">
-  <h3>Composite</h3>
+  <h3 class="te-section-label">Composite</h3>
   {% if ctx.composite %}
-    {{ diverging_bar("Trench Edge", ctx.composite.value) }}
-    <p class="te-composite-verdict">{{ ctx.composite.verdict }}</p>
+    {% set verdict_color = ctx.team_a_color if ctx.composite.value > 0 else ctx.team_b_color %}
+    <div class="te-composite-card">
+      {{ diverging_bar("Trench Edge", ctx.composite.value, ctx.team_a_color, ctx.team_b_color) }}
+      <div class="te-composite-verdict" style="color: {{ verdict_color }}; border-color: {{ verdict_color }};">{{ ctx.composite.verdict }}</div>
+    </div>
   {% else %}
     <p class="te-muted">Not computed this run &mdash; see caveats below.</p>
   {% endif %}
@@ -191,14 +220,16 @@
 
 {% if ctx.warnings %}
 <section class="te-caveats">
-  <h3>Caveats</h3>
+  <h3 class="te-section-label">Caveats</h3>
   <ul>
     {% for w in ctx.warnings %}<li>{{ w }}</li>{% endfor %}
   </ul>
 </section>
 {% endif %}
 
+</div>
+
 <footer>
-  Source: collegefootballdata.com (Tier 1 stats, roster, talent) + human-maintained depth-chart config &middot; generated {{ ctx.generated_at }}
+  Source: collegefootballdata.com (Tier 1 stats, roster, talent, team colors) + ourlads.com (depth chart) + puntandrally.com/247sports.com (enrichment) &middot; generated {{ ctx.generated_at }}
 </footer>
 </div>

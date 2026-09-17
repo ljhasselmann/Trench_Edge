@@ -1,0 +1,65 @@
+team: Tulane
+starters:
+  OL:
+  - name: Dominic Steward
+    position_tag: LT
+    jersey: '55'
+    class_year: SO
+    snaps_multi_year: 97
+    recruit_rating: 90
+    recruit_stars: 4
+  - name: Elijah Baker
+    position_tag: LG
+    jersey: '73'
+    class_year: SO
+    snaps_multi_year: 211
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: John Bock II
+    position_tag: C
+    jersey: '51'
+    class_year: SR
+    snaps_multi_year: 51
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: Reese Baker
+    position_tag: RG
+    jersey: '78'
+    class_year: SO
+    snaps_multi_year: 1049
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Ryan Mickow
+    position_tag: RT
+    jersey: '58'
+    class_year: JR
+    snaps_multi_year: 98
+    recruit_rating: 83
+    recruit_stars: 3
+  DL:
+  - name: Josh Lewis
+    position_tag: DE
+    jersey: '99'
+    class_year: FR
+    snaps_multi_year: 105
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Derrick Shepard Jr.
+    position_tag: NT
+    jersey: '94'
+    class_year: SR
+    snaps_multi_year: 316
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Ed Smith IV
+    position_tag: DT
+    jersey: '45'
+    class_year: SR
+    snaps_multi_year: 106
+    recruit_rating: 77
+    recruit_stars: 2
+offense_scheme: West Coast
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

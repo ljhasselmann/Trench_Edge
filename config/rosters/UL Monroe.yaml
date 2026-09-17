@@ -1,0 +1,47 @@
+team: UL Monroe
+starters:
+  OL:
+  - name: David Applewhite
+    position_tag: LT
+    jersey: '55'
+    class_year: JR
+    snaps_multi_year: 222
+  - name: Kaliem Croswell
+    position_tag: LG
+    jersey: '56'
+    class_year: SR
+    snaps_multi_year: 450
+  - name: Sean Dugery
+    position_tag: C
+    jersey: '72'
+    class_year: SR
+    snaps_multi_year: 127
+  - name: Reese Steele
+    position_tag: RG
+    jersey: '77'
+    class_year: GR
+    snaps_multi_year: 279
+  - name: AJ Vinson
+    position_tag: RT
+    jersey: '67'
+    class_year: SR
+    snaps_multi_year: 852
+  DL:
+  - name: CJ Wilson
+    position_tag: DE
+    jersey: '44'
+    class_year: GR
+    snaps_multi_year: 66
+  - name: Marvin Hall
+    position_tag: NT
+    jersey: '99'
+    class_year: SR
+    snaps_multi_year: 11
+  - name: James Smith
+    position_tag: DT
+    snaps_multi_year: 305
+offense_scheme: Spread Option
+defense_scheme: Multiple 3-3-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

@@ -1,0 +1,67 @@
+team: Miami (OH)
+starters:
+  OL:
+  - name: Eric Smith
+    position_tag: LT
+    jersey: '51'
+    class_year: SR
+    snaps_multi_year: 881
+  - name: Greg Smith Jr.
+    position_tag: LG
+    jersey: '74'
+    class_year: JR
+    snaps_multi_year: 872
+    recruit_rating: 70
+    recruit_stars: 2
+  - name: Kris Manu
+    position_tag: C
+    jersey: '72'
+    class_year: SO
+    snaps_multi_year: 925
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Jacob Schorsch
+    position_tag: RG
+    jersey: '70'
+    class_year: SO
+    snaps_multi_year: 615
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: Evan Malcore
+    position_tag: RT
+    jersey: '54'
+    class_year: SR
+    snaps_multi_year: 76
+    recruit_rating: 79
+    recruit_stars: 2
+  DL:
+  - name: Devin Bell
+    position_tag: LDE
+    jersey: '5'
+    class_year: SO
+    snaps_multi_year: 309
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: Brach Rice
+    position_tag: LDT
+    jersey: '4'
+    class_year: SO
+    snaps_multi_year: 53
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: Roosevelt Andrews III
+    position_tag: RDT
+    jersey: '92'
+    class_year: JR
+    snaps_multi_year: 677
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Grant Lyons
+    position_tag: RDE
+    recruit_rating: 85
+    recruit_stars: 3
+offense_scheme: Multiple
+defense_scheme: Multiple
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

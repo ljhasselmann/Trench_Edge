@@ -1,0 +1,59 @@
+team: Rice
+starters:
+  OL:
+  - name: Justin Michaelis
+    position_tag: LT
+    jersey: '73'
+    class_year: FR
+    snaps_multi_year: 136
+  - name: Cole Principe
+    position_tag: LG
+    jersey: '71'
+    class_year: SO
+    snaps_multi_year: 413
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: Nate Bledsoe
+    position_tag: C
+    jersey: '56'
+    class_year: JR
+    snaps_multi_year: 392
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Patrick Valent
+    position_tag: RG
+    jersey: '50'
+    class_year: JR
+    snaps_multi_year: 692
+    recruit_rating: 78
+    recruit_stars: 2
+  - name: Luke Miller
+    position_tag: RT
+    jersey: '53'
+    class_year: SO
+    snaps_multi_year: 921
+    recruit_rating: 85
+    recruit_stars: 3
+  DL:
+  - name: Joseph Mutombo
+    position_tag: DE
+    jersey: '8'
+    class_year: JR
+    snaps_multi_year: 453
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Aquantis Clemmons
+    position_tag: NT
+    jersey: '57'
+    class_year: JR
+    snaps_multi_year: 495
+  - name: Dillan Botts
+    position_tag: DT
+    jersey: '96'
+    class_year: SR
+    snaps_multi_year: 403
+offense_scheme: Spread Option
+defense_scheme: Multiple 3-4
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

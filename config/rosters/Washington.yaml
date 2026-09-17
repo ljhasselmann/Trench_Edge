@@ -1,0 +1,72 @@
+team: Washington
+starters:
+  OL:
+  - name: Kodi Greene
+    position_tag: LT
+    jersey: '76'
+    class_year: FR
+    snaps_multi_year: 143
+    recruit_rating: 98
+    recruit_stars: 5
+  - name: John Mills
+    position_tag: LG
+    jersey: '72'
+    class_year: SO
+    snaps_multi_year: 732
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Kolt Dieterich
+    position_tag: C
+    jersey: '55'
+    class_year: JR
+    snaps_multi_year: 143
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Champ Taulealea
+    position_tag: RG
+    jersey: '73'
+    class_year: FR
+    snaps_multi_year: 130
+    recruit_rating: 90
+    recruit_stars: 4
+  - name: Drew Azzopardi
+    position_tag: RT
+    jersey: '74'
+    class_year: SR
+    snaps_multi_year: 1651
+    recruit_rating: 84
+    recruit_stars: 3
+  DL:
+  - name: Jacob Lane
+    position_tag: LDE
+    jersey: '48'
+    class_year: SR
+    snaps_multi_year: 710
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Elinneus Davis
+    position_tag: LDT
+    jersey: '90'
+    class_year: JR
+    snaps_multi_year: 616
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Derek Colman-Brusa
+    position_tag: RDT
+    jersey: '5'
+    class_year: FR
+    snaps_multi_year: 46
+    recruit_rating: 94
+    recruit_stars: 4
+  - name: Ramzak Fruean
+    position_tag: RDE
+    jersey: '11'
+    class_year: FR
+    snaps_multi_year: 61
+    recruit_rating: 92
+    recruit_stars: 4
+offense_scheme: Air Raid
+defense_scheme: Multiple 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

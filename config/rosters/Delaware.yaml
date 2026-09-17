@@ -1,0 +1,50 @@
+team: Delaware
+starters:
+  OL:
+  - name: Noah Rosahac
+    position_tag: LT
+    jersey: '75'
+    class_year: JR
+    snaps_multi_year: 954
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Mustafa Kanneh
+    position_tag: LG
+  - name: Steven Demboski
+    position_tag: C
+    jersey: '61'
+    class_year: GR
+    snaps_multi_year: 981
+  - name: Chandler Telfaire
+    position_tag: RG
+    jersey: '51'
+    class_year: SO
+    snaps_multi_year: 128
+  - name: Anthony Caccese
+    position_tag: RT
+    jersey: '62'
+    class_year: SR
+    snaps_multi_year: 1112
+  DL:
+  - name: Noah Matthews
+    position_tag: LDE
+    jersey: '13'
+    class_year: GR
+    snaps_multi_year: 529
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Dominick Brogna
+    position_tag: NT
+    jersey: '52'
+    class_year: GR
+    snaps_multi_year: 420
+  - name: Trace Scott III
+    position_tag: RDE
+    jersey: '33'
+    class_year: JR
+    snaps_multi_year: 379
+offense_scheme: Spread
+defense_scheme: 3-3-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

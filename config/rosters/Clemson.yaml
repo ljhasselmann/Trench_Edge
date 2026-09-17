@@ -1,0 +1,72 @@
+team: Clemson
+starters:
+  OL:
+  - name: Brayden Jacobs
+    position_tag: LT
+    jersey: '74'
+    class_year: SO
+    snaps_multi_year: 491
+    recruit_rating: 96
+    recruit_stars: 4
+  - name: Elyjah Thurmon
+    position_tag: LG
+    jersey: '52'
+    class_year: JR
+    snaps_multi_year: 369
+    recruit_rating: 91
+    recruit_stars: 4
+  - name: Harris Sewell
+    position_tag: C
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 1291
+    recruit_rating: 93
+    recruit_stars: 4
+  - name: Ronan O'Connell
+    position_tag: RG
+    jersey: '77'
+    class_year: JR
+    snaps_multi_year: 252
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Easton Ware
+    position_tag: RT
+    jersey: '63'
+    class_year: SO
+    snaps_multi_year: 49
+    recruit_rating: 91
+    recruit_stars: 4
+  DL:
+  - name: Jahiem Lawson
+    position_tag: LDE
+    jersey: '15'
+    class_year: GR
+    snaps_multi_year: 748
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Andy Burburija
+    position_tag: LDT
+    jersey: '56'
+    class_year: JR
+    snaps_multi_year: 69
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Amare Adams
+    position_tag: RDT
+    jersey: '95'
+    class_year: SO
+    snaps_multi_year: 191
+    recruit_rating: 98
+    recruit_stars: 5
+  - name: Will Heldt
+    position_tag: RDE
+    jersey: '13'
+    class_year: SR
+    snaps_multi_year: 659
+    recruit_rating: 86
+    recruit_stars: 3
+offense_scheme: Air Raid
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

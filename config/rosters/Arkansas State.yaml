@@ -1,0 +1,55 @@
+team: Arkansas State
+starters:
+  OL:
+  - name: Sterling Wiggins
+    position_tag: LT
+    jersey: '72'
+    class_year: JR
+    snaps_multi_year: 115
+  - name: Tristian Smith
+    position_tag: LG
+    jersey: '68'
+    class_year: SR
+    snaps_multi_year: 968
+  - name: Mason Myers
+    position_tag: C
+    jersey: '52'
+    class_year: JR
+    snaps_multi_year: 1137
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Wil Saxton
+    position_tag: RG
+    jersey: '50'
+    class_year: SR
+    snaps_multi_year: 1072
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Aleric Watson
+    position_tag: RT
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 657
+    recruit_rating: 79
+    recruit_stars: 2
+  DL:
+  - name: Donquarius Parker
+    position_tag: DE
+    jersey: '14'
+    class_year: SR
+    snaps_multi_year: 14
+  - name: Elias Sherman
+    position_tag: NT
+    jersey: '92'
+    class_year: JR
+    snaps_multi_year: 95
+  - name: Shakai Woods
+    position_tag: DT
+    jersey: '98'
+    class_year: JR
+    snaps_multi_year: 11
+offense_scheme: Spread
+defense_scheme: 4-3
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

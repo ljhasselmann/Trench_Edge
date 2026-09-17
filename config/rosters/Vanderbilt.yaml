@@ -1,0 +1,34 @@
+team: Vanderbilt
+starters:
+  OL:
+  - name: Lyndon Cooper
+    position_tag: C
+    jersey: '56'
+    class_year: GR
+    snaps_multi_year: 133
+    recruit_rating: 85
+    recruit_stars: 3
+  DL:
+  - name: Brian Allen Jr.
+    position_tag: DE
+    jersey: '10'
+    class_year: GR
+    snaps_multi_year: 35
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Glenn Seabrooks III
+    position_tag: NT
+    jersey: '53'
+    class_year: JR
+    snaps_multi_year: 373
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Issa Ouattara
+    position_tag: DT
+    recruit_rating: 89
+    recruit_stars: 3
+offense_scheme: Multiple
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

@@ -1,0 +1,61 @@
+team: Baylor
+starters:
+  OL:
+  - name: Kaden Sieracki
+    position_tag: LT
+    jersey: '74'
+    class_year: SR
+    snaps_multi_year: 1367
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Nate Kibble
+    position_tag: LG
+    jersey: '70'
+    class_year: JR
+    snaps_multi_year: 180
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Koltin Sieracki
+    position_tag: C
+    jersey: '66'
+    class_year: JR
+    snaps_multi_year: 513
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Asher Hale
+    position_tag: RG
+    jersey: '72'
+    class_year: JR
+    snaps_multi_year: 181
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Logan Moore
+    position_tag: RT
+    jersey: '77'
+    class_year: SR
+    snaps_multi_year: 163
+  DL:
+  - name: Kyler Jordan
+    position_tag: DE
+    jersey: '40'
+    class_year: SR
+    snaps_multi_year: 52
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Hosea Wheeler
+    position_tag: NT
+    jersey: '00'
+    class_year: GR
+    snaps_multi_year: 66
+  - name: Devonte Tezino
+    position_tag: DT
+    jersey: '59'
+    class_year: SR
+    snaps_multi_year: 801
+    recruit_rating: 86
+    recruit_stars: 3
+offense_scheme: Air Raid
+defense_scheme: Multiple 3-4
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

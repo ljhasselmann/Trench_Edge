@@ -1,0 +1,70 @@
+team: Georgia Tech
+starters:
+  OL:
+  - name: Ethan Mackenny
+    position_tag: LT
+    jersey: '78'
+    class_year: SR
+    snaps_multi_year: 1006
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Kevin Peay Jr.
+    position_tag: LG
+    jersey: '52'
+    class_year: SO
+    snaps_multi_year: 137
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Jameson Riggs
+    position_tag: C
+    jersey: '70'
+    class_year: JR
+    snaps_multi_year: 322
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Joseph Ionata
+    position_tag: RG
+    jersey: '69'
+    class_year: JR
+    snaps_multi_year: 133
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Malachi Carney
+    position_tag: RT
+    jersey: '72'
+    class_year: SR
+    snaps_multi_year: 882
+    recruit_rating: 85
+    recruit_stars: 3
+  DL:
+  - name: Jordan Walker
+    position_tag: LDE
+    jersey: '10'
+    class_year: SR
+    snaps_multi_year: 63
+  - name: Tawfiq Thomas
+    position_tag: LDT
+    jersey: '95'
+    class_year: SR
+    snaps_multi_year: 106
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Vincent Carroll-Jackson
+    position_tag: RDT
+    jersey: '99'
+    class_year: SR
+    snaps_multi_year: 94
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Noah Carter
+    position_tag: RDE
+    jersey: '24'
+    class_year: JR
+    snaps_multi_year: 23
+    recruit_rating: 96
+    recruit_stars: 4
+offense_scheme: Spread Pro Style
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

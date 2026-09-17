@@ -1,0 +1,72 @@
+team: TCU
+starters:
+  OL:
+  - name: Ben Taylor-Whitfield
+    position_tag: LT
+    jersey: '56'
+    class_year: SR
+    snaps_multi_year: 1696
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Cade Bennett
+    position_tag: LG
+    jersey: '60'
+    class_year: GR
+    snaps_multi_year: 628
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Jaheim Buchanon
+    position_tag: C
+    jersey: '59'
+    class_year: SR
+    snaps_multi_year: 141
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Noah McKinney
+    position_tag: RG
+    jersey: '58'
+    class_year: SR
+    snaps_multi_year: 133
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Witten Van Hoy
+    position_tag: RT
+    jersey: '50'
+    class_year: SO
+    snaps_multi_year: 96
+    recruit_rating: 87
+    recruit_stars: 3
+  DL:
+  - name: Paul Oyewale
+    position_tag: LDE
+    jersey: '97'
+    class_year: JR
+    snaps_multi_year: 586
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Markis Deal
+    position_tag: NT
+    jersey: '95'
+    class_year: SR
+    snaps_multi_year: 989
+    recruit_rating: 96
+    recruit_stars: 4
+  - name: Ansel Din-Mbuh
+    position_tag: DT
+    jersey: '92'
+    class_year: SR
+    snaps_multi_year: 556
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: John Schobel
+    position_tag: RDE
+    jersey: '14'
+    class_year: SO
+    snaps_multi_year: 67
+    recruit_rating: 88
+    recruit_stars: 3
+offense_scheme: Air Raid
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

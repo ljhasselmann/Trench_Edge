@@ -1,0 +1,65 @@
+team: Stanford
+starters:
+  OL:
+  - name: Kahlil House
+    position_tag: LT
+    jersey: '57'
+    class_year: JR
+    snaps_multi_year: 1559
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Ziron Brown
+    position_tag: LG
+    jersey: '50'
+    class_year: SO
+    snaps_multi_year: 490
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Aidan Kilstrom
+    position_tag: C
+    jersey: '52'
+    class_year: SR
+    snaps_multi_year: 52
+    recruit_rating: 77
+    recruit_stars: 2
+  - name: Josh Williams
+    position_tag: RG
+    jersey: '60'
+    class_year: SO
+    snaps_multi_year: 457
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Fisher Anderson
+    position_tag: RT
+    jersey: '73'
+    class_year: SR
+    snaps_multi_year: 903
+    recruit_rating: 90
+    recruit_stars: 4
+  DL:
+  - name: Omar Staples
+    position_tag: DE
+    jersey: '44'
+    class_year: JR
+    snaps_multi_year: 313
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Braden Marceau-Olayinka
+    position_tag: NT
+    jersey: '74'
+    class_year: JR
+    snaps_multi_year: 550
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Zach Rowell
+    position_tag: DT
+    jersey: '96'
+    class_year: SR
+    snaps_multi_year: 756
+    recruit_rating: 88
+    recruit_stars: 3
+offense_scheme: Pro Style
+defense_scheme: Multiple 3-4
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

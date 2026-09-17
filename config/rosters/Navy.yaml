@@ -1,0 +1,51 @@
+team: Navy
+starters:
+  OL:
+  - name: Sean Crowley
+    position_tag: LT
+    jersey: '73'
+    class_year: JR
+    snaps_multi_year: 941
+  - name: Cam Nichols
+    position_tag: LG
+    jersey: '69'
+    class_year: SR
+    snaps_multi_year: 1178
+  - name: Toran Smith
+    position_tag: C
+    jersey: '63'
+    class_year: JR
+    snaps_multi_year: 328
+  - name: Jake Polito
+    position_tag: RG
+    jersey: '70'
+    class_year: JR
+    snaps_multi_year: 158
+  - name: Malcolm Johnson
+    position_tag: RT
+    jersey: '77'
+    class_year: SO
+    snaps_multi_year: 132
+  DL:
+  - name: Aiden Lyczek
+    position_tag: DE
+    jersey: '93'
+    class_year: JR
+    snaps_multi_year: 117
+  - name: Xavyer Arrington
+    position_tag: NT
+    jersey: '94'
+    class_year: JR
+    snaps_multi_year: 87
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: Griffen Willis
+    position_tag: DT
+    jersey: '95'
+    class_year: SR
+    snaps_multi_year: 1107
+offense_scheme: Triple Option
+defense_scheme: Multiple
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

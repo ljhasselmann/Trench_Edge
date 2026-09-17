@@ -1,0 +1,59 @@
+team: Mississippi State
+starters:
+  OL:
+  - name: Blake Steen
+    position_tag: LT
+    jersey: '54'
+    class_year: SR
+    snaps_multi_year: 102
+    recruit_rating: 81
+    recruit_stars: 3
+  - name: DJ Chester
+    position_tag: LG
+    jersey: '78'
+    class_year: JR
+    snaps_multi_year: 114
+    recruit_rating: 96
+    recruit_stars: 4
+  - name: Canon Boone
+    position_tag: C
+    jersey: '72'
+    class_year: GR
+    snaps_multi_year: 1211
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: LJ Prudhomme
+    position_tag: RG
+    jersey: '50'
+    class_year: FR
+    snaps_multi_year: 105
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Jakheem Shumpert-Perkins
+    position_tag: RT
+    recruit_rating: 85
+    recruit_stars: 3
+  DL:
+  - name: Will Whitson
+    position_tag: DE
+    jersey: '43'
+    class_year: GR
+    snaps_multi_year: 120
+    recruit_rating: 81
+    recruit_stars: 3
+  - name: Jaray Bledsoe
+    position_tag: NT
+    jersey: '9'
+    class_year: SR
+    snaps_multi_year: 416
+    recruit_rating: 90
+    recruit_stars: 4
+  - name: DJ Reed
+    position_tag: DT
+    recruit_rating: 93
+    recruit_stars: 4
+offense_scheme: Veer and Shoot
+defense_scheme: 3-3-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

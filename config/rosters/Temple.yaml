@@ -1,0 +1,57 @@
+team: Temple
+starters:
+  OL:
+  - name: Giakoby Hills
+    position_tag: LT
+    jersey: '71'
+    class_year: JR
+    snaps_multi_year: 743
+  - name: Eric King
+    position_tag: LG
+    jersey: '52'
+    class_year: SR
+    snaps_multi_year: 1184
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Grayson Mains
+    position_tag: C
+    jersey: '57'
+    class_year: SR
+    snaps_multi_year: 1462
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Jackson Pruitt
+    position_tag: RG
+    jersey: '54'
+    class_year: SR
+    snaps_multi_year: 1194
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Kevin Terry
+    position_tag: RT
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 433
+    recruit_rating: 83
+    recruit_stars: 3
+  DL:
+  - name: Cameron Jones
+    position_tag: DE
+    jersey: '99'
+    class_year: JR
+    snaps_multi_year: 184
+  - name: Joseph Auzenne
+    position_tag: NT
+    jersey: '98'
+    class_year: SR
+    snaps_multi_year: 194
+  - name: Kevin Hornbeak Jr.
+    position_tag: DT
+    jersey: '93'
+    class_year: SR
+    snaps_multi_year: 61
+offense_scheme: Spread
+defense_scheme: Multiple
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

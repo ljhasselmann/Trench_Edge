@@ -1,0 +1,64 @@
+team: Wyoming
+starters:
+  OL:
+  - name: Rex Johnsen
+    position_tag: LT
+    jersey: '70'
+    class_year: SR
+    snaps_multi_year: 1344
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Kalvin Janssen
+    position_tag: LG
+    jersey: '55'
+    class_year: FR
+    snaps_multi_year: 22
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Jason Maciejczak
+    position_tag: C
+    jersey: '51'
+    class_year: JR
+    snaps_multi_year: 86
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: Giovanni Panozzo
+    position_tag: RG
+    jersey: '50'
+    class_year: SO
+    snaps_multi_year: 75
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: Braylon Jenkins
+    position_tag: RT
+    jersey: '63'
+    class_year: SO
+    snaps_multi_year: 499
+    recruit_rating: 82
+    recruit_stars: 3
+  DL:
+  - name: Jack Dunkley
+    position_tag: LDE
+    jersey: '21'
+    class_year: SR
+    snaps_multi_year: 83
+  - name: Dante Drake
+    position_tag: NT
+    jersey: '92'
+    class_year: JR
+    snaps_multi_year: 267
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Jayden Williams
+    position_tag: DT
+    snaps_multi_year: 366
+  - name: Esaia Bogar
+    position_tag: RDE
+    jersey: '11'
+    class_year: SR
+    snaps_multi_year: 301
+offense_scheme: Pro Style, West Coast
+defense_scheme: 4-3
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

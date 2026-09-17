@@ -1,0 +1,63 @@
+team: Oklahoma State
+starters:
+  OL:
+  - name: Desmond Magiya
+    position_tag: LT
+    jersey: '76'
+    class_year: JR
+    snaps_multi_year: 120
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Johnny Dickson III
+    position_tag: LG
+    jersey: '54'
+    class_year: SR
+    snaps_multi_year: 178
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Tyler Mercer
+    position_tag: C
+    jersey: '56'
+    class_year: SO
+    snaps_multi_year: 174
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Joseph Hanson
+    position_tag: RG
+    jersey: '68'
+    class_year: SR
+    snaps_multi_year: 122
+  - name: Ashton Lepo
+    position_tag: RT
+    jersey: '77'
+    class_year: SR
+    snaps_multi_year: 130
+    recruit_rating: 88
+    recruit_stars: 3
+  DL:
+  - name: Jaleel Johnson
+    position_tag: DE
+    jersey: '95'
+    class_year: SR
+    snaps_multi_year: 518
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Saadiq Clements
+    position_tag: NT
+    jersey: '5'
+    class_year: JR
+    snaps_multi_year: 47
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Iman Oates
+    position_tag: DT
+    jersey: '99'
+    class_year: SR
+    snaps_multi_year: 900
+    recruit_rating: 88
+    recruit_stars: 3
+offense_scheme: Air Raid
+defense_scheme: 3-3-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

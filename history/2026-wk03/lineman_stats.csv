@@ -1,0 +1,659 @@
+team,name,jersey,position_tag,weight_lbs,class_year,snaps_multi_year,recruit_rating,recruit_stars,confidence
+Air Force,Brandon Nazworth,73,LT,290,JR,27,80,3,confirmed
+Air Force,Alec Falk,75,LG,315,SR,1052,,,confirmed
+Air Force,Rudy Varela,51,C,295,SR,11,,,confirmed
+Air Force,Jon Ashford,72,RG,320,JR,187,,,confirmed
+Air Force,Luke Vonderhaar,55,RT,285,SR,334,,,confirmed
+Akron,Carlos Slayden,71,LT,300,SR,86,,,confirmed
+Akron,Brandon Smith,56,LG,310,JR,77,,,confirmed
+Akron,Colin Lyons,72,C,295,GR,772,78,2,confirmed
+Akron,Nate Hampton,52,RG,300,FR,116,,,confirmed
+Akron,Allen Jones Jr.,50,RT,290,SR,440,,,confirmed
+Alabama,Jackson Lloyd,77,LT,326,SO,185,96,4,confirmed
+Alabama,William Sanders,70,LG,321,JR,293,89,3,confirmed
+Alabama,Racin Delgatty,55,C,305,SR,144,82,3,confirmed
+Alabama,Michael Carroll,64,RG,324,SO,622,98,5,confirmed
+Alabama,Jayvin James,54,RT,317,SR,144,82,3,confirmed
+Arizona,Matthew Lado,73,LT,320,SO,493,85,3,confirmed
+Arizona,Rhino Tapa'atoutai,59,LG,320,JR,717,87,3,confirmed
+Arizona,Zach Henning,,C,310,,,85,3,confirmed
+Arizona,Alexander Doost,63,RG,335,JR,1000,85,3,confirmed
+Arizona,Tristan Bounds,71,RT,320,GR,750,88,3,confirmed
+Arizona State,Luke Baklenko,78,LT,305,SR,83,89,3,confirmed
+Arizona State,Maki Stewart,59,LG,340,SO,370,87,3,confirmed
+Arizona State,Tana Alo-Tupuola,58,C,335,JR,106,85,3,confirmed
+Arizona State,Wade Helton,64,RG,310,SO,608,87,3,confirmed
+Arizona State,Jalen Klemm,70,RT,300,SR,280,90,4,confirmed
+Arkansas,Kavion Broussard,75,LT,312,JR,351,88,3,confirmed
+Arkansas,Malachi Breland,71,LG,334,SR,170,85,3,confirmed
+Arkansas,Caden Kitler,52,C,303,SR,883,82,3,confirmed
+Arkansas,Kobe Branham,50,RG,336,JR,974,86,3,confirmed
+Arkansas,Bryant Williams,64,RT,335,SR,160,83,3,confirmed
+Arkansas State,Sterling Wiggins,72,LT,317,JR,115,,,confirmed
+Arkansas State,Tristian Smith,68,LG,319,SR,968,,,confirmed
+Arkansas State,Mason Myers,52,C,289,JR,1137,84,3,confirmed
+Arkansas State,Wil Saxton,50,RG,314,SR,1072,84,3,confirmed
+Arkansas State,Aleric Watson,55,RT,333,SR,657,79,2,confirmed
+Army,Henry Appleton,58,LT,291,SR,1063,,,confirmed
+Army,Kyle Kloska,75,LG,302,SR,149,,,confirmed
+Army,Brady Small,51,C,318,SR,1836,,,confirmed
+Army,Paolo Gennarelli,71,RG,301,SR,1545,,,confirmed
+Army,Teddy Williams,74,RT,295,SR,1000,79,2,confirmed
+Auburn,Jo Simmons,,LT,330,,,,,confirmed
+Auburn,Jacob Strand,69,LG,310,SR,110,86,3,confirmed
+Auburn,Cole Best,72,C,322,SR,150,84,3,confirmed
+Auburn,Cole Skinner,56,RG,322,SR,114,81,3,confirmed
+Auburn,Stanton Ramil,65,RT,313,JR,150,92,4,confirmed
+Ball State,Chris Hood,66,LT,327,SR,1136,78,2,confirmed
+Ball State,Misael Sandoval,77,LG,332,JR,136,86,3,confirmed
+Ball State,Grant Haworth,68,C,299,SO,138,80,3,confirmed
+Ball State,Jacob Jeudy,56,RG,289,SR,29,,,confirmed
+Ball State,Tristan Cook,70,RT,291,SO,890,80,3,confirmed
+Baylor,Kaden Sieracki,74,LT,310,SR,1367,86,3,confirmed
+Baylor,Nate Kibble,70,LG,333,JR,180,88,3,confirmed
+Baylor,Koltin Sieracki,66,C,317,JR,513,84,3,confirmed
+Baylor,Asher Hale,72,RG,326,JR,181,83,3,confirmed
+Baylor,Logan Moore,77,RT,296,SR,163,,,confirmed
+Boise State,Tyler Ethridge,78,LT,308,SR,142,,,confirmed
+Boise State,Carson Rasmussen,64,LG,300,JR,298,86,3,confirmed
+Boise State,Stewart Taufa,52,C,302,FR,149,84,3,confirmed
+Boise State,Roger Carreon,62,RG,310,SR,1362,84,3,confirmed
+Boise State,Daylon Metoyer,75,RT,321,SR,1290,88,3,confirmed
+Boston College,Veguer Jean-Jumeau,63,LT,305,SO,134,,,confirmed
+Boston College,Robert Smith IV,55,LG,315,SO,563,86,3,confirmed
+Boston College,Michael Crounse,77,C,315,JR,690,85,3,confirmed
+Boston College,Judah Pruitt,52,RG,315,SO,180,85,3,confirmed
+Boston College,Kristian Phillips,71,RT,315,SR,140,82,3,confirmed
+Bowling Green,Gabe Funk,65,LT,320,SO,115,79,2,confirmed
+Bowling Green,Brody Bolyn,54,LG,310,JR,325,80,3,confirmed
+Bowling Green,Alexis Sanchez,78,C,335,SR,211,77,2,confirmed
+Bowling Green,Alex Harris,70,RG,320,SO,151,79,2,confirmed
+Bowling Green,James Thomas Jr.,77,RT,295,JR,502,79,2,confirmed
+Buffalo,Gabriel Arena,59,LT,293,SR,290,85,3,confirmed
+Buffalo,Thomas Barr,55,LG,292,SO,155,85,3,confirmed
+Buffalo,Nino Francavilla,74,C,300,SR,155,84,3,confirmed
+Buffalo,Jackson Bellamy,69,RG,341,JR,121,79,2,confirmed
+Buffalo,Nathan Natoli,76,RT,305,SR,,,,confirmed
+BYU,Paki Finau,58,LT,310,SO,105,90,4,confirmed
+BYU,Sonny Makasini,51,LG,315,SR,833,81,3,confirmed
+BYU,Bruce Mitchell,63,C,305,SR,1500,79,2,confirmed
+BYU,Kyle Sfarcioc,64,RG,305,SR,714,79,2,confirmed
+BYU,Andrew Gentry,75,RT,310,SR,901,94,4,confirmed
+California,Frederick Williams III,54,LT,335,JR,949,86,3,confirmed
+California,Tyson Ruffins,56,LG,310,JR,1034,86,3,confirmed
+California,Bastian Swinney,76,C,315,SR,1098,90,4,confirmed
+California,Sioape Vatikani,71,RG,330,SR,1016,88,3,confirmed
+California,Jimothy Lewis Jr.,77,RT,315,SO,103,90,4,confirmed
+Central Michigan,Jacob Booth,69,LT,295,SR,548,86,3,confirmed
+Central Michigan,Jacob Russell,70,LG,295,SR,589,,,confirmed
+Central Michigan,Losini Maka,55,C,310,SR,89,,,confirmed
+Central Michigan,John Iannuzzi,60,RG,320,SR,150,,,confirmed
+Central Michigan,Martin Koivisto,76,RT,290,SR,1252,82,3,confirmed
+Charlotte,J'Ven Williams,74,LT,315,JR,132,98,5,confirmed
+Charlotte,Luke Sandy,57,LG,305,SR,123,79,2,confirmed
+Charlotte,Nic Cruji,65,C,305,SR,132,,,confirmed
+Charlotte,Isaiah Bullerdick,76,RG,300,SR,111,,,confirmed
+Charlotte,Kristos Fernandez,75,RT,300,GR,469,,,confirmed
+Cincinnati,Joe Cotton,74,LT,320,SR,888,,,confirmed
+Cincinnati,Evan Tengesdahl,50,LG,325,SR,979,88,3,confirmed
+Cincinnati,Taran Tyo,77,C,325,SR,883,86,3,confirmed
+Cincinnati,Xavier Lozowicki,66,RG,320,SR,225,,,confirmed
+Cincinnati,Judea Milon,71,RT,300,SR,170,80,3,confirmed
+Clemson,Brayden Jacobs,74,LT,345,SO,491,96,4,confirmed
+Clemson,Elyjah Thurmon,52,LG,325,JR,369,91,4,confirmed
+Clemson,Harris Sewell,55,C,310,SR,1291,93,4,confirmed
+Clemson,Ronan O'Connell,77,RG,320,JR,252,87,3,confirmed
+Clemson,Easton Ware,63,RT,310,SO,49,91,4,confirmed
+Coastal Carolina,Mason Barton,68,LT,335,JR,30,,,confirmed
+Coastal Carolina,Joshua Daniel,65,LG,320,JR,124,82,3,confirmed
+Coastal Carolina,Kain McDonald,66,C,305,SO,315,83,3,confirmed
+Coastal Carolina,Tray Franklin,56,RG,315,SR,338,79,2,confirmed
+Coastal Carolina,Daughtry Richardson,78,RT,328,SR,119,86,3,confirmed
+Colorado,Bo Hughley,55,LT,295,JR,140,96,4,confirmed
+Colorado,Chauncey Gooden,51,LG,380,FR,148,92,4,confirmed
+Colorado,Sean Kinney,62,C,305,JR,97,,,confirmed
+Colorado,Jayvon McFadden,71,RG,295,FR,141,89,3,confirmed
+Colorado,Leon Bell,57,RT,330,GR,141,88,3,confirmed
+Colorado State,Toriyan Johnson,76,LT,330,JR,107,,,confirmed
+Colorado State,Braden Hales,73,LG,305,SO,137,80,3,confirmed
+Colorado State,Phillip Ocon,65,C,300,SO,252,84,3,confirmed
+Colorado State,Zach Smith,71,RG,300,SO,136,82,3,confirmed
+Colorado State,John Holthaus,63,RT,285,SO,148,81,3,confirmed
+Delaware,Noah Rosahac,75,LT,300,JR,954,85,3,confirmed
+Delaware,Mustafa Kanneh,,LG,320,,,,,confirmed
+Delaware,Steven Demboski,61,C,305,GR,981,,,confirmed
+Delaware,Chandler Telfaire,51,RG,305,SO,128,,,confirmed
+Delaware,Anthony Caccese,62,RT,305,SR,1112,,,confirmed
+Duke,Nick Del Grande,56,LT,300,SR,134,81,3,confirmed
+Duke,Jordan Larsen,64,LG,310,SR,919,,,confirmed
+Duke,Matt Craycraft,72,C,305,SR,2008,85,3,confirmed
+Duke,Bradley Smith,63,RG,305,SO,484,86,3,confirmed
+Duke,Braden Miller,77,RT,315,SR,121,85,3,confirmed
+East Carolina,Marleo Neolien,66,LT,310,SR,197,85,3,confirmed
+East Carolina,Bryce Weaver,71,LG,317,SR,516,82,3,confirmed
+East Carolina,Brandon Best,58,C,313,GR,82,83,3,confirmed
+East Carolina,Ethan Kramer,55,RG,300,GR,115,,,confirmed
+East Carolina,Hayes Creel,75,RT,320,GR,115,,,confirmed
+Eastern Michigan,Tyler Brumfield,71,LT,305,SR,167,87,3,confirmed
+Eastern Michigan,Guzzy Kayed,55,LG,316,JR,193,,,confirmed
+Eastern Michigan,Nicholas Gallegos,65,C,294,GR,922,,,confirmed
+Eastern Michigan,Cole Dellinger,72,RG,295,SR,125,89,3,confirmed
+Eastern Michigan,Tyler McMillan,68,RT,325,GR,83,75,2,confirmed
+Florida,Bryce Lovett,53,LT,305,SR,703,87,3,confirmed
+Florida,Knijeah Harris,77,LG,308,SR,1426,88,3,confirmed
+Florida,Harrison Moore,52,C,293,JR,103,87,3,confirmed
+Florida,TJ Shanahan Jr.,67,RG,309,SR,93,90,4,confirmed
+Florida,Emeka Ugorji,66,RT,308,SO,86,87,3,confirmed
+Florida Atlantic,Ja'Kavion Nonar,57,LT,315,SR,1041,86,3,confirmed
+Florida Atlantic,Aiden Jones,58,LG,315,SO,170,,,confirmed
+Florida Atlantic,Braden Cunningham,65,C,315,SO,190,82,3,confirmed
+Florida Atlantic,Vincent Fiacable,62,RG,320,SR,1137,86,3,confirmed
+Florida Atlantic,Ben Galloway,,RT,310,,,85,3,confirmed
+Florida International,Jeremy Smith,50,LT,290,FR,160,82,3,confirmed
+Florida International,Zaire Flournoy,54,LG,335,SR,564,79,2,confirmed
+Florida International,Daveion Harley,55,C,310,JR,155,,,confirmed
+Florida International,Antonio Tripp Jr.,71,RG,305,JR,681,90,4,confirmed
+Florida International,Manasseh Ripert,51,RT,290,SR,21,,,confirmed
+Florida State,Xavier Chaplin,77,LT,346,SR,138,86,3,confirmed
+Florida State,Paul Bowling,51,LG,305,SO,33,84,3,confirmed
+Florida State,Bradyn Welch-Joiner,,C,327,,,86,3,confirmed
+Florida State,Nate Pabst,71,RG,315,SR,138,79,2,confirmed
+Florida State,Chimdia Nwaiwu,79,RT,307,SR,105,,,confirmed
+Fresno State,Brayden Walton,76,LT,325,SO,883,82,3,confirmed
+Fresno State,Marquise Thorpe-Taylor,55,LG,330,SO,107,89,3,confirmed
+Fresno State,Oscar Weigel,69,C,290,SO,95,77,2,confirmed
+Fresno State,Jonah Leaupepetele,65,RG,325,FR,15,84,3,confirmed
+Fresno State,Rolan Fullwood,71,RT,320,SR,896,85,3,confirmed
+Georgia,Earnest Greene III,71,LT,320,SR,1093,97,4,confirmed
+Georgia,Dontrell Glover,63,LG,320,SO,818,89,3,confirmed
+Georgia,Drew Bobo,74,C,305,SR,998,86,3,confirmed
+Georgia,Zykie Helton,55,RG,300,FR,73,90,4,confirmed
+Georgia,Juan Gaston,73,RT,360,SO,542,98,5,confirmed
+Georgia Southern,Matthew Williams,51,LT,315,JR,227,,,confirmed
+Georgia Southern,Brandon Stoner,76,LG,325,FR,95,83,3,confirmed
+Georgia Southern,Ty Furnish,53,C,295,GR,257,86,3,confirmed
+Georgia Southern,Ethan Williams,55,RG,295,JR,136,83,3,confirmed
+Georgia Southern,Colin Alexander,63,RT,305,SO,256,81,3,confirmed
+Georgia State,Aidan Andrews,71,LT,295,FR,125,83,3,confirmed
+Georgia State,Deandre Duffus,56,LG,330,JR,578,84,3,confirmed
+Georgia State,Tyhler Williams,54,C,315,SR,1006,,,confirmed
+Georgia State,Gage Stanaland,55,RG,310,JR,112,84,3,confirmed
+Georgia State,Pherleski Martin,74,RT,320,FR,201,84,3,confirmed
+Georgia Tech,Ethan Mackenny,78,LT,325,SR,1006,86,3,confirmed
+Georgia Tech,Kevin Peay Jr.,52,LG,315,SO,137,86,3,confirmed
+Georgia Tech,Jameson Riggs,70,C,315,JR,322,87,3,confirmed
+Georgia Tech,Joseph Ionata,69,RG,305,JR,133,88,3,confirmed
+Georgia Tech,Malachi Carney,72,RT,350,SR,882,85,3,confirmed
+Hawai'i,Boogie Henderson,56,LT,310,SO,360,,,confirmed
+Hawai'i,Lipe Moala,73,LG,345,JR,158,,,confirmed
+Hawai'i,Ethan Spencer,57,C,300,SR,1341,,,confirmed
+Hawai'i,Judah Kaio,79,RG,305,SR,727,,,confirmed
+Hawai'i,Dean Briski,52,RT,305,SR,1059,,,confirmed
+Houston,Alvin Ebosele,79,LT,312,SR,1062,89,3,confirmed
+Houston,Shadre Hurst,56,LG,304,SR,105,,,confirmed
+Houston,Anthony Boswell,52,C,301,SO,104,78,2,confirmed
+Houston,McKenzie Agnello,66,RG,314,SR,878,,,confirmed
+Houston,Drew Terrill,73,RT,300,SR,17,78,2,confirmed
+Illinois,Christian Martin,72,LT,300,SR,117,85,3,confirmed
+Illinois,Maika Matelau,70,LG,300,SO,44,87,3,confirmed
+Illinois,Jake Renfro,59,C,320,SR,117,80,3,confirmed
+Illinois,Brandon Henderson,75,RG,335,SR,1237,89,3,confirmed
+Illinois,Nathan Knapik,71,RT,300,JR,197,85,3,confirmed
+Indiana,Carter Smith,65,LT,313,GR,1953,93,4,confirmed
+Indiana,Drew Evans,62,LG,307,GR,1469,76,2,confirmed
+Indiana,Bray Lynch,74,C,298,GR,1918,87,3,confirmed
+Indiana,Adedamola Ajani,72,RG,308,SO,495,87,3,confirmed
+Indiana,Joe Brunner,56,RT,313,SR,95,94,4,confirmed
+Iowa,Jack Dotzler,71,T,309,SR,283,87,3,confirmed
+Iowa,Trevor Lauck,59,T,314,JR,823,89,3,confirmed
+Iowa,Leighton Jones,64,G,288,JR,271,89,3,confirmed
+Iowa,Kade Pieper,58,G,298,JR,964,85,3,confirmed
+Iowa,Cael Winter,61,C,294,JR,121,,,confirmed
+Iowa State,Jake Taylor,79,LT,310,JR,96,94,4,confirmed
+Iowa State,Caden Maas,77,LG,315,JR,102,,,confirmed
+Iowa State,Braden Smith,63,C,310,SO,102,80,3,confirmed
+Iowa State,Trevor Bindel,55,RG,310,FR,33,88,3,confirmed
+Iowa State,Maasai King,51,RT,310,SR,102,78,2,confirmed
+Jacksonville State,Amarii Atchison,74,LT,300,JR,57,,,confirmed
+Jacksonville State,Hadine Diaby,62,LG,300,JR,133,,,confirmed
+Jacksonville State,Lucas Mrachkovskiy,50,C,295,SO,1105,,,confirmed
+Jacksonville State,Ryan Walker,55,RG,285,JR,150,,,confirmed
+Jacksonville State,Cam Stancil,71,RT,300,JR,178,,,confirmed
+James Madison,DJ Fox,77,LT,310,SR,67,,,confirmed
+James Madison,Tyler Brown,56,LG,325,SR,85,77,2,confirmed
+James Madison,Zach Greenberg,60,C,300,GR,1013,,,confirmed
+James Madison,Evan Bushong,73,RG,320,SO,166,79,2,confirmed
+James Madison,Deacon Rawls,71,RT,310,SO,247,78,2,confirmed
+Kansas,Calvin Clements,75,LT,325,JR,1005,87,3,confirmed
+Kansas,Amir Herring,56,LG,310,JR,728,90,4,confirmed
+Kansas,Kasen Carpenter,51,C,310,JR,129,85,3,confirmed
+Kansas,Tavake Tuikolovatu,54,RG,325,JR,285,88,3,confirmed
+Kansas,Nick Morrow,52,RT,330,JR,79,85,3,confirmed
+Kansas State,Ryan Howard,72,LT,295,SO,115,86,3,confirmed
+Kansas State,Tanner Morley,77,LG,320,JR,39,81,3,confirmed
+Kansas State,Dylan Villarouel,71,C,328,FR,159,85,3,confirmed
+Kansas State,Keiton Jones,54,RG,322,FR,85,90,4,confirmed
+Kansas State,Gus Hawkins,70,RT,307,SO,241,91,4,confirmed
+Kennesaw State,JaDarious Lee,56,LT,302,SR,1096,,,confirmed
+Kennesaw State,Precious Ekeh,75,LG,325,JR,117,,,confirmed
+Kennesaw State,Mateo Guevara,55,C,317,SR,117,82,3,confirmed
+Kennesaw State,Mike Wallace Jr.,51,RG,323,SO,117,79,2,confirmed
+Kennesaw State,Nikola Milovac,76,RT,317,JR,1117,85,3,confirmed
+Kent State,Tyler Meadows,78,LT,340,SO,542,81,3,confirmed
+Kent State,Dustyn Morell,54,LG,290,SR,1178,83,3,confirmed
+Kent State,Ben Midea,50,C,320,JR,119,,,confirmed
+Kent State,William Johnson III,73,RG,270,FR,121,84,3,confirmed
+Kent State,Mofe Adewole,76,RT,275,SR,112,,,confirmed
+Kentucky,Lance Heard,53,LT,325,SR,123,98,5,confirmed
+Kentucky,Olaus Alinen,73,LG,329,SR,123,94,4,confirmed
+Kentucky,Coleton Price,72,C,308,SR,122,84,3,confirmed
+Kentucky,Tegra Tshabola,77,RG,329,SR,98,97,4,confirmed
+Kentucky,Malachi Wood,71,RT,329,SR,458,85,3,confirmed
+Liberty,D.J. Geth,51,LT,295,JR,996,86,3,confirmed
+Liberty,Joep Engbers,60,LG,305,JR,886,,,confirmed
+Liberty,Aaron Fenimore,61,C,295,JR,1798,82,3,confirmed
+Liberty,Alex Birchmeier,53,RG,300,JR,99,95,4,confirmed
+Liberty,Christian Williams,56,RT,310,SR,706,86,3,confirmed
+Louisiana,Zay Alexander,57,LT,322,SO,101,88,3,confirmed
+Louisiana,Kaden Moreau,75,LG,305,SR,1088,,,confirmed
+Louisiana,Cooper Fordham,50,C,295,JR,863,84,3,confirmed
+Louisiana,Matthew Broussard,76,RG,313,JR,662,80,3,confirmed
+Louisiana,George Jackson,71,RT,315,SR,1054,82,3,confirmed
+Louisiana Tech,Hayden Christman,72,LT,331,JR,1828,87,3,confirmed
+Louisiana Tech,Ashanti Cole,79,LG,312,SR,1012,,,confirmed
+Louisiana Tech,Roy Brackins III,60,C,308,JR,739,79,2,confirmed
+Louisiana Tech,Austin Ellis,53,RG,305,SO,182,80,3,confirmed
+Louisiana Tech,Troy Smith III,52,RT,301,JR,109,83,3,confirmed
+Louisville,Lance Robinson,53,LT,295,GR,943,82,3,confirmed
+Louisville,Eryx Daugherty,56,LG,310,JR,126,87,3,confirmed
+Louisville,Evan Wibberley,58,C,305,SR,126,80,3,confirmed
+Louisville,Johnnie Brown III,66,RG,310,SR,126,,,confirmed
+Louisville,Cason Henry,71,RT,300,SR,70,86,3,confirmed
+LSU,Jordan Seaton,76,LT,307,JR,146,98,5,confirmed
+LSU,Bo Bordelon,66,LG,305,SR,259,87,3,confirmed
+LSU,Braelin Moore,61,C,301,SR,769,85,3,confirmed
+LSU,Aliou Bah,55,RG,327,SR,160,88,3,confirmed
+LSU,Weston Davis,74,RT,315,SO,875,94,4,confirmed
+Marshall,Tariq Montgomery,76,LT,312,SR,768,78,2,confirmed
+Marshall,Robby Martin,73,LG,304,SO,117,89,3,confirmed
+Marshall,Andrew Dudley,56,C,292,FR,131,83,3,confirmed
+Marshall,Jalen Slappy,70,RG,312,SR,1706,82,3,confirmed
+Marshall,Xavier Bausley,78,RT,318,SR,19,,,confirmed
+Maryland,Rahtrel Perry,76,LT,317,SR,872,,,confirmed
+Maryland,Ryan Howerton,71,LG,332,SO,340,87,3,confirmed
+Maryland,Michael Hershey,61,C,295,JR,1056,84,3,confirmed
+Maryland,Tellek Lockette,55,RG,327,SR,64,82,3,confirmed
+Maryland,Isaiah Wright,74,RT,315,GR,735,85,3,confirmed
+Massachusetts,Greg Knox III,66,LT,315,GR,95,,,confirmed
+Massachusetts,Aitor Urionabarrenechea,79,LG,350,SR,96,84,3,confirmed
+Massachusetts,Peyton Miller,64,C,330,SR,386,80,3,confirmed
+Massachusetts,Brock Taylor,69,RG,350,JR,441,79,2,confirmed
+Massachusetts,Zachary Franks,73,RT,310,GR,100,85,3,confirmed
+Memphis,Xavier Allen,71,LT,299,SR,98,,,confirmed
+Memphis,Skyler Grant,75,LG,308,GR,83,79,2,confirmed
+Memphis,Phillip Gray,73,C,300,SR,183,78,2,confirmed
+Memphis,Maarten Woudsma,55,RG,305,SR,183,80,3,confirmed
+Memphis,Aaron Karas,59,RT,322,SR,183,80,3,confirmed
+Miami,Samson Okunlola,63,LT,330,JR,646,98,5,confirmed
+Miami,Seuseu Alofaituli,65,LG,290,SO,143,93,4,confirmed
+Miami,Ryan Rodriguez,76,C,300,SR,221,89,3,confirmed
+Miami,Max Buchanan,66,RG,310,SO,134,88,3,confirmed
+Miami,Matthew McCoy,78,RT,325,SR,1355,86,3,confirmed
+Miami (OH),Eric Smith,51,LT,306,SR,881,,,confirmed
+Miami (OH),Greg Smith Jr.,74,LG,300,JR,872,70,2,confirmed
+Miami (OH),Kris Manu,72,C,300,SO,925,84,3,confirmed
+Miami (OH),Jacob Schorsch,70,RG,300,SO,615,80,3,confirmed
+Miami (OH),Evan Malcore,54,RT,305,SR,76,79,2,confirmed
+Michigan,Blake Frazier,77,LT,295,JR,620,92,4,confirmed
+Michigan,Evan Link,71,LG,324,SR,1134,88,3,confirmed
+Michigan,Jake Guarnera,53,C,311,JR,825,89,3,confirmed
+Michigan,Brady Norton,70,RG,312,SR,308,80,3,confirmed
+Michigan,Andrew Sprague,54,RT,315,JR,928,96,4,confirmed
+Michigan State,Ben Murawski,75,LT,340,SR,98,78,2,confirmed
+Michigan State,Conner Moore,58,LG,311,SR,915,,,confirmed
+Michigan State,Trent Fraley,63,C,306,SR,150,79,2,confirmed
+Michigan State,Nick Sharpe,52,RG,351,GR,117,83,3,confirmed
+Michigan State,Rakeem Johnson,55,RT,296,SO,513,87,3,confirmed
+Middle Tennessee,Reese Tripp,75,LT,365,JR,123,,,confirmed
+Middle Tennessee,Adrian Crespin,55,LG,296,JR,54,,,confirmed
+Middle Tennessee,Chris Moreno,50,C,318,JR,96,,,confirmed
+Middle Tennessee,Alex Gale,63,RG,311,SO,437,,,confirmed
+Middle Tennessee,Quentin Butler,71,RT,300,JR,123,,,confirmed
+Minnesota,Nathan Roy,50,LT,305,JR,904,92,4,confirmed
+Minnesota,Greg Johnson,65,LG,325,SR,1691,90,4,confirmed
+Minnesota,Ashton Beers,78,C,320,SR,1571,87,3,confirmed
+Minnesota,Tony Nelson,59,RG,325,SR,393,86,3,confirmed
+Minnesota,Daniel Shipp,51,RT,295,SO,88,86,3,confirmed
+Mississippi State,Blake Steen,54,LT,340,SR,102,81,3,confirmed
+Mississippi State,DJ Chester,78,LG,315,JR,114,96,4,confirmed
+Mississippi State,Canon Boone,72,C,315,GR,1211,87,3,confirmed
+Mississippi State,LJ Prudhomme,50,RG,320,FR,105,88,3,confirmed
+Mississippi State,Jakheem Shumpert-Perkins,,RT,330,,,85,3,confirmed
+Missouri,Cayden Green,70,LT,324,SR,1631,95,4,confirmed
+Missouri,Tristan Wilson,73,LG,311,SR,324,87,3,confirmed
+Missouri,Dominick Giudice,56,C,305,SR,1004,83,3,confirmed
+Missouri,Curtis Peagler,77,RG,335,SR,966,83,3,confirmed
+Missouri,Luke Work,51,RT,310,JR,107,85,3,confirmed
+Missouri State,King Large,71,LT,316,FR,92,86,3,confirmed
+Missouri State,Matthew Greene,54,LG,285,JR,1180,,,confirmed
+Missouri State,Isaiah Villanueva,72,C,302,SR,52,,,confirmed
+Missouri State,Ryan Mitchell,55,RG,285,SO,95,,,confirmed
+Missouri State,Sebastian Espinoza,77,RT,300,JR,66,80,3,confirmed
+Navy,Sean Crowley,73,LT,293,JR,941,,,confirmed
+Navy,Cam Nichols,69,LG,305,SR,1178,,,confirmed
+Navy,Toran Smith,63,C,277,JR,328,,,confirmed
+Navy,Jake Polito,70,RG,295,JR,158,,,confirmed
+Navy,Malcolm Johnson,77,RT,292,SO,132,,,confirmed
+NC State,Jimarion McCrimon,62,LT,295,SR,78,,,confirmed
+NC State,Yousef Mugharbil,71,LG,322,GR,224,88,3,confirmed
+NC State,Spike Sowells Jr.,72,C,312,SO,430,95,4,confirmed
+NC State,Kamen Smith,79,RG,325,SR,623,86,3,confirmed
+NC State,Teague Andersen,54,RT,322,SR,827,82,3,confirmed
+Nebraska,Elijah Pritchett,57,LT,325,SR,657,98,5,confirmed
+Nebraska,Paul Mubenga,65,LG,315,SR,129,88,3,confirmed
+Nebraska,Justin Evans,51,C,315,SR,1805,79,2,confirmed
+Nebraska,Brendan Black,54,RG,320,SR,130,84,3,confirmed
+Nebraska,Gunnar Gottula,77,RT,305,SR,984,87,3,confirmed
+Nevada,Jack Foster,55,LT,298,SR,867,,,confirmed
+Nevada,Zach Cochnauer,76,LG,306,SR,746,,,confirmed
+Nevada,Jacob Norcross,59,C,300,JR,129,78,2,confirmed
+Nevada,Ethan Newman,72,RG,300,SR,129,,,confirmed
+Nevada,Henry Sellards,66,RT,300,JR,140,82,3,confirmed
+New Mexico,Cole Millward,79,LT,297,SR,111,81,3,confirmed
+New Mexico,Malik Aliane,51,LG,320,GR,1143,,,confirmed
+New Mexico,Kaden Robnett,59,C,302,SR,973,77,2,confirmed
+New Mexico,Jaymar Tasi,58,RG,308,SO,595,84,3,confirmed
+New Mexico,Tyler Lawrence,68,RT,306,SR,964,81,3,confirmed
+New Mexico State,Ma'Kyi Lee,55,LT,315,GR,188,85,3,confirmed
+New Mexico State,Luke Moise,50,LG,300,JR,141,,,confirmed
+New Mexico State,James Williams,69,C,320,JR,193,,,confirmed
+New Mexico State,Tyler Keinath,54,RG,318,GR,192,76,2,confirmed
+New Mexico State,Caleb Pyfrom,66,RT,325,JR,88,86,3,confirmed
+North Carolina,Jordan Hall,66,LT,336,JR,314,86,3,confirmed
+North Carolina,Andrew Threatt,75,LG,315,SR,100,,,confirmed
+North Carolina,Christo Kelly,56,C,305,GR,119,,,confirmed
+North Carolina,Aidan Banfield,68,RG,300,JR,908,87,3,confirmed
+North Carolina,Jacqawn McRoy,71,RT,335,SO,100,95,4,confirmed
+North Dakota State,Ryan Babatz,76,LT,315,SO,449,86,3,confirmed
+North Dakota State,Griffin Empey,62,LG,302,JR,888,,,confirmed
+North Dakota State,Gage Schmidt,61,C,300,SO,286,,,confirmed
+North Dakota State,Josh Magin,75,RG,308,SR,657,,,confirmed
+North Dakota State,Kene Anene,55,RT,310,SO,172,88,3,confirmed
+Northern Illinois,Ross Liegel,58,LT,278,SO,454,87,3,confirmed
+Northern Illinois,Luke Skartvedt,53,LG,337,JR,133,78,2,confirmed
+Northern Illinois,Landon Hron,63,C,335,JR,879,80,3,confirmed
+Northern Illinois,Tyler Chambers,76,RG,300,FR,143,81,3,confirmed
+Northern Illinois,Lane Mahnesmith,66,RT,320,SO,142,80,3,confirmed
+North Texas,Johnny Williams IV,71,LT,329,JR,137,86,3,confirmed
+North Texas,Dylan Shaw,53,LG,320,SO,149,88,3,confirmed
+North Texas,Chandler Strong,57,C,288,SR,137,,,confirmed
+North Texas,Keon Johnson,68,RG,370,JR,247,,,confirmed
+North Texas,Neto Umeozulu,72,RT,329,SR,143,93,4,confirmed
+Northwestern,Grant Seagren,74,LT,320,JR,56,75,2,confirmed
+Northwestern,Dennis Rahouski,71,LG,300,SO,66,82,3,confirmed
+Northwestern,Anthony Birsa,64,C,305,JR,174,90,4,confirmed
+Northwestern,Idrys Cotton,77,RG,305,SO,71,87,3,confirmed
+Northwestern,Deuce McGuire,73,RT,310,GR,293,89,3,confirmed
+Notre Dame,Will Black,74,LT,316,SO,149,97,4,confirmed
+Notre Dame,Anthonie Knapp,54,LG,304,JR,1653,88,3,confirmed
+Notre Dame,Ashton Craig,70,C,310,SR,592,90,4,confirmed
+Notre Dame,Sullivan Absher,75,RG,320,SR,478,92,4,confirmed
+Notre Dame,Guerby Lambert,76,RT,325,JR,829,95,4,confirmed
+Ohio,Jarian Shelby,75,LT,290,SR,212,,,confirmed
+Ohio,CJ Dawson II,55,LG,327,SR,,,,confirmed
+Ohio,Bryce Parson,76,C,296,SO,152,86,3,confirmed
+Ohio,Seth Anstead,63,RG,300,SO,154,82,3,confirmed
+Ohio,Tigana Cisse,74,RT,305,GR,126,80,3,confirmed
+Ohio State,Ian Moore,69,LT,315,JR,292,92,4,confirmed
+Ohio State,Luke Montgomery,51,LG,313,SR,1210,94,4,confirmed
+Ohio State,Carson Hinzman,75,C,301,SR,1550,93,4,confirmed
+Ohio State,Austin Siereveld,67,RG,327,SR,1417,89,3,confirmed
+Ohio State,Phillip Daniels,70,RT,312,SR,852,88,3,confirmed
+Oklahoma,Michael Fasusi,56,LT,320,SO,693,98,5,confirmed
+Oklahoma,Eddy Pierre-Louis,55,LG,319,JR,626,88,3,confirmed
+Oklahoma,Caleb Nitta,60,C,305,SR,31,,,confirmed
+Oklahoma,Heath Ozaeta,77,RG,315,SR,1068,89,3,confirmed
+Oklahoma,E'Marion Harris,76,RT,318,SR,107,90,4,confirmed
+Oklahoma State,Desmond Magiya,76,LT,333,JR,120,84,3,confirmed
+Oklahoma State,Johnny Dickson III,54,LG,317,SR,178,88,3,confirmed
+Oklahoma State,Tyler Mercer,56,C,300,SO,174,85,3,confirmed
+Oklahoma State,Joseph Hanson,68,RG,302,SR,122,,,confirmed
+Oklahoma State,Ashton Lepo,77,RT,320,SR,130,88,3,confirmed
+Old Dominion,Kendrick Hall,72,LT,299,JR,100,83,3,confirmed
+Old Dominion,Connor Drake,73,LG,325,JR,129,83,3,confirmed
+Old Dominion,Brayden Walker,50,C,297,SO,111,,,confirmed
+Old Dominion,Logan Cox,69,RG,328,JR,255,,,confirmed
+Old Dominion,Raykwon Goldthwaite,79,RT,305,SR,97,,,confirmed
+Ole Miss,Terez Davis,55,LT,300,JR,192,86,3,confirmed
+Ole Miss,Delano Townsend,51,LG,330,SR,1049,82,3,confirmed
+Ole Miss,Brycen Sanders,62,C,315,SR,1272,90,4,confirmed
+Ole Miss,Patrick Kutas,75,RG,315,SR,1215,93,4,confirmed
+Ole Miss,Tommy Kinsler IV,61,RT,350,SR,46,89,3,confirmed
+Oregon,Fox Crader,59,T,315,JR,263,91,4,confirmed
+Oregon,Ziyare Addison,58,T,315,SO,133,95,4,confirmed
+Oregon,Dave Iuli,74,G,332,SR,1179,90,4,confirmed
+Oregon,Michael Bennett,75,G,302,SR,50,,,confirmed
+Oregon,Iapani Laloulu,72,C,329,SR,1979,90,4,confirmed
+Oregon State,Josiah Timoteo,71,LT,310,JR,485,82,3,confirmed
+Oregon State,Nathan Elu,78,LG,320,SR,547,86,3,confirmed
+Oregon State,Tyler Voltin,79,RG,335,SR,676,,,confirmed
+Oregon State,Teko Shoats,50,RT,295,JR,153,83,3,confirmed
+Penn State,Malachi Goodman,78,LT,330,FR,115,98,5,confirmed
+Penn State,Trevor Buhr,70,LG,318,JR,103,86,3,confirmed
+Penn State,Brock Riker,51,C,291,SO,115,86,3,confirmed
+Penn State,Cooper Cousins,50,RG,320,JR,452,96,4,confirmed
+Penn State,Anthony Donkoh,68,RT,334,JR,1243,90,4,confirmed
+Pittsburgh,Netinho Olivieri,74,LT,310,SR,144,,,confirmed
+Pittsburgh,Kendall Stanley,53,LG,305,SR,726,79,2,confirmed
+Pittsburgh,Ryan Carretta,71,C,320,JR,741,87,3,confirmed
+Pittsburgh,BJ Williams,55,RG,320,SR,1935,87,3,confirmed
+Pittsburgh,Ryan Baer,70,RT,325,SR,1983,89,3,confirmed
+Purdue,Nuku Mafi,68,LT,330,SO,143,87,3,confirmed
+Purdue,Brock Brownfield,65,LG,280,FR,67,87,3,confirmed
+Purdue,Boaz Stanley,50,C,315,SR,143,,,confirmed
+Purdue,Micah Banuelos,59,RG,315,JR,143,92,4,confirmed
+Purdue,Jude McCoskey,72,RT,320,SR,191,79,2,confirmed
+Rice,Justin Michaelis,73,LT,321,FR,136,,,confirmed
+Rice,Cole Principe,71,LG,310,SO,413,80,3,confirmed
+Rice,Nate Bledsoe,56,C,315,JR,392,84,3,confirmed
+Rice,Patrick Valent,50,RG,330,JR,692,78,2,confirmed
+Rice,Luke Miller,53,RT,304,SO,921,85,3,confirmed
+Rutgers,Tyler Needham,56,LT,305,SR,1544,,,confirmed
+Rutgers,Chris Vigna,67,LG,310,SO,74,,,confirmed
+Rutgers,Terrence Salami,73,C,310,SR,239,,,confirmed
+Rutgers,Kwabena Asamoah,69,RG,310,SR,1901,,,confirmed
+Rutgers,Moshood Giwa,74,RT,320,SR,221,,,confirmed
+Sacramento State,Shontrail Key,54,LT,290,SR,175,83,3,confirmed
+Sacramento State,Brandon Sousa,64,LG,313,SR,168,78,2,confirmed
+Sacramento State,Bryson Summers,71,C,329,SR,363,83,3,confirmed
+Sacramento State,Vae Soifua,74,RG,308,SR,138,84,3,confirmed
+Sacramento State,Jeremiah Stallworth,77,RT,325,SO,305,83,3,confirmed
+Sam Houston,Carter Kadow,58,LT,315,JR,,,,confirmed
+Sam Houston,Graceson Spann,74,LG,305,SO,139,,,confirmed
+Sam Houston,Brock Stukes,54,C,310,SR,139,,,confirmed
+Sam Houston,Denell Nix Jr.,71,RG,310,SO,139,,,confirmed
+Sam Houston,Isaac Sohn,67,RT,305,JR,240,,,confirmed
+San Diego State,Joseph Borjon,78,LT,338,SR,963,82,3,confirmed
+San Diego State,Kalan Ellis,76,LG,350,SR,812,84,3,confirmed
+San Diego State,Isaac Lucas,56,C,298,JR,107,76,2,confirmed
+San Diego State,Dennis Jones,72,RT,350,SR,108,,,confirmed
+San José State,Daniel Moleni,54,LT,290,SR,238,,,confirmed
+San José State,Simeon Afalava,56,LG,285,SR,218,,,confirmed
+San José State,Joseph Harbert,75,C,290,SR,1227,,,confirmed
+San José State,Tyler Chen,62,RG,280,JR,1191,,,confirmed
+San José State,Manuel Serna,76,RT,295,SO,214,,,confirmed
+SMU,PJ Williams,59,LT,313,SR,1809,97,4,confirmed
+SMU,Alex Woods,77,LG,300,JR,122,84,3,confirmed
+SMU,Joshua Bates,64,C,315,JR,972,90,4,confirmed
+SMU,Addison Nichols,63,RG,320,SR,973,93,4,confirmed
+SMU,Andrew Chamblee,74,RT,308,SR,624,93,4,confirmed
+South Alabama,Reese Osei-Wusu,68,LT,310,SR,381,,,confirmed
+South Alabama,Jamal Siler,64,LG,310,JR,177,,,confirmed
+South Alabama,Kenton Jerido,69,C,340,SR,1565,80,3,confirmed
+South Alabama,Shalik Hubbard,57,RG,330,SR,169,,,confirmed
+South Alabama,Ethan Hubbard,72,RT,295,SR,877,84,3,confirmed
+South Carolina,Shed Sarratt Jr.,,LT,318,,,92,4,confirmed
+South Carolina,Hank Purvis,52,LG,330,JR,57,79,2,confirmed
+South Carolina,Carter Miller,50,C,311,SR,86,,,confirmed
+South Carolina,Dayne Arnett,75,RT,300,SR,77,79,2,confirmed
+Southern Miss,Braden Cain,70,LT,310,JR,106,,,confirmed
+Southern Miss,Zerian Hudson,55,LG,334,SR,37,,,confirmed
+Southern Miss,Joe Rounds,50,C,315,SR,107,,,confirmed
+Southern Miss,Aloali'i Maui,62,RG,310,GR,842,,,confirmed
+Southern Miss,Christian Young,78,RT,335,SR,30,,,confirmed
+South Florida,Michael Wooten,77,LT,325,SR,112,87,3,confirmed
+South Florida,Julius Tate,61,LG,305,SO,56,87,3,confirmed
+South Florida,Thomas Shrader,67,C,312,GR,934,87,3,confirmed
+South Florida,Caleb Cook,78,RG,315,GR,112,82,3,confirmed
+South Florida,Ethan Green,79,RT,322,SR,102,89,3,confirmed
+Stanford,Kahlil House,57,LT,305,JR,1559,88,3,confirmed
+Stanford,Ziron Brown,50,LG,310,SO,490,86,3,confirmed
+Stanford,Aidan Kilstrom,52,C,300,SR,52,77,2,confirmed
+Stanford,Josh Williams,60,RG,300,SO,457,88,3,confirmed
+Stanford,Fisher Anderson,73,RT,315,SR,903,90,4,confirmed
+Syracuse,Trevion Mack,75,LT,320,JR,795,83,3,confirmed
+Syracuse,Oluwafunto Akinshilo,69,LG,325,SR,157,,,confirmed
+Syracuse,Joe Cruz,78,C,315,SR,1035,83,3,confirmed
+Syracuse,Byron Washington,76,RG,400,SO,540,85,3,confirmed
+Syracuse,Kam Pringle,77,RT,335,SO,315,92,4,confirmed
+TCU,Ben Taylor-Whitfield,56,LT,320,SR,1696,86,3,confirmed
+TCU,Cade Bennett,60,LG,310,GR,628,85,3,confirmed
+TCU,Jaheim Buchanon,59,C,300,SR,141,83,3,confirmed
+TCU,Noah McKinney,58,RG,325,SR,133,83,3,confirmed
+TCU,Witten Van Hoy,50,RT,320,SO,96,87,3,confirmed
+Temple,Giakoby Hills,71,LT,290,JR,743,,,confirmed
+Temple,Eric King,52,LG,300,SR,1184,82,3,confirmed
+Temple,Grayson Mains,57,C,300,SR,1462,87,3,confirmed
+Temple,Jackson Pruitt,54,RG,315,SR,1194,86,3,confirmed
+Temple,Kevin Terry,55,RT,280,SR,433,83,3,confirmed
+Tennessee,David Sanders Jr.,70,LT,310,SO,589,98,5,confirmed
+Tennessee,Wendell Moe Jr.,75,LG,330,SR,794,84,3,confirmed
+Tennessee,Sam Pendleton,56,C,315,SR,882,89,3,confirmed
+Tennessee,Jesse Perry,72,RG,320,JR,938,88,3,confirmed
+Tennessee,Ory Williams,77,RT,330,JR,53,87,3,confirmed
+Texas,Trevor Goosby,74,LT,325,SR,1298,88,3,confirmed
+Texas,Laurence Seymore III,50,LG,316,SR,36,89,3,confirmed
+Texas,Connor Robertson,62,C,316,SR,769,87,3,confirmed
+Texas,Brandon Baker,73,RG,315,JR,1070,97,4,confirmed
+Texas,Melvin Siani,71,RT,317,SR,135,,,confirmed
+Texas A&M,Tyree Adams,71,LT,305,SR,131,,,confirmed
+Texas A&M,Blake Ivy,52,LG,324,JR,191,,,confirmed
+Texas A&M,Mark Nabou Jr.,54,C,307,GR,909,,,confirmed
+Texas A&M,Trovon Baugh,76,RG,335,GR,124,,,confirmed
+Texas A&M,Wilkin Formby,75,RT,320,GR,111,,,confirmed
+Texas State,Sully Burns,68,LT,327,SR,1103,79,2,confirmed
+Texas State,Rasheed Jackson,75,LG,339,JR,138,,,confirmed
+Texas State,Mikel Udengwu,52,C,,JR,131,,,confirmed
+Texas State,Bamidele Badusi,77,RG,328,JR,116,85,3,confirmed
+Texas State,William Boone,71,RT,351,JR,142,,,confirmed
+Texas Tech,Howard Sampson,79,LT,330,SR,1077,83,3,confirmed
+Texas Tech,Hunter Zambrano,57,LG,300,SR,208,80,3,confirmed
+Texas Tech,Sheridan Wilson,72,C,300,SR,2134,85,3,confirmed
+Texas Tech,Jordan Church,54,RG,320,JR,151,85,3,confirmed
+Texas Tech,Jacob Ponton,70,RT,315,SO,1194,88,3,confirmed
+Toledo,Ibrahim Traore,55,LT,297,SR,503,86,3,confirmed
+Toledo,Jonathan Harder,73,LG,330,SR,471,87,3,confirmed
+Toledo,Luke Rector,50,C,300,JR,97,,,confirmed
+Toledo,Ahmad Carwise,74,RG,300,SO,106,,,confirmed
+Toledo,Matt Hofer,71,RT,288,SO,221,83,3,confirmed
+Troy,Darion Rivers,77,LT,323,JR,61,86,3,confirmed
+Troy,Luke Petit,51,LG,299,SR,138,,,confirmed
+Troy,Tyler Cappi,65,C,295,SR,759,,,confirmed
+Troy,Patrick Screws Jr.,72,RG,320,JR,210,85,3,confirmed
+Troy,Jordon Jones,55,RT,315,SR,138,,,confirmed
+Tulane,Dominic Steward,55,LT,280,SO,97,90,4,confirmed
+Tulane,Elijah Baker,73,LG,295,SO,211,85,3,confirmed
+Tulane,John Bock II,51,C,316,SR,51,80,3,confirmed
+Tulane,Reese Baker,78,RG,292,SO,1049,86,3,confirmed
+Tulane,Ryan Mickow,58,RT,311,JR,98,83,3,confirmed
+Tulsa,Cam East,73,LT,330,SR,752,88,3,confirmed
+Tulsa,Hunter Erb,60,LG,330,SR,364,94,4,confirmed
+Tulsa,Malachi Preciado,50,C,305,SR,136,87,3,confirmed
+Tulsa,Ian Mayes,52,RG,300,SO,524,87,3,confirmed
+Tulsa,Brody Duffel,77,RT,310,JR,814,83,3,confirmed
+UAB,Payton Kirkland,51,LT,315,JR,108,,,confirmed
+UAB,Jaden Ligon,59,LG,340,SO,2,,,confirmed
+UAB,Adam Lepkowski,68,C,300,GR,1025,,,confirmed
+UAB,Calib Perez,75,RG,315,GR,743,,,confirmed
+UAB,Barrett Maddox,55,RT,325,JR,151,,,confirmed
+UCLA,Jordan Davis,68,LT,328,GR,95,,,confirmed
+UCLA,Eugene Brooks,55,LG,348,JR,792,,,confirmed
+UCLA,Riley Robell,51,C,284,SR,114,,,confirmed
+UCLA,Carter Sweazie,52,RG,342,GR,82,,,confirmed
+UCLA,Hall Schmidt,65,RT,317,GR,114,,,confirmed
+UL Monroe,David Applewhite,55,LT,305,JR,222,,,confirmed
+UL Monroe,Kaliem Croswell,56,LG,310,SR,450,,,confirmed
+UL Monroe,Sean Dugery,72,C,310,SR,127,,,confirmed
+UL Monroe,Reese Steele,77,RG,300,GR,279,,,confirmed
+UL Monroe,AJ Vinson,67,RT,305,SR,852,,,confirmed
+UNLV,Will Thomas,72,LT,305,SR,998,,,confirmed
+UNLV,Colton Thomasson,77,LG,325,JR,143,90,4,confirmed
+UNLV,Austin Boyd,79,C,305,SR,1240,83,3,confirmed
+UNLV,Amare Taase,74,RG,330,SO,264,82,3,confirmed
+UNLV,Jackson Brown,78,RT,310,JR,206,88,3,confirmed
+USC,Elijah Paige,72,LT,315,JR,1267,93,4,confirmed
+USC,Hayden Treter,68,LG,320,SO,257,86,3,confirmed
+USC,Tobias Raymond,73,C,310,JR,1172,87,3,confirmed
+USC,Alani Noa,77,RG,315,SR,1639,89,3,confirmed
+USC,Justin Tauanuu,74,RT,310,SO,1109,89,3,confirmed
+Utah,Zereoue Williams,76,LT,305,GR,282,88,3,confirmed
+Utah,Solatoa Moea'i,62,LG,325,SR,701,90,4,confirmed
+Utah,Alex Harrison,79,C,309,GR,242,86,3,confirmed
+Utah,Keith Olson,74,RG,307,SR,392,86,3,confirmed
+Utah,Cedric Jefferson,73,RT,300,JR,114,,,confirmed
+UTEP,Tyler Roberts,73,LT,314,FR,211,83,3,confirmed
+UTEP,Jaymon Lamb,54,LG,273,JR,70,,,confirmed
+UTEP,Brian Williams Jr.,56,C,330,SO,98,,,confirmed
+UTEP,Omoruyi Aliu-Otokiti,55,RG,315,JR,57,,,confirmed
+UTEP,Grayson Johnson,74,RT,330,JR,98,,,confirmed
+UTSA,Jonah Miller,75,LT,290,SR,141,90,4,confirmed
+UTSA,Ben Rios,57,LG,295,SR,1509,86,3,confirmed
+UTSA,Luke Lapeze,76,C,320,SR,280,81,3,confirmed
+UTSA,Darrell Jones,74,RG,340,SR,739,,,confirmed
+UTSA,Jaylen Garth,71,RT,310,SR,1189,92,4,confirmed
+Vanderbilt,Lyndon Cooper,56,C,310,GR,133,85,3,confirmed
+Virginia,McKale Boley,52,LT,329,GR,1417,87,3,confirmed
+Virginia,Noah Josey,76,LG,315,GR,1859,88,3,confirmed
+Virginia,Drake Metcalf,60,C,304,GR,1010,89,3,confirmed
+Virginia,Makilan Thomas,54,RG,317,GR,76,83,3,confirmed
+Virginia,Monroe Mills,71,RT,322,GR,86,83,3,confirmed
+Virginia Tech,Justin Terry,72,LT,358,SO,119,86,3,confirmed
+Virginia Tech,Layth Ghannam,56,LG,314,JR,859,88,3,confirmed
+Virginia Tech,Kyle Altuner,62,C,302,SO,831,91,4,confirmed
+Virginia Tech,Montavious Cunningham,66,RG,318,GR,371,84,3,confirmed
+Virginia Tech,Aidan Lynch,76,RT,319,SO,802,87,3,confirmed
+Wake Forest,Tolu Olajide,55,LT,300,SR,137,,,confirmed
+Wake Forest,Clinton Richard,65,LG,305,SO,418,88,3,confirmed
+Wake Forest,Will Way,70,C,290,JR,113,,,confirmed
+Wake Forest,Ryan Berger,64,RG,318,JR,120,78,2,confirmed
+Wake Forest,Aidan Martin,72,RT,265,FR,170,86,3,confirmed
+Washington,Kodi Greene,76,LT,321,FR,143,98,5,confirmed
+Washington,John Mills,72,LG,338,SO,732,88,3,confirmed
+Washington,Kolt Dieterich,55,C,295,JR,143,82,3,confirmed
+Washington,Champ Taulealea,73,RG,344,FR,130,90,4,confirmed
+Washington,Drew Azzopardi,74,RT,322,SR,1651,84,3,confirmed
+Western Kentucky,Tai Ray,67,LT,330,JR,91,85,3,confirmed
+Western Kentucky,Nonso Omezi,73,LG,340,SR,162,,,confirmed
+Western Kentucky,Alec Johnson,50,C,295,SR,137,79,2,confirmed
+Western Kentucky,Rhett Larson,70,RG,315,SR,159,84,3,confirmed
+Western Kentucky,Karsten Upchurch,74,RT,295,SR,891,82,3,confirmed
+Western Michigan,Brandon Smith,60,LT,315,SR,19,77,2,confirmed
+Western Michigan,Hunter Whitenack,77,LG,340,SR,728,86,3,confirmed
+Western Michigan,Jeremy Schleicher,65,C,305,SO,180,84,3,confirmed
+Western Michigan,Gavin Dabo,72,RG,305,SO,901,82,3,confirmed
+Western Michigan,Chad Schuster,76,RT,305,SR,1151,85,3,confirmed
+West Virginia,Kevin Brown,74,LT,294,FR,108,94,4,confirmed
+West Virginia,Nick Krahe,52,LG,312,JR,973,83,3,confirmed
+West Virginia,Wes King,78,C,309,SR,108,83,3,confirmed
+West Virginia,Amare Grayson,54,RG,306,JR,108,85,3,confirmed
+West Virginia,Carsten Casady,79,RT,310,JR,108,,,confirmed
+Wisconsin,PJ Wilkins,71,LT,340,SR,100,,,confirmed
+Wisconsin,Colin Cubberly,78,LG,324,JR,504,88,3,confirmed
+Wisconsin,Austin Kawecki,51,C,311,GR,108,85,3,confirmed
+Wisconsin,Emerson Mandell,75,RG,324,JR,719,91,4,confirmed
+Wisconsin,Kevin Heywood,55,RT,318,JR,180,96,4,confirmed
+Wyoming,Rex Johnsen,70,LT,308,SR,1344,82,3,confirmed
+Wyoming,Kalvin Janssen,55,LG,307,FR,22,84,3,confirmed
+Wyoming,Jason Maciejczak,51,C,310,JR,86,80,3,confirmed
+Wyoming,Giovanni Panozzo,50,RG,314,SO,75,80,3,confirmed
+Wyoming,Braylon Jenkins,63,RT,315,SO,499,82,3,confirmed

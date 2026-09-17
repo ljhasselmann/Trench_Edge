@@ -1,0 +1,72 @@
+team: Northwestern
+starters:
+  OL:
+  - name: Grant Seagren
+    position_tag: LT
+    jersey: '74'
+    class_year: JR
+    snaps_multi_year: 56
+    recruit_rating: 75
+    recruit_stars: 2
+  - name: Dennis Rahouski
+    position_tag: LG
+    jersey: '71'
+    class_year: SO
+    snaps_multi_year: 66
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Anthony Birsa
+    position_tag: C
+    jersey: '64'
+    class_year: JR
+    snaps_multi_year: 174
+    recruit_rating: 90
+    recruit_stars: 4
+  - name: Idrys Cotton
+    position_tag: RG
+    jersey: '77'
+    class_year: SO
+    snaps_multi_year: 71
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Deuce McGuire
+    position_tag: RT
+    jersey: '73'
+    class_year: GR
+    snaps_multi_year: 293
+    recruit_rating: 89
+    recruit_stars: 3
+  DL:
+  - name: Callen Campbell
+    position_tag: LDE
+    jersey: '44'
+    class_year: SO
+    snaps_multi_year: 262
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Brendan Flakes
+    position_tag: LDT
+    jersey: '15'
+    class_year: GR
+    snaps_multi_year: 549
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Tyler Gant
+    position_tag: RDT
+    jersey: '54'
+    class_year: JR
+    snaps_multi_year: 295
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Jamaal Johnson
+    position_tag: RDE
+    jersey: '24'
+    class_year: GR
+    snaps_multi_year: 63
+    recruit_rating: 87
+    recruit_stars: 3
+offense_scheme: Spread
+defense_scheme: Multiple 4-3
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

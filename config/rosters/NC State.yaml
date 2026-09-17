@@ -1,0 +1,63 @@
+team: NC State
+starters:
+  OL:
+  - name: Jimarion McCrimon
+    position_tag: LT
+    jersey: '62'
+    class_year: SR
+    snaps_multi_year: 78
+  - name: Yousef Mugharbil
+    position_tag: LG
+    jersey: '71'
+    class_year: GR
+    snaps_multi_year: 224
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Spike Sowells Jr.
+    position_tag: C
+    jersey: '72'
+    class_year: SO
+    snaps_multi_year: 430
+    recruit_rating: 95
+    recruit_stars: 4
+  - name: Kamen Smith
+    position_tag: RG
+    jersey: '79'
+    class_year: SR
+    snaps_multi_year: 623
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Teague Andersen
+    position_tag: RT
+    jersey: '54'
+    class_year: SR
+    snaps_multi_year: 827
+    recruit_rating: 82
+    recruit_stars: 3
+  DL:
+  - name: Joseph Adedire
+    position_tag: DE
+    jersey: '13'
+    class_year: SR
+    snaps_multi_year: 137
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Josiah Victor
+    position_tag: NT
+    jersey: '90'
+    class_year: SO
+    snaps_multi_year: 157
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Isaiah Shirley
+    position_tag: DT
+    jersey: '88'
+    class_year: SR
+    snaps_multi_year: 595
+    recruit_rating: 89
+    recruit_stars: 3
+offense_scheme: Multiple
+defense_scheme: Multiple 3-4
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

@@ -1,0 +1,72 @@
+team: Arizona State
+starters:
+  OL:
+  - name: Luke Baklenko
+    position_tag: LT
+    jersey: '78'
+    class_year: SR
+    snaps_multi_year: 83
+    recruit_rating: 89
+    recruit_stars: 3
+  - name: Maki Stewart
+    position_tag: LG
+    jersey: '59'
+    class_year: SO
+    snaps_multi_year: 370
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Tana Alo-Tupuola
+    position_tag: C
+    jersey: '58'
+    class_year: JR
+    snaps_multi_year: 106
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Wade Helton
+    position_tag: RG
+    jersey: '64'
+    class_year: SO
+    snaps_multi_year: 608
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Jalen Klemm
+    position_tag: RT
+    jersey: '70'
+    class_year: SR
+    snaps_multi_year: 280
+    recruit_rating: 90
+    recruit_stars: 4
+  DL:
+  - name: Roman Pitre
+    position_tag: LDE
+    jersey: '5'
+    class_year: SR
+    snaps_multi_year: 238
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: C.J. Fite
+    position_tag: LDT
+    jersey: '99'
+    class_year: SR
+    snaps_multi_year: 1171
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Blazen Lono-Wong
+    position_tag: RDT
+    jersey: '97'
+    class_year: JR
+    snaps_multi_year: 517
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Jalen Thompson
+    position_tag: RDE
+    jersey: '9'
+    class_year: SR
+    snaps_multi_year: 62
+    recruit_rating: 90
+    recruit_stars: 4
+offense_scheme: Spread
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

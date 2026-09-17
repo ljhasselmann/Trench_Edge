@@ -1,0 +1,59 @@
+team: Louisiana Tech
+starters:
+  OL:
+  - name: Hayden Christman
+    position_tag: LT
+    jersey: '72'
+    class_year: JR
+    snaps_multi_year: 1828
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Ashanti Cole
+    position_tag: LG
+    jersey: '79'
+    class_year: SR
+    snaps_multi_year: 1012
+  - name: Roy Brackins III
+    position_tag: C
+    jersey: '60'
+    class_year: JR
+    snaps_multi_year: 739
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: Austin Ellis
+    position_tag: RG
+    jersey: '53'
+    class_year: SO
+    snaps_multi_year: 182
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: Troy Smith III
+    position_tag: RT
+    jersey: '52'
+    class_year: JR
+    snaps_multi_year: 109
+    recruit_rating: 83
+    recruit_stars: 3
+  DL:
+  - name: Donovan Rieman
+    position_tag: LDE
+    jersey: '98'
+    class_year: SR
+    snaps_multi_year: 449
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Jacob Bradford
+    position_tag: NT
+    jersey: '93'
+    class_year: SO
+    snaps_multi_year: 144
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Emmanuel Oguns
+    position_tag: RDE
+    snaps_multi_year: 455
+offense_scheme: Air Raid
+defense_scheme: 3-3-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

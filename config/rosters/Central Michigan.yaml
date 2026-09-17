@@ -1,0 +1,57 @@
+team: Central Michigan
+starters:
+  OL:
+  - name: Jacob Booth
+    position_tag: LT
+    jersey: '69'
+    class_year: SR
+    snaps_multi_year: 548
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Jacob Russell
+    position_tag: LG
+    jersey: '70'
+    class_year: SR
+    snaps_multi_year: 589
+  - name: Losini Maka
+    position_tag: C
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 89
+  - name: John Iannuzzi
+    position_tag: RG
+    jersey: '60'
+    class_year: SR
+    snaps_multi_year: 150
+  - name: Martin Koivisto
+    position_tag: RT
+    jersey: '76'
+    class_year: SR
+    snaps_multi_year: 1252
+    recruit_rating: 82
+    recruit_stars: 3
+  DL:
+  - name: Korver Demma
+    position_tag: LDE
+    jersey: '5'
+    class_year: SR
+    snaps_multi_year: 560
+  - name: Jaxon Cherry
+    position_tag: NT
+    jersey: '92'
+    class_year: JR
+    snaps_multi_year: 62
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: JJ Douglas
+    position_tag: RDE
+    jersey: '1'
+    class_year: SO
+    snaps_multi_year: 79
+    recruit_rating: 85
+    recruit_stars: 3
+offense_scheme: Power Spread
+defense_scheme: 3-3-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

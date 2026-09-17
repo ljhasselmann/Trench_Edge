@@ -1,0 +1,60 @@
+team: Akron
+starters:
+  OL:
+  - name: Carlos Slayden
+    position_tag: LT
+    jersey: '71'
+    class_year: SR
+    snaps_multi_year: 86
+  - name: Brandon Smith
+    position_tag: LG
+    jersey: '56'
+    class_year: JR
+    snaps_multi_year: 77
+  - name: Colin Lyons
+    position_tag: C
+    jersey: '72'
+    class_year: GR
+    snaps_multi_year: 772
+    recruit_rating: 78
+    recruit_stars: 2
+  - name: Nate Hampton
+    position_tag: RG
+    jersey: '52'
+    class_year: FR
+    snaps_multi_year: 116
+  - name: Allen Jones Jr.
+    position_tag: RT
+    jersey: '50'
+    class_year: SR
+    snaps_multi_year: 440
+  DL:
+  - name: Cyrus Durham
+    position_tag: LDE
+    jersey: '1'
+    class_year: JR
+    snaps_multi_year: 699
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Ronald Hull
+    position_tag: NT
+    jersey: '5'
+    class_year: JR
+    snaps_multi_year: 644
+  - name: Jon'Trell Mixon
+    position_tag: DT
+    jersey: '8'
+    class_year: JR
+    snaps_multi_year: 242
+  - name: Omari Abor
+    position_tag: RDE
+    jersey: '56'
+    class_year: SR
+    snaps_multi_year: 103
+    recruit_rating: 96
+    recruit_stars: 4
+offense_scheme: Multiple Up-Tempo
+defense_scheme: Multiple 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

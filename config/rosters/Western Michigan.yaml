@@ -1,0 +1,65 @@
+team: Western Michigan
+starters:
+  OL:
+  - name: Brandon Smith
+    position_tag: LT
+    jersey: '60'
+    class_year: SR
+    snaps_multi_year: 19
+    recruit_rating: 77
+    recruit_stars: 2
+  - name: Hunter Whitenack
+    position_tag: LG
+    jersey: '77'
+    class_year: SR
+    snaps_multi_year: 728
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Jeremy Schleicher
+    position_tag: C
+    jersey: '65'
+    class_year: SO
+    snaps_multi_year: 180
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Gavin Dabo
+    position_tag: RG
+    jersey: '72'
+    class_year: SO
+    snaps_multi_year: 901
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Chad Schuster
+    position_tag: RT
+    jersey: '76'
+    class_year: SR
+    snaps_multi_year: 1151
+    recruit_rating: 85
+    recruit_stars: 3
+  DL:
+  - name: Scoop Gardner Jr.
+    position_tag: LDE
+    jersey: '2'
+    class_year: JR
+    snaps_multi_year: 104
+    recruit_rating: 81
+    recruit_stars: 3
+  - name: Zavian Tibbs
+    position_tag: LDT
+    jersey: '41'
+    class_year: SR
+    snaps_multi_year: 76
+  - name: Ahmed Tounkara
+    position_tag: RDT
+    jersey: '94'
+    class_year: SO
+    snaps_multi_year: 85
+  - name: KJ Burley
+    position_tag: RDE
+    recruit_rating: 82
+    recruit_stars: 3
+offense_scheme: Multiple
+defense_scheme: 4-3
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

@@ -1,0 +1,55 @@
+team: Nevada
+starters:
+  OL:
+  - name: Jack Foster
+    position_tag: LT
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 867
+  - name: Zach Cochnauer
+    position_tag: LG
+    jersey: '76'
+    class_year: SR
+    snaps_multi_year: 746
+  - name: Jacob Norcross
+    position_tag: C
+    jersey: '59'
+    class_year: JR
+    snaps_multi_year: 129
+    recruit_rating: 78
+    recruit_stars: 2
+  - name: Ethan Newman
+    position_tag: RG
+    jersey: '72'
+    class_year: SR
+    snaps_multi_year: 129
+  - name: Henry Sellards
+    position_tag: RT
+    jersey: '66'
+    class_year: JR
+    snaps_multi_year: 140
+    recruit_rating: 82
+    recruit_stars: 3
+  DL:
+  - name: Myles Williams
+    position_tag: DE
+    jersey: '92'
+    class_year: GR
+    snaps_multi_year: 75
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: David Paine Jr.
+    position_tag: NT
+    jersey: '98'
+    class_year: JR
+    snaps_multi_year: 236
+  - name: Tanner Vaughan
+    position_tag: DT
+    jersey: '96'
+    class_year: GR
+    snaps_multi_year: 420
+offense_scheme: Multiple
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

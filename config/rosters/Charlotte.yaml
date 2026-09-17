@@ -1,0 +1,64 @@
+team: Charlotte
+starters:
+  OL:
+  - name: J'Ven Williams
+    position_tag: LT
+    jersey: '74'
+    class_year: JR
+    snaps_multi_year: 132
+    recruit_rating: 98
+    recruit_stars: 5
+  - name: Luke Sandy
+    position_tag: LG
+    jersey: '57'
+    class_year: SR
+    snaps_multi_year: 123
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: Nic Cruji
+    position_tag: C
+    jersey: '65'
+    class_year: SR
+    snaps_multi_year: 132
+  - name: Isaiah Bullerdick
+    position_tag: RG
+    jersey: '76'
+    class_year: SR
+    snaps_multi_year: 111
+  - name: Kristos Fernandez
+    position_tag: RT
+    jersey: '75'
+    class_year: GR
+    snaps_multi_year: 469
+  DL:
+  - name: DJ Burgess
+    position_tag: LDE
+    jersey: '7'
+    class_year: SR
+    snaps_multi_year: 125
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Devin Ancrum
+    position_tag: NT
+    jersey: '95'
+    class_year: FR
+    snaps_multi_year: 66
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Jamarrion Solomon
+    position_tag: DT
+    jersey: '51'
+    class_year: SR
+    snaps_multi_year: 366
+  - name: Curtis Simpson
+    position_tag: RDE
+    jersey: '9'
+    class_year: SO
+    snaps_multi_year: 421
+    recruit_rating: 87
+    recruit_stars: 3
+offense_scheme: Spread Option
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

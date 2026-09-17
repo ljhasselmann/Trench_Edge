@@ -1,0 +1,65 @@
+team: Minnesota
+starters:
+  OL:
+  - name: Nathan Roy
+    position_tag: LT
+    jersey: '50'
+    class_year: JR
+    snaps_multi_year: 904
+    recruit_rating: 92
+    recruit_stars: 4
+  - name: Greg Johnson
+    position_tag: LG
+    jersey: '65'
+    class_year: SR
+    snaps_multi_year: 1691
+    recruit_rating: 90
+    recruit_stars: 4
+  - name: Ashton Beers
+    position_tag: C
+    jersey: '78'
+    class_year: SR
+    snaps_multi_year: 1571
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Tony Nelson
+    position_tag: RG
+    jersey: '59'
+    class_year: SR
+    snaps_multi_year: 393
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Daniel Shipp
+    position_tag: RT
+    jersey: '51'
+    class_year: SO
+    snaps_multi_year: 88
+    recruit_rating: 86
+    recruit_stars: 3
+  DL:
+  - name: Anthony Smith
+    position_tag: DE
+    jersey: '00'
+    class_year: SR
+    snaps_multi_year: 1271
+    recruit_rating: 92
+    recruit_stars: 4
+  - name: Riley Sunram
+    position_tag: NT
+    jersey: '93'
+    class_year: JR
+    snaps_multi_year: 87
+    recruit_rating: 93
+    recruit_stars: 4
+  - name: Theorin Randle
+    position_tag: DT
+    jersey: '99'
+    class_year: SR
+    snaps_multi_year: 60
+    recruit_rating: 85
+    recruit_stars: 3
+offense_scheme: Multiple
+defense_scheme: 4-3
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

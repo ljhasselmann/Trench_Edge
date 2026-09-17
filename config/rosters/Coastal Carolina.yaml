@@ -1,0 +1,66 @@
+team: Coastal Carolina
+starters:
+  OL:
+  - name: Mason Barton
+    position_tag: LT
+    jersey: '68'
+    class_year: JR
+    snaps_multi_year: 30
+  - name: Joshua Daniel
+    position_tag: LG
+    jersey: '65'
+    class_year: JR
+    snaps_multi_year: 124
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Kain McDonald
+    position_tag: C
+    jersey: '66'
+    class_year: SO
+    snaps_multi_year: 315
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Tray Franklin
+    position_tag: RG
+    jersey: '56'
+    class_year: SR
+    snaps_multi_year: 338
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: Daughtry Richardson
+    position_tag: RT
+    jersey: '78'
+    class_year: SR
+    snaps_multi_year: 119
+    recruit_rating: 86
+    recruit_stars: 3
+  DL:
+  - name: Chandavian Bradley
+    position_tag: LDE
+    jersey: '00'
+    class_year: JR
+    snaps_multi_year: 54
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: DJ Wesolak
+    position_tag: LDT
+    jersey: '7'
+    class_year: JR
+    snaps_multi_year: 44
+    recruit_rating: 91
+    recruit_stars: 4
+  - name: Ahmad Poole
+    position_tag: RDT
+    jersey: '92'
+    class_year: SR
+    snaps_multi_year: 62
+  - name: Mitchell Toney
+    position_tag: RDE
+    jersey: '50'
+    class_year: JR
+    snaps_multi_year: 88
+offense_scheme: Spread
+defense_scheme: Multiple 4-3
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

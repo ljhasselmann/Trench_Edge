@@ -1,0 +1,58 @@
+team: Ohio
+starters:
+  OL:
+  - name: Jarian Shelby
+    position_tag: LT
+    jersey: '75'
+    class_year: SR
+    snaps_multi_year: 212
+  - name: CJ Dawson II
+    position_tag: LG
+    jersey: '55'
+    class_year: SR
+  - name: Bryce Parson
+    position_tag: C
+    jersey: '76'
+    class_year: SO
+    snaps_multi_year: 152
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Seth Anstead
+    position_tag: RG
+    jersey: '63'
+    class_year: SO
+    snaps_multi_year: 154
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Tigana Cisse
+    position_tag: RT
+    jersey: '74'
+    class_year: GR
+    snaps_multi_year: 126
+    recruit_rating: 80
+    recruit_stars: 3
+  DL:
+  - name: Ike Ackerman
+    position_tag: DE
+    jersey: '14'
+    class_year: FR
+    snaps_multi_year: 137
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Ty Neubert
+    position_tag: NT
+    jersey: '99'
+    class_year: FR
+    snaps_multi_year: 151
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Nehemiah Dukes
+    position_tag: DT
+    jersey: '00'
+    class_year: SR
+    snaps_multi_year: 635
+offense_scheme: Multiple
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

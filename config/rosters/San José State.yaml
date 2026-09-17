@@ -1,0 +1,49 @@
+team: "San Jos\xE9 State"
+starters:
+  OL:
+  - name: Daniel Moleni
+    position_tag: LT
+    jersey: '54'
+    class_year: SR
+    snaps_multi_year: 238
+  - name: Simeon Afalava
+    position_tag: LG
+    jersey: '56'
+    class_year: SR
+    snaps_multi_year: 218
+  - name: Joseph Harbert
+    position_tag: C
+    jersey: '75'
+    class_year: SR
+    snaps_multi_year: 1227
+  - name: Tyler Chen
+    position_tag: RG
+    jersey: '62'
+    class_year: JR
+    snaps_multi_year: 1191
+  - name: Manuel Serna
+    position_tag: RT
+    jersey: '76'
+    class_year: SO
+    snaps_multi_year: 214
+  DL:
+  - name: Jeremiah Tuiileila
+    position_tag: LDE
+    jersey: '45'
+    class_year: FR
+    snaps_multi_year: 88
+  - name: Solomone Langi
+    position_tag: NT
+    jersey: '51'
+    class_year: SR
+    snaps_multi_year: 82
+  - name: Justin Stearns
+    position_tag: RDE
+    jersey: '57'
+    class_year: SR
+    snaps_multi_year: 367
+offense_scheme: Spread-N-Shred
+defense_scheme: Multiple 3-4
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

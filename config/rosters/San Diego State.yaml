@@ -1,0 +1,68 @@
+team: San Diego State
+starters:
+  OL:
+  - name: Joseph Borjon
+    position_tag: LT
+    jersey: '78'
+    class_year: SR
+    snaps_multi_year: 963
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Kalan Ellis
+    position_tag: LG
+    jersey: '76'
+    class_year: SR
+    snaps_multi_year: 812
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Isaac Lucas
+    position_tag: C
+    jersey: '56'
+    class_year: JR
+    snaps_multi_year: 107
+    recruit_rating: 76
+    recruit_stars: 2
+  - name: Michael Watkins
+    position_tag: RG
+    jersey: '55'
+    class_year: SO
+    snaps_multi_year: 102
+  - name: Dennis Jones
+    position_tag: RT
+    jersey: '72'
+    class_year: SR
+    snaps_multi_year: 108
+  DL:
+  - name: Brady Nassar
+    position_tag: LDE
+    jersey: '33'
+    class_year: SR
+    snaps_multi_year: 890
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Malachi Finau
+    position_tag: NT
+    jersey: '6'
+    class_year: SR
+    snaps_multi_year: 434
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Gavriel Lightfoot
+    position_tag: DT
+    jersey: '95'
+    class_year: SR
+    snaps_multi_year: 77
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Kai Wallin
+    position_tag: RDE
+    jersey: '18'
+    class_year: SR
+    snaps_multi_year: 76
+    recruit_rating: 83
+    recruit_stars: 3
+offense_scheme: Multiple
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

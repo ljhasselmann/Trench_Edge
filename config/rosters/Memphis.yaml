@@ -1,0 +1,68 @@
+team: Memphis
+starters:
+  OL:
+  - name: Xavier Allen
+    position_tag: LT
+    jersey: '71'
+    class_year: SR
+    snaps_multi_year: 98
+  - name: Skyler Grant
+    position_tag: LG
+    jersey: '75'
+    class_year: GR
+    snaps_multi_year: 83
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: Phillip Gray
+    position_tag: C
+    jersey: '73'
+    class_year: SR
+    snaps_multi_year: 183
+    recruit_rating: 78
+    recruit_stars: 2
+  - name: Maarten Woudsma
+    position_tag: RG
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 183
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: Aaron Karas
+    position_tag: RT
+    jersey: '59'
+    class_year: SR
+    snaps_multi_year: 183
+    recruit_rating: 80
+    recruit_stars: 3
+  DL:
+  - name: J'Mond Tapp
+    position_tag: LDE
+    jersey: '14'
+    class_year: SR
+    snaps_multi_year: 178
+    recruit_rating: 94
+    recruit_stars: 4
+  - name: Taylor Burton
+    position_tag: NT
+    jersey: '90'
+    class_year: SR
+    snaps_multi_year: 420
+  - name: Jaden McKinney
+    position_tag: DT
+    jersey: '11'
+    class_year: SR
+    snaps_multi_year: 121
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Elijah Kinsler
+    position_tag: RDE
+    jersey: '15'
+    class_year: SO
+    snaps_multi_year: 142
+    recruit_rating: 85
+    recruit_stars: 3
+offense_scheme: Pro Spread
+defense_scheme: Multiple
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

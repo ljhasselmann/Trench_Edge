@@ -1,0 +1,70 @@
+team: Purdue
+starters:
+  OL:
+  - name: Nuku Mafi
+    position_tag: LT
+    jersey: '68'
+    class_year: SO
+    snaps_multi_year: 143
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Brock Brownfield
+    position_tag: LG
+    jersey: '65'
+    class_year: FR
+    snaps_multi_year: 67
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Boaz Stanley
+    position_tag: C
+    jersey: '50'
+    class_year: SR
+    snaps_multi_year: 143
+  - name: Micah Banuelos
+    position_tag: RG
+    jersey: '59'
+    class_year: JR
+    snaps_multi_year: 143
+    recruit_rating: 92
+    recruit_stars: 4
+  - name: Jude McCoskey
+    position_tag: RT
+    jersey: '72'
+    class_year: SR
+    snaps_multi_year: 191
+    recruit_rating: 79
+    recruit_stars: 2
+  DL:
+  - name: Trey Smith
+    position_tag: LDE
+    jersey: '23'
+    class_year: JR
+    snaps_multi_year: 266
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Curt Neal
+    position_tag: NT
+    jersey: '92'
+    class_year: SR
+    snaps_multi_year: 66
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Ian Jeffries
+    position_tag: DT
+    jersey: '40'
+    class_year: JR
+    snaps_multi_year: 496
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Keyshawn Burgos
+    position_tag: RDE
+    jersey: '11'
+    class_year: SR
+    snaps_multi_year: 65
+    recruit_rating: 86
+    recruit_stars: 3
+offense_scheme: Multiple
+defense_scheme: Multiple 3-3-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

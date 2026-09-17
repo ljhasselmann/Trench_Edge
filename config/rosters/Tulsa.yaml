@@ -1,0 +1,70 @@
+team: Tulsa
+starters:
+  OL:
+  - name: Cam East
+    position_tag: LT
+    jersey: '73'
+    class_year: SR
+    snaps_multi_year: 752
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Hunter Erb
+    position_tag: LG
+    jersey: '60'
+    class_year: SR
+    snaps_multi_year: 364
+    recruit_rating: 94
+    recruit_stars: 4
+  - name: Malachi Preciado
+    position_tag: C
+    jersey: '50'
+    class_year: SR
+    snaps_multi_year: 136
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Ian Mayes
+    position_tag: RG
+    jersey: '52'
+    class_year: SO
+    snaps_multi_year: 524
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Brody Duffel
+    position_tag: RT
+    jersey: '77'
+    class_year: JR
+    snaps_multi_year: 814
+    recruit_rating: 83
+    recruit_stars: 3
+  DL:
+  - name: Kyran Duhon
+    position_tag: LDE
+    jersey: '00'
+    class_year: JR
+    snaps_multi_year: 76
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Arias Nash
+    position_tag: LDT
+    jersey: '10'
+    class_year: SR
+    snaps_multi_year: 90
+  - name: Tai Newhouse
+    position_tag: RDT
+    jersey: '99'
+    class_year: SR
+    snaps_multi_year: 902
+    recruit_rating: 77
+    recruit_stars: 2
+  - name: Thomas Davis
+    position_tag: RDE
+    jersey: '15'
+    class_year: SR
+    snaps_multi_year: 103
+    recruit_rating: 87
+    recruit_stars: 3
+offense_scheme: Spread
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

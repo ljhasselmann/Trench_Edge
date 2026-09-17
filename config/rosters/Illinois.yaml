@@ -1,0 +1,63 @@
+team: Illinois
+starters:
+  OL:
+  - name: Christian Martin
+    position_tag: LT
+    jersey: '72'
+    class_year: SR
+    snaps_multi_year: 117
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Maika Matelau
+    position_tag: LG
+    jersey: '70'
+    class_year: SO
+    snaps_multi_year: 44
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Jake Renfro
+    position_tag: C
+    jersey: '59'
+    class_year: SR
+    snaps_multi_year: 117
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: Brandon Henderson
+    position_tag: RG
+    jersey: '75'
+    class_year: SR
+    snaps_multi_year: 1237
+    recruit_rating: 89
+    recruit_stars: 3
+  - name: Nathan Knapik
+    position_tag: RT
+    jersey: '71'
+    class_year: JR
+    snaps_multi_year: 197
+    recruit_rating: 85
+    recruit_stars: 3
+  DL:
+  - name: Joe Barna
+    position_tag: DE
+    jersey: '43'
+    class_year: JR
+    snaps_multi_year: 93
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Darrell Prater
+    position_tag: NT
+    jersey: '96'
+    class_year: SR
+    snaps_multi_year: 76
+  - name: Pat Farrell
+    position_tag: DT
+    jersey: '52'
+    class_year: SR
+    snaps_multi_year: 394
+    recruit_rating: 86
+    recruit_stars: 3
+offense_scheme: Spread
+defense_scheme: Multiple 3-3-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

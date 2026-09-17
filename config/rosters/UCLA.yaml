@@ -1,0 +1,49 @@
+team: UCLA
+starters:
+  OL:
+  - name: Jordan Davis
+    position_tag: LT
+    jersey: '68'
+    class_year: GR
+    snaps_multi_year: 95
+  - name: Eugene Brooks
+    position_tag: LG
+    jersey: '55'
+    class_year: JR
+    snaps_multi_year: 792
+  - name: Riley Robell
+    position_tag: C
+    jersey: '51'
+    class_year: SR
+    snaps_multi_year: 114
+  - name: Carter Sweazie
+    position_tag: RG
+    jersey: '52'
+    class_year: GR
+    snaps_multi_year: 82
+  - name: Hall Schmidt
+    position_tag: RT
+    jersey: '65'
+    class_year: GR
+    snaps_multi_year: 114
+  DL:
+  - name: Sahir West
+    position_tag: DE
+    jersey: '15'
+    class_year: JR
+    snaps_multi_year: 109
+  - name: Amier Washington
+    position_tag: NT
+    jersey: '90'
+    class_year: SR
+    snaps_multi_year: 55
+  - name: Tyson Ford
+    position_tag: DT
+    jersey: '95'
+    class_year: GR
+    snaps_multi_year: 72
+offense_scheme: Spread
+defense_scheme: 4-3
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

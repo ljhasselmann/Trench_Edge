@@ -1,0 +1,63 @@
+team: Ball State
+starters:
+  OL:
+  - name: Chris Hood
+    position_tag: LT
+    jersey: '66'
+    class_year: SR
+    snaps_multi_year: 1136
+    recruit_rating: 78
+    recruit_stars: 2
+  - name: Misael Sandoval
+    position_tag: LG
+    jersey: '77'
+    class_year: JR
+    snaps_multi_year: 136
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Grant Haworth
+    position_tag: C
+    jersey: '68'
+    class_year: SO
+    snaps_multi_year: 138
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: Jacob Jeudy
+    position_tag: RG
+    jersey: '56'
+    class_year: SR
+    snaps_multi_year: 29
+  - name: Tristan Cook
+    position_tag: RT
+    jersey: '70'
+    class_year: SO
+    snaps_multi_year: 890
+    recruit_rating: 80
+    recruit_stars: 3
+  DL:
+  - name: Ben Marsh
+    position_tag: DE
+    jersey: '7'
+    class_year: JR
+    snaps_multi_year: 170
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: Ka'Shawn Thomas
+    position_tag: NT
+    jersey: '94'
+    class_year: JR
+    snaps_multi_year: 70
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Ameir Glenn
+    position_tag: DT
+    jersey: '56'
+    class_year: SO
+    snaps_multi_year: 312
+    recruit_rating: 85
+    recruit_stars: 3
+offense_scheme: Multiple
+defense_scheme: 3-4
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

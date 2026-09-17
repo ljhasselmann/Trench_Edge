@@ -1,0 +1,64 @@
+team: Colorado
+starters:
+  OL:
+  - name: Bo Hughley
+    position_tag: LT
+    jersey: '55'
+    class_year: JR
+    snaps_multi_year: 140
+    recruit_rating: 96
+    recruit_stars: 4
+  - name: Chauncey Gooden
+    position_tag: LG
+    jersey: '51'
+    class_year: FR
+    snaps_multi_year: 148
+    recruit_rating: 92
+    recruit_stars: 4
+  - name: Sean Kinney
+    position_tag: C
+    jersey: '62'
+    class_year: JR
+    snaps_multi_year: 97
+  - name: Jayvon McFadden
+    position_tag: RG
+    jersey: '71'
+    class_year: FR
+    snaps_multi_year: 141
+    recruit_rating: 89
+    recruit_stars: 3
+  - name: Leon Bell
+    position_tag: RT
+    jersey: '57'
+    class_year: GR
+    snaps_multi_year: 141
+    recruit_rating: 88
+    recruit_stars: 3
+  DL:
+  - name: Toby Anene
+    position_tag: LDE
+    jersey: '53'
+    class_year: SR
+    snaps_multi_year: 84
+  - name: Dylan Manuel
+    position_tag: NT
+    jersey: '99'
+    class_year: FR
+    snaps_multi_year: 90
+  - name: Santana Hopper
+    position_tag: DT
+    jersey: '97'
+    class_year: SR
+    snaps_multi_year: 87
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Lamont Lester Jr.
+    position_tag: RDE
+    jersey: '56'
+    class_year: SO
+    snaps_multi_year: 65
+offense_scheme: Multiple
+defense_scheme: Multiple
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

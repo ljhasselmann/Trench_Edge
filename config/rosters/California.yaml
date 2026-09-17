@@ -1,0 +1,65 @@
+team: California
+starters:
+  OL:
+  - name: Frederick Williams III
+    position_tag: LT
+    jersey: '54'
+    class_year: JR
+    snaps_multi_year: 949
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Tyson Ruffins
+    position_tag: LG
+    jersey: '56'
+    class_year: JR
+    snaps_multi_year: 1034
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Bastian Swinney
+    position_tag: C
+    jersey: '76'
+    class_year: SR
+    snaps_multi_year: 1098
+    recruit_rating: 90
+    recruit_stars: 4
+  - name: Sioape Vatikani
+    position_tag: RG
+    jersey: '71'
+    class_year: SR
+    snaps_multi_year: 1016
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Jimothy Lewis Jr.
+    position_tag: RT
+    jersey: '77'
+    class_year: SO
+    snaps_multi_year: 103
+    recruit_rating: 90
+    recruit_stars: 4
+  DL:
+  - name: Nate Burrell
+    position_tag: DE
+    jersey: '98'
+    class_year: SR
+    snaps_multi_year: 447
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Jericho Johnson
+    position_tag: NT
+    jersey: '44'
+    class_year: SO
+    snaps_multi_year: 83
+    recruit_rating: 95
+    recruit_stars: 4
+  - name: Derek Wilkins
+    position_tag: DT
+    jersey: '96'
+    class_year: SR
+    snaps_multi_year: 508
+    recruit_rating: 90
+    recruit_stars: 4
+offense_scheme: Up-Tempo Spread
+defense_scheme: Multiple 2-4-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

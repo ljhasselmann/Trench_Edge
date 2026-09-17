@@ -1,0 +1,46 @@
+team: UAB
+starters:
+  OL:
+  - name: Payton Kirkland
+    position_tag: LT
+    jersey: '51'
+    class_year: JR
+    snaps_multi_year: 108
+  - name: Jaden Ligon
+    position_tag: LG
+    jersey: '59'
+    class_year: SO
+    snaps_multi_year: 2
+  - name: Adam Lepkowski
+    position_tag: C
+    jersey: '68'
+    class_year: GR
+    snaps_multi_year: 1025
+  - name: Calib Perez
+    position_tag: RG
+    jersey: '75'
+    class_year: GR
+    snaps_multi_year: 743
+  - name: Barrett Maddox
+    position_tag: RT
+    jersey: '55'
+    class_year: JR
+    snaps_multi_year: 151
+  DL:
+  - name: Tylin Jackson
+    position_tag: DE
+    jersey: '17'
+    class_year: JR
+    snaps_multi_year: 80
+  - name: Cam Cunningham
+    position_tag: NT
+    jersey: '29'
+    class_year: GR
+    snaps_multi_year: 60
+  - name: Chris Spencer
+    position_tag: DT
+offense_scheme: Multiple
+defense_scheme: Multiple 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

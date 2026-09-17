@@ -1,0 +1,58 @@
+team: Florida Atlantic
+starters:
+  OL:
+  - name: Ja'Kavion Nonar
+    position_tag: LT
+    jersey: '57'
+    class_year: SR
+    snaps_multi_year: 1041
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Aiden Jones
+    position_tag: LG
+    jersey: '58'
+    class_year: SO
+    snaps_multi_year: 170
+  - name: Braden Cunningham
+    position_tag: C
+    jersey: '65'
+    class_year: SO
+    snaps_multi_year: 190
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Vincent Fiacable
+    position_tag: RG
+    jersey: '62'
+    class_year: SR
+    snaps_multi_year: 1137
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Ben Galloway
+    position_tag: RT
+    recruit_rating: 85
+    recruit_stars: 3
+  DL:
+  - name: Jay Crable
+    position_tag: DE
+    jersey: '12'
+    class_year: JR
+    snaps_multi_year: 72
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: CJ Doggette Jr.
+    position_tag: NT
+    jersey: '1'
+    class_year: SR
+    snaps_multi_year: 715
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Blake Burris
+    position_tag: DT
+    jersey: '98'
+    class_year: GR
+    snaps_multi_year: 63
+offense_scheme: Air Raid
+defense_scheme: Multiple 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

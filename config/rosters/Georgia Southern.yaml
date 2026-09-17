@@ -1,0 +1,58 @@
+team: Georgia Southern
+starters:
+  OL:
+  - name: Matthew Williams
+    position_tag: LT
+    jersey: '51'
+    class_year: JR
+    snaps_multi_year: 227
+  - name: Brandon Stoner
+    position_tag: LG
+    jersey: '76'
+    class_year: FR
+    snaps_multi_year: 95
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Ty Furnish
+    position_tag: C
+    jersey: '53'
+    class_year: GR
+    snaps_multi_year: 257
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Ethan Williams
+    position_tag: RG
+    jersey: '55'
+    class_year: JR
+    snaps_multi_year: 136
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Colin Alexander
+    position_tag: RT
+    jersey: '63'
+    class_year: SO
+    snaps_multi_year: 256
+    recruit_rating: 81
+    recruit_stars: 3
+  DL:
+  - name: Anthony Bynum
+    position_tag: DE
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Latrell Bullard
+    position_tag: NT
+    jersey: '57'
+    class_year: GR
+    snaps_multi_year: 699
+  - name: Elijah Fears
+    position_tag: DT
+    jersey: '94'
+    class_year: SO
+    snaps_multi_year: 407
+    recruit_rating: 84
+    recruit_stars: 3
+offense_scheme: Multiple
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

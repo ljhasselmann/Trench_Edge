@@ -1,0 +1,63 @@
+team: Louisiana
+starters:
+  OL:
+  - name: Zay Alexander
+    position_tag: LT
+    jersey: '57'
+    class_year: SO
+    snaps_multi_year: 101
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Kaden Moreau
+    position_tag: LG
+    jersey: '75'
+    class_year: SR
+    snaps_multi_year: 1088
+  - name: Cooper Fordham
+    position_tag: C
+    jersey: '50'
+    class_year: JR
+    snaps_multi_year: 863
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Matthew Broussard
+    position_tag: RG
+    jersey: '76'
+    class_year: JR
+    snaps_multi_year: 662
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: George Jackson
+    position_tag: RT
+    jersey: '71'
+    class_year: SR
+    snaps_multi_year: 1054
+    recruit_rating: 82
+    recruit_stars: 3
+  DL:
+  - name: Lance Williams
+    position_tag: DE
+    jersey: '9'
+    class_year: JR
+    snaps_multi_year: 305
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Fitzgerald West Jr.
+    position_tag: NT
+    jersey: '68'
+    class_year: SR
+    snaps_multi_year: 679
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Chase Edwards
+    position_tag: DT
+    jersey: '41'
+    class_year: JR
+    snaps_multi_year: 407
+    recruit_rating: 87
+    recruit_stars: 3
+offense_scheme: Multiple
+defense_scheme: 3-4
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

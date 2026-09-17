@@ -1,0 +1,51 @@
+team: Jacksonville State
+starters:
+  OL:
+  - name: Amarii Atchison
+    position_tag: LT
+    jersey: '74'
+    class_year: JR
+    snaps_multi_year: 57
+  - name: Hadine Diaby
+    position_tag: LG
+    jersey: '62'
+    class_year: JR
+    snaps_multi_year: 133
+  - name: Lucas Mrachkovskiy
+    position_tag: C
+    jersey: '50'
+    class_year: SO
+    snaps_multi_year: 1105
+  - name: Ryan Walker
+    position_tag: RG
+    jersey: '55'
+    class_year: JR
+    snaps_multi_year: 150
+  - name: Cam Stancil
+    position_tag: RT
+    jersey: '71'
+    class_year: JR
+    snaps_multi_year: 178
+  DL:
+  - name: Tae Floyd
+    position_tag: DE
+    jersey: '15'
+    class_year: JR
+    snaps_multi_year: 159
+  - name: Jawaun Campbell
+    position_tag: NT
+    jersey: '93'
+    class_year: JR
+    snaps_multi_year: 985
+  - name: Khurtiss Perry
+    position_tag: DT
+    jersey: '44'
+    class_year: SR
+    snaps_multi_year: 485
+    recruit_rating: 97
+    recruit_stars: 4
+offense_scheme: Spread Option
+defense_scheme: 3-3-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

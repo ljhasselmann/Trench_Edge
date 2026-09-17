@@ -182,6 +182,7 @@ def rank_league(results: list[OLRankResult]) -> list[OLRankResult]:
 def fetch_league_ol_attributes(
     year: int,
     session=None,
+    browser_fetch=None,
 ) -> dict[str, TeamOLAttributes]:
     """One team-attribute fetch per FBS team -- Mass/Experience/Recruiting/
     Performance, whatever's available. A team missing config/rosters/
@@ -190,20 +191,15 @@ def fetch_league_ol_attributes(
     raising in that case) simply comes back with every field None and a
     stack of warnings, not a crashed run; rank_league sorts it last.
 
-    Deliberately does NOT take a browser_fetch param: unlike
-    compute_experience_inputs's live year-over-year puntandrally lookup
-    (needed once per matchup, at render time), this league-wide pass only
-    needs what's ALREADY staged in config/rosters/{team}.yaml plus CFBD --
-    both scripts/populate_all_fbs_rosters.py and the per-matchup render
-    path populate that file; this function just reads it back out.
-
-    NOTE: this still passes browser_fetch=None down into
-    compute_experience_inputs, which means its year-over-year snap-share
-    lookup (fetch_puntandrally.fetch_roster) launches a fresh Chromium
-    instance per team here rather than sharing one browser session --
-    acceptable for an occasional/periodic league-wide rank run, unlike
-    run_week.py's per-matchup path which shares one session because it
-    also drives the matchup rendering in the same run.
+    `browser_fetch` is fetch_puntandrally's pluggable
+    `(url, wait_for_selector=...) -> html` callable, passed through to
+    each team's compute_experience_inputs() call for its year-over-year
+    snap-share lookup -- pass a fetch_puntandrally.browser_session() fetch
+    (see run_week.py's own use of this pattern) so all ~138 teams share
+    one Chromium instance instead of each launching its own. Confirmed
+    live this was the actual bottleneck: leaving this None (the previous
+    behavior) meant one fresh browser launch per team for this one lookup
+    alone.
     """
     fbs_teams = [t["school"] for t in fetch_cfbd.fetch_fbs_teams(year, session=session)]
     talent_table = fetch_talent.fetch_talent_table(year, session=session)
@@ -217,7 +213,7 @@ def fetch_league_ol_attributes(
         attrs.ol_starters = mass.ol_starters
         attrs.warnings.extend(mass.warnings)
 
-        experience = fetch_talent.compute_experience_inputs(team, year, talent_table=talent_table, session=session)
+        experience = fetch_talent.compute_experience_inputs(team, year, talent_table=talent_table, session=session, browser_fetch=browser_fetch)
         attrs.returning_ol_snap_pct = experience.returning_ol_snap_pct
         attrs.warnings.extend(experience.warnings)
 
@@ -328,6 +324,8 @@ if __name__ == "__main__":
     import argparse
     import yaml
 
+    import fetch_puntandrally
+
     parser = argparse.ArgumentParser(description="Compute the league-wide TrenchEdge OL Rank.")
     parser.add_argument("--year", type=int, default=2026)
     parser.add_argument("--weights-file", default="config/weights.yaml")
@@ -337,7 +335,8 @@ if __name__ == "__main__":
     with open(args.weights_file) as f:
         weights = yaml.safe_load(f)
 
-    attrs_by_team = fetch_league_ol_attributes(args.year)
+    with fetch_puntandrally.browser_session() as browser_fetch:
+        attrs_by_team = fetch_league_ol_attributes(args.year, browser_fetch=browser_fetch)
     league = list(attrs_by_team.values())
     results = [compute_ol_rank(a, league, weights) for a in league]
     ranked = rank_league(results)

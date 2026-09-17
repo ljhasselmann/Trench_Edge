@@ -1,0 +1,54 @@
+team: Hawai'i
+starters:
+  OL:
+  - name: Boogie Henderson
+    position_tag: LT
+    jersey: '56'
+    class_year: SO
+    snaps_multi_year: 360
+  - name: Lipe Moala
+    position_tag: LG
+    jersey: '73'
+    class_year: JR
+    snaps_multi_year: 158
+  - name: Ethan Spencer
+    position_tag: C
+    jersey: '57'
+    class_year: SR
+    snaps_multi_year: 1341
+  - name: Judah Kaio
+    position_tag: RG
+    jersey: '79'
+    class_year: SR
+    snaps_multi_year: 727
+  - name: Dean Briski
+    position_tag: RT
+    jersey: '52'
+    class_year: SR
+    snaps_multi_year: 1059
+  DL:
+  - name: Lesterlaisene Lagafuaina
+    position_tag: LDE
+    jersey: '51'
+    class_year: JR
+    snaps_multi_year: 639
+  - name: Geoffrey Speight Jr.
+    position_tag: NT
+    jersey: '95'
+    class_year: SR
+    snaps_multi_year: 128
+  - name: Luther McCoy
+    position_tag: DT
+    jersey: '52'
+    class_year: GR
+    snaps_multi_year: 351
+  - name: Josh Sagapolutele
+    position_tag: RDE
+    jersey: '91'
+    class_year: JR
+    snaps_multi_year: 131
+offense_scheme: Run-and-Shoot
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

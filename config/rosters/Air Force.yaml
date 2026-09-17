@@ -1,0 +1,50 @@
+team: Air Force
+starters:
+  OL:
+  - name: Brandon Nazworth
+    position_tag: LT
+    jersey: '73'
+    class_year: JR
+    snaps_multi_year: 27
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: Alec Falk
+    position_tag: LG
+    jersey: '75'
+    class_year: SR
+    snaps_multi_year: 1052
+  - name: Rudy Varela
+    position_tag: C
+    jersey: '51'
+    class_year: SR
+    snaps_multi_year: 11
+  - name: Jon Ashford
+    position_tag: RG
+    jersey: '72'
+    class_year: JR
+    snaps_multi_year: 187
+  - name: Luke Vonderhaar
+    position_tag: RT
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 334
+  DL:
+  - name: Jaylin Reese
+    position_tag: DE
+    recruit_rating: 77
+    recruit_stars: 2
+  - name: Andrew Tillett
+    position_tag: NT
+    jersey: '93'
+    class_year: SR
+    snaps_multi_year: 266
+  - name: Chaz Barnett
+    position_tag: DT
+    jersey: '59'
+    class_year: JR
+    snaps_multi_year: 7
+offense_scheme: Triple Option
+defense_scheme: 3-4
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

@@ -1,0 +1,64 @@
+team: North Dakota State
+starters:
+  OL:
+  - name: Ryan Babatz
+    position_tag: LT
+    jersey: '76'
+    class_year: SO
+    snaps_multi_year: 449
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Griffin Empey
+    position_tag: LG
+    jersey: '62'
+    class_year: JR
+    snaps_multi_year: 888
+  - name: Gage Schmidt
+    position_tag: C
+    jersey: '61'
+    class_year: SO
+    snaps_multi_year: 286
+  - name: Josh Magin
+    position_tag: RG
+    jersey: '75'
+    class_year: SR
+    snaps_multi_year: 657
+  - name: Kene Anene
+    position_tag: RT
+    jersey: '55'
+    class_year: SO
+    snaps_multi_year: 172
+    recruit_rating: 88
+    recruit_stars: 3
+  DL:
+  - name: Kelton McCaslin
+    position_tag: LDE
+    jersey: '9'
+    class_year: SR
+    snaps_multi_year: 523
+    recruit_rating: 75
+    recruit_stars: 2
+  - name: Keenan Wilson
+    position_tag: NT
+    jersey: '8'
+    class_year: JR
+    snaps_multi_year: 524
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: Logan Larson
+    position_tag: DT
+    jersey: '94'
+    class_year: SR
+    snaps_multi_year: 408
+  - name: Matthew Stenbroten
+    position_tag: RDE
+    jersey: '11'
+    class_year: SO
+    snaps_multi_year: 323
+    recruit_rating: 84
+    recruit_stars: 3
+offense_scheme: Pro Style
+defense_scheme: 4-3
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

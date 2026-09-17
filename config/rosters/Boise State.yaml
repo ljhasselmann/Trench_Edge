@@ -1,0 +1,61 @@
+team: Boise State
+starters:
+  OL:
+  - name: Tyler Ethridge
+    position_tag: LT
+    jersey: '78'
+    class_year: SR
+    snaps_multi_year: 142
+  - name: Carson Rasmussen
+    position_tag: LG
+    jersey: '64'
+    class_year: JR
+    snaps_multi_year: 298
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Stewart Taufa
+    position_tag: C
+    jersey: '52'
+    class_year: FR
+    snaps_multi_year: 149
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Roger Carreon
+    position_tag: RG
+    jersey: '62'
+    class_year: SR
+    snaps_multi_year: 1362
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Daylon Metoyer
+    position_tag: RT
+    jersey: '75'
+    class_year: SR
+    snaps_multi_year: 1290
+    recruit_rating: 88
+    recruit_stars: 3
+  DL:
+  - name: Max Stege
+    position_tag: DE
+    jersey: '95'
+    class_year: SR
+    snaps_multi_year: 906
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: David Latu
+    position_tag: NT
+    jersey: '92'
+    class_year: SR
+    snaps_multi_year: 273
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Mikaio Edward
+    position_tag: DT
+    jersey: '97'
+    class_year: JR
+    snaps_multi_year: 80
+offense_scheme: Spread
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

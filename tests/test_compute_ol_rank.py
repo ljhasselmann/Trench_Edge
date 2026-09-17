@@ -163,6 +163,39 @@ def test_fetch_league_ol_attributes_threads_direction_splits_through(monkeypatch
     assert attrs_by_team["Miami"].direction_splits.left.success_rate == 0.6
 
 
+def test_fetch_league_ol_attributes_threads_browser_fetch_to_experience_lookup(monkeypatch):
+    # Confirmed live: leaving browser_fetch=None here meant every team's
+    # Experience lookup launched its own fresh Chromium instance -- the
+    # actual bottleneck in a full league-wide run. A caller-supplied
+    # browser_fetch must reach compute_experience_inputs so all teams can
+    # share one browser session (see run_week.py's own use of this
+    # pattern).
+    import compute_ol_rank as col
+    import fetch_cfbd
+    import fetch_roster
+    import fetch_talent
+
+    monkeypatch.setattr(fetch_cfbd, "fetch_fbs_teams", lambda year, **kw: [{"school": "Miami"}])
+    monkeypatch.setattr(fetch_talent, "fetch_talent_table", lambda year, **kw: {})
+    monkeypatch.setattr(fetch_roster, "compute_mass_inputs", lambda team, year, **kw: fetch_roster.MassInputs(team=team))
+    monkeypatch.setattr(fetch_talent, "compute_recruiting_talent_inputs", lambda team: fetch_talent.RecruitingTalentInputs(team=team))
+    monkeypatch.setattr(fetch_cfbd, "fetch_team_trench_stats", lambda team, year, **kw: fetch_cfbd.TeamAdvancedStats(team=team, year=year, offense=SideStats(), defense=SideStats(), raw={}))
+    monkeypatch.setattr(fetch_cfbd, "fetch_rushing_direction_splits", lambda team, year, **kw: RushingDirectionSplits(team=team))
+
+    captured = {}
+
+    def _fake_compute_experience_inputs(team, year, **kwargs):
+        captured["browser_fetch"] = kwargs.get("browser_fetch")
+        return fetch_talent.ExperienceInputs(team=team)
+
+    monkeypatch.setattr(fetch_talent, "compute_experience_inputs", _fake_compute_experience_inputs)
+
+    sentinel = object()
+    col.fetch_league_ol_attributes(2026, browser_fetch=sentinel)
+
+    assert captured["browser_fetch"] is sentinel
+
+
 def test_write_ol_rank_table_csv_includes_direction_splits_as_raw_columns(tmp_path):
     splits = RushingDirectionSplits(
         team="Miami",

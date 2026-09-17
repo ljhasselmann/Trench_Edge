@@ -1,0 +1,59 @@
+team: North Texas
+starters:
+  OL:
+  - name: Johnny Williams IV
+    position_tag: LT
+    jersey: '71'
+    class_year: JR
+    snaps_multi_year: 137
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Dylan Shaw
+    position_tag: LG
+    jersey: '53'
+    class_year: SO
+    snaps_multi_year: 149
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Chandler Strong
+    position_tag: C
+    jersey: '57'
+    class_year: SR
+    snaps_multi_year: 137
+  - name: Keon Johnson
+    position_tag: RG
+    jersey: '68'
+    class_year: JR
+    snaps_multi_year: 247
+  - name: Neto Umeozulu
+    position_tag: RT
+    jersey: '72'
+    class_year: SR
+    snaps_multi_year: 143
+    recruit_rating: 93
+    recruit_stars: 4
+  DL:
+  - name: Davion Rhodes
+    position_tag: DE
+    jersey: '91'
+    class_year: SR
+    snaps_multi_year: 66
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: Nolan Clark
+    position_tag: NT
+    jersey: '58'
+    class_year: SO
+    snaps_multi_year: 44
+  - name: Justin Benton
+    position_tag: DT
+    jersey: '15'
+    class_year: JR
+    snaps_multi_year: 49
+    recruit_rating: 88
+    recruit_stars: 3
+offense_scheme: Air Raid
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

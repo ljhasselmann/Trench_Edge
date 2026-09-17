@@ -1,0 +1,66 @@
+team: Massachusetts
+starters:
+  OL:
+  - name: Greg Knox III
+    position_tag: LT
+    jersey: '66'
+    class_year: GR
+    snaps_multi_year: 95
+  - name: Aitor Urionabarrenechea
+    position_tag: LG
+    jersey: '79'
+    class_year: SR
+    snaps_multi_year: 96
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Peyton Miller
+    position_tag: C
+    jersey: '64'
+    class_year: SR
+    snaps_multi_year: 386
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: Brock Taylor
+    position_tag: RG
+    jersey: '69'
+    class_year: JR
+    snaps_multi_year: 441
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: Zachary Franks
+    position_tag: RT
+    jersey: '73'
+    class_year: GR
+    snaps_multi_year: 100
+    recruit_rating: 85
+    recruit_stars: 3
+  DL:
+  - name: Justin Krueger
+    position_tag: LDE
+    jersey: '9'
+    class_year: JR
+    snaps_multi_year: 35
+  - name: Tim Passmore Jr.
+    position_tag: NT
+    jersey: '90'
+    class_year: SR
+    snaps_multi_year: 342
+    recruit_rating: 78
+    recruit_stars: 2
+  - name: Zakar Morris
+    position_tag: DT
+    jersey: '55'
+    class_year: JR
+    snaps_multi_year: 44
+  - name: William DePaepe
+    position_tag: RDE
+    jersey: '98'
+    class_year: JR
+    snaps_multi_year: 63
+    recruit_rating: 87
+    recruit_stars: 3
+offense_scheme: Multiple Pro
+defense_scheme: 4-3, 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

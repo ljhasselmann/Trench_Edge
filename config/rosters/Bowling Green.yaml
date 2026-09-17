@@ -1,0 +1,63 @@
+team: Bowling Green
+starters:
+  OL:
+  - name: Gabe Funk
+    position_tag: LT
+    jersey: '65'
+    class_year: SO
+    snaps_multi_year: 115
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: Brody Bolyn
+    position_tag: LG
+    jersey: '54'
+    class_year: JR
+    snaps_multi_year: 325
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: Alexis Sanchez
+    position_tag: C
+    jersey: '78'
+    class_year: SR
+    snaps_multi_year: 211
+    recruit_rating: 77
+    recruit_stars: 2
+  - name: Alex Harris
+    position_tag: RG
+    jersey: '70'
+    class_year: SO
+    snaps_multi_year: 151
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: James Thomas Jr.
+    position_tag: RT
+    jersey: '77'
+    class_year: JR
+    snaps_multi_year: 502
+    recruit_rating: 79
+    recruit_stars: 2
+  DL:
+  - name: Kade Kostus
+    position_tag: DE
+    jersey: '4'
+    class_year: SR
+    snaps_multi_year: 93
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Selah Brown
+    position_tag: NT
+    jersey: '88'
+    class_year: GR
+    snaps_multi_year: 84
+    recruit_rating: 89
+    recruit_stars: 3
+  - name: Eriq George
+    position_tag: DT
+    jersey: '5'
+    class_year: SR
+    snaps_multi_year: 505
+offense_scheme: Multiple
+defense_scheme: Multiple
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

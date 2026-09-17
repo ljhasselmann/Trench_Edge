@@ -1,0 +1,63 @@
+team: Syracuse
+starters:
+  OL:
+  - name: Trevion Mack
+    position_tag: LT
+    jersey: '75'
+    class_year: JR
+    snaps_multi_year: 795
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Oluwafunto Akinshilo
+    position_tag: LG
+    jersey: '69'
+    class_year: SR
+    snaps_multi_year: 157
+  - name: Joe Cruz
+    position_tag: C
+    jersey: '78'
+    class_year: SR
+    snaps_multi_year: 1035
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Byron Washington
+    position_tag: RG
+    jersey: '76'
+    class_year: SO
+    snaps_multi_year: 540
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Kam Pringle
+    position_tag: RT
+    jersey: '77'
+    class_year: SO
+    snaps_multi_year: 315
+    recruit_rating: 92
+    recruit_stars: 4
+  DL:
+  - name: Tunmise Adeleye
+    position_tag: DE
+    jersey: '30'
+    class_year: SR
+    snaps_multi_year: 83
+    recruit_rating: 95
+    recruit_stars: 4
+  - name: Rashard Perry
+    position_tag: NT
+    jersey: '92'
+    class_year: SR
+    snaps_multi_year: 459
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Nissi Ogbebor
+    position_tag: DT
+    jersey: '11'
+    class_year: SO
+    snaps_multi_year: 176
+    recruit_rating: 85
+    recruit_stars: 3
+offense_scheme: Pro Style
+defense_scheme: Multiple 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

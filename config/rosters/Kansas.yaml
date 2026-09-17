@@ -1,0 +1,70 @@
+team: Kansas
+starters:
+  OL:
+  - name: Calvin Clements
+    position_tag: LT
+    jersey: '75'
+    class_year: JR
+    snaps_multi_year: 1005
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Amir Herring
+    position_tag: LG
+    jersey: '56'
+    class_year: JR
+    snaps_multi_year: 728
+    recruit_rating: 90
+    recruit_stars: 4
+  - name: Kasen Carpenter
+    position_tag: C
+    jersey: '51'
+    class_year: JR
+    snaps_multi_year: 129
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Tavake Tuikolovatu
+    position_tag: RG
+    jersey: '54'
+    class_year: JR
+    snaps_multi_year: 285
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Nick Morrow
+    position_tag: RT
+    jersey: '52'
+    class_year: JR
+    snaps_multi_year: 79
+    recruit_rating: 85
+    recruit_stars: 3
+  DL:
+  - name: Leroy Harris III
+    position_tag: LDE
+    jersey: '33'
+    class_year: JR
+    snaps_multi_year: 455
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Marcus Calvin
+    position_tag: LDT
+    jersey: '56'
+    class_year: JR
+    snaps_multi_year: 281
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Blake Herold
+    position_tag: RDT
+    jersey: '94'
+    class_year: JR
+    snaps_multi_year: 818
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: David Santiago
+    position_tag: RDE
+    jersey: '44'
+    class_year: JR
+    snaps_multi_year: 76
+offense_scheme: Multiple
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

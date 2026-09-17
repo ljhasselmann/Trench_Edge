@@ -1,0 +1,63 @@
+team: UNLV
+starters:
+  OL:
+  - name: Will Thomas
+    position_tag: LT
+    jersey: '72'
+    class_year: SR
+    snaps_multi_year: 998
+  - name: Colton Thomasson
+    position_tag: LG
+    jersey: '77'
+    class_year: JR
+    snaps_multi_year: 143
+    recruit_rating: 90
+    recruit_stars: 4
+  - name: Austin Boyd
+    position_tag: C
+    jersey: '79'
+    class_year: SR
+    snaps_multi_year: 1240
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Amare Taase
+    position_tag: RG
+    jersey: '74'
+    class_year: SO
+    snaps_multi_year: 264
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Jackson Brown
+    position_tag: RT
+    jersey: '78'
+    class_year: JR
+    snaps_multi_year: 206
+    recruit_rating: 88
+    recruit_stars: 3
+  DL:
+  - name: Lucas Conti
+    position_tag: LDE
+    jersey: '94'
+    class_year: JR
+    snaps_multi_year: 787
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Mohamed Altayeb
+    position_tag: NT
+    jersey: '16'
+    class_year: SR
+    snaps_multi_year: 134
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Kal-El Togafau
+    position_tag: RDE
+    jersey: '44'
+    class_year: FR
+    snaps_multi_year: 118
+    recruit_rating: 85
+    recruit_stars: 3
+offense_scheme: Pro Spread
+defense_scheme: Multiple 3-3-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

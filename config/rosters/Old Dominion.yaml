@@ -1,0 +1,57 @@
+team: Old Dominion
+starters:
+  OL:
+  - name: Kendrick Hall
+    position_tag: LT
+    jersey: '72'
+    class_year: JR
+    snaps_multi_year: 100
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Connor Drake
+    position_tag: LG
+    jersey: '73'
+    class_year: JR
+    snaps_multi_year: 129
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Brayden Walker
+    position_tag: C
+    jersey: '50'
+    class_year: SO
+    snaps_multi_year: 111
+  - name: Logan Cox
+    position_tag: RG
+    jersey: '69'
+    class_year: JR
+    snaps_multi_year: 255
+  - name: Raykwon Goldthwaite
+    position_tag: RT
+    jersey: '79'
+    class_year: SR
+    snaps_multi_year: 97
+  DL:
+  - name: Javen Gibson
+    position_tag: LDE
+    jersey: '4'
+    class_year: SR
+    snaps_multi_year: 385
+    recruit_rating: 80
+    recruit_stars: 3
+  - name: DeAndre Lynch
+    position_tag: NT
+    jersey: '9'
+    class_year: JR
+    snaps_multi_year: 597
+  - name: Chris Forbes
+    position_tag: RDE
+    jersey: '90'
+    class_year: SO
+    snaps_multi_year: 484
+    recruit_rating: 83
+    recruit_stars: 3
+offense_scheme: Spread Option
+defense_scheme: 3-3-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

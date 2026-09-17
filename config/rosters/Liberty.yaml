@@ -1,0 +1,61 @@
+team: Liberty
+starters:
+  OL:
+  - name: D.J. Geth
+    position_tag: LT
+    jersey: '51'
+    class_year: JR
+    snaps_multi_year: 996
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Joep Engbers
+    position_tag: LG
+    jersey: '60'
+    class_year: JR
+    snaps_multi_year: 886
+  - name: Aaron Fenimore
+    position_tag: C
+    jersey: '61'
+    class_year: JR
+    snaps_multi_year: 1798
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Alex Birchmeier
+    position_tag: RG
+    jersey: '53'
+    class_year: JR
+    snaps_multi_year: 99
+    recruit_rating: 95
+    recruit_stars: 4
+  - name: Christian Williams
+    position_tag: RT
+    jersey: '56'
+    class_year: SR
+    snaps_multi_year: 706
+    recruit_rating: 86
+    recruit_stars: 3
+  DL:
+  - name: Michael Floyde
+    position_tag: DE
+    jersey: '91'
+    class_year: SO
+    snaps_multi_year: 41
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: Mike Jarvis
+    position_tag: NT
+    jersey: '97'
+    class_year: SR
+    snaps_multi_year: 702
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Nathan Pirolli
+    position_tag: DT
+    jersey: '94'
+    class_year: JR
+    snaps_multi_year: 384
+offense_scheme: Spread
+defense_scheme: Multiple 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

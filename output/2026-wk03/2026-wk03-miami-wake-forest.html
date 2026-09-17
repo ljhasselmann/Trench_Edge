@@ -98,17 +98,29 @@
 .trench-edge-widget .te-caveats ul { margin: 4px 0 0 0; padding-left: 18px; font-size: 13px; color: var(--te-text-secondary); }
 .trench-edge-widget .te-caveats li { margin-bottom: 4px; }
 .trench-edge-widget footer { font-size: 11px; color: var(--te-muted); border-top: 1px solid var(--te-gridline); padding-top: 12px; }
+.trench-edge-widget .te-chalkboard { background: #1e3a2f; border-radius: 8px; padding: 16px; }
+.trench-edge-widget .te-chalk-side-label { color: #d8e8de; font-size: 12px; text-align: center; margin-bottom: 8px; }
+.trench-edge-widget .te-chalk-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.trench-edge-widget .te-chalk-player { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 8px 10px; min-width: 84px; text-align: center; }
+.trench-edge-widget .te-chalk-player .te-chalk-pos { font-size: 10px; color: #a9c4b6; letter-spacing: 0.04em; }
+.trench-edge-widget .te-chalk-player .te-chalk-jersey { font-size: 20px; font-weight: 700; color: #ffffff; }
+.trench-edge-widget .te-chalk-player .te-chalk-name { font-size: 11px; color: #e6efe9; margin-top: 2px; }
+.trench-edge-widget .te-chalk-player .te-chalk-detail { font-size: 10px; color: #a9c4b6; margin-top: 2px; }
+.trench-edge-widget .te-chalk-player.te-chalk-ol { border-color: var(--te-blue); }
+.trench-edge-widget .te-chalk-player.te-chalk-dl { border-color: var(--te-red); }
+.trench-edge-widget .te-chalk-los { display: flex; align-items: center; gap: 8px; margin: 12px 0; color: #a9c4b6; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+.trench-edge-widget .te-chalk-los::before, .trench-edge-widget .te-chalk-los::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,0.25); }
 </style>
 
 <header>
   <h2>Miami OL vs Wake Forest DL</h2>
-  <p class="te-subtitle">2026-wk03-miami-wake-forest-a &middot; 2026 season &middot; generated 2026-09-16 17:51 UTC</p>
+  <p class="te-subtitle">2026-wk03-miami-wake-forest-a &middot; 2026 season &middot; generated 2026-09-16 23:34 UTC</p>
 </header>
 
 <section class="te-stat-tiles">
   <div class="te-stat-tile">
     <div class="te-label">Miami OL avg weight</div>
-    <div class="te-value">319 lbs</div>
+    <div class="te-value">311 lbs</div>
   </div>
   <div class="te-stat-tile">
     <div class="te-label">Wake Forest DL avg weight</div>
@@ -116,7 +128,7 @@
   </div>
   <div class="te-stat-tile">
     <div class="te-label">Weight differential</div>
-    <div class="te-value">+50 lbs</div>
+    <div class="te-value">+42 lbs</div>
   </div>
 </section>
 
@@ -127,22 +139,32 @@
     <tr><th>#</th><th>Player</th><th>Class</th><th>Weight</th><th>Snaps (multi-yr)</th><th>Recruit</th><th>Confidence</th></tr>
     
     <tr>
-      <td>#78</td>
-      <td>Matthew McCoy</td>
-      <td>SR</td>
-      <td>325 lbs</td>
-      <td>1355</td>
-      <td>86 (3&starf;)</td>
-      <td class="te-badge">&check; confirmed</td>
-    </tr>
-    
-    <tr>
       <td>#63</td>
       <td>Samson Okunlola</td>
       <td>JR</td>
       <td>330 lbs</td>
       <td>646</td>
       <td>98 (5&starf;)</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>#65</td>
+      <td>Seuseu Alofaituli</td>
+      <td>SO</td>
+      <td>290 lbs</td>
+      <td>143</td>
+      <td>93 (4&starf;)</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>#76</td>
+      <td>Ryan Rodriguez</td>
+      <td>SR</td>
+      <td>300 lbs</td>
+      <td>221</td>
+      <td>89 (3&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
@@ -157,22 +179,12 @@
     </tr>
     
     <tr>
-      <td>#79</td>
-      <td>Jackson Cantwell</td>
-      <td>FR</td>
-      <td>330 lbs</td>
-      <td>60</td>
-      <td>99 (5&starf;)</td>
-      <td class="te-badge">&check; confirmed</td>
-    </tr>
-    
-    <tr>
-      <td>#76</td>
-      <td>Ryan Rodriguez</td>
+      <td>#78</td>
+      <td>Matthew McCoy</td>
       <td>SR</td>
-      <td>300 lbs</td>
-      <td>221</td>
-      <td>89 (3&starf;)</td>
+      <td>325 lbs</td>
+      <td>1355</td>
+      <td>86 (3&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
@@ -185,21 +197,21 @@
     <tr><th>#</th><th>Player</th><th>Class</th><th>Weight</th><th>Snaps (multi-yr)</th><th>Recruit</th><th>Confidence</th></tr>
     
     <tr>
-      <td>#11</td>
-      <td>Langston Hardy</td>
-      <td>SR</td>
-      <td>250 lbs</td>
-      <td>779</td>
-      <td>81 (3&starf;)</td>
-      <td class="te-badge">&check; confirmed</td>
-    </tr>
-    
-    <tr>
       <td>#10</td>
       <td>Gabe Kirschke</td>
       <td>SR</td>
       <td>249 lbs</td>
       <td>595</td>
+      <td>&mdash;</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>#94</td>
+      <td>Zach Lohavichan</td>
+      <td>SR</td>
+      <td>285 lbs</td>
+      <td>878</td>
       <td>&mdash;</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
@@ -215,16 +227,96 @@
     </tr>
     
     <tr>
-      <td>#94</td>
-      <td>Zach Lohavichan</td>
+      <td>#11</td>
+      <td>Langston Hardy</td>
       <td>SR</td>
-      <td>285 lbs</td>
-      <td>878</td>
-      <td>&mdash;</td>
+      <td>250 lbs</td>
+      <td>779</td>
+      <td>81 (3&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
   </table>
+  
+</section>
+
+<section class="te-chalkboard-section">
+  <h3>Formation</h3>
+  
+  <div class="te-chalkboard">
+    <div class="te-chalk-side-label">Miami offensive line &middot; Air Raid</div>
+    <div class="te-chalk-row">
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">LT</div>
+        <div class="te-chalk-jersey">#63</div>
+        <div class="te-chalk-name">Samson Okunlola</div>
+        <div class="te-chalk-detail">330 lbs &middot; 646 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">LG</div>
+        <div class="te-chalk-jersey">#65</div>
+        <div class="te-chalk-name">Seuseu Alofaituli</div>
+        <div class="te-chalk-detail">290 lbs &middot; 143 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">C</div>
+        <div class="te-chalk-jersey">#76</div>
+        <div class="te-chalk-name">Ryan Rodriguez</div>
+        <div class="te-chalk-detail">300 lbs &middot; 221 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">RG</div>
+        <div class="te-chalk-jersey">#66</div>
+        <div class="te-chalk-name">Max Buchanan</div>
+        <div class="te-chalk-detail">310 lbs &middot; 134 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">RT</div>
+        <div class="te-chalk-jersey">#78</div>
+        <div class="te-chalk-name">Matthew McCoy</div>
+        <div class="te-chalk-detail">325 lbs &middot; 1355 snaps</div>
+      </div>
+      
+    </div>
+    <div class="te-chalk-los">Line of scrimmage</div>
+    <div class="te-chalk-row">
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">LDE</div>
+        <div class="te-chalk-jersey">#10</div>
+        <div class="te-chalk-name">Gabe Kirschke</div>
+        <div class="te-chalk-detail">249 lbs &middot; 595 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">NT</div>
+        <div class="te-chalk-jersey">#94</div>
+        <div class="te-chalk-name">Zach Lohavichan</div>
+        <div class="te-chalk-detail">285 lbs &middot; 878 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">DT</div>
+        <div class="te-chalk-jersey">#52</div>
+        <div class="te-chalk-name">Dallas Afalava</div>
+        <div class="te-chalk-detail">291 lbs &middot; 606 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">RDE</div>
+        <div class="te-chalk-jersey">#11</div>
+        <div class="te-chalk-name">Langston Hardy</div>
+        <div class="te-chalk-detail">250 lbs &middot; 779 snaps</div>
+      </div>
+      
+    </div>
+    <div class="te-chalk-side-label">Wake Forest defensive line &middot; 4-2-5</div>
+  </div>
   
 </section>
 
@@ -245,10 +337,10 @@
       </div>
       <div class="te-bar-center"></div>
       <div class="te-bar-half te-bar-half-right">
-        <div class="te-bar-fill te-bar-fill-blue" style="width: 50.3%;"></div>
+        <div class="te-bar-fill te-bar-fill-blue" style="width: 42.2%;"></div>
       </div>
     </div>
-    <div class="te-bar-value">+5.0</div>
+    <div class="te-bar-value">+4.2</div>
   
 </div>
 
@@ -277,14 +369,14 @@
     
     <div class="te-bar-track">
       <div class="te-bar-half te-bar-half-left">
-        <div class="te-bar-fill te-bar-fill-red" style="width: 25.2%;"></div>
+        <div class="te-bar-fill te-bar-fill-red" style="width: 23.6%;"></div>
       </div>
       <div class="te-bar-center"></div>
       <div class="te-bar-half te-bar-half-right">
         
       </div>
     </div>
-    <div class="te-bar-value">-2.5</div>
+    <div class="te-bar-value">-2.4</div>
   
 </div>
 
@@ -299,10 +391,10 @@
       </div>
       <div class="te-bar-center"></div>
       <div class="te-bar-half te-bar-half-right">
-        <div class="te-bar-fill te-bar-fill-blue" style="width: 23.0%;"></div>
+        <div class="te-bar-fill te-bar-fill-blue" style="width: 20.6%;"></div>
       </div>
     </div>
-    <div class="te-bar-value">+2.3</div>
+    <div class="te-bar-value">+2.1</div>
   
 </div>
 
@@ -322,10 +414,10 @@
       </div>
       <div class="te-bar-center"></div>
       <div class="te-bar-half te-bar-half-right">
-        <div class="te-bar-fill te-bar-fill-blue" style="width: 27.9%;"></div>
+        <div class="te-bar-fill te-bar-fill-blue" style="width: 25.4%;"></div>
       </div>
     </div>
-    <div class="te-bar-value">+2.8</div>
+    <div class="te-bar-value">+2.5</div>
   
 </div>
 
@@ -334,16 +426,9 @@
 </section>
 
 
-<section class="te-caveats">
-  <h3>Caveats</h3>
-  <ul>
-    <li>[Miami Experience] config/rosters/Miami.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season</li><li>[Wake Forest Experience] config/rosters/Wake Forest.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season</li>
-  </ul>
-</section>
-
 
 <footer>
-  Source: collegefootballdata.com (Tier 1 stats, roster, talent) + human-maintained depth-chart config &middot; generated 2026-09-16 17:51 UTC
+  Source: collegefootballdata.com (Tier 1 stats, roster, talent) + human-maintained depth-chart config &middot; generated 2026-09-16 23:34 UTC
 </footer>
 </div>
 </div>
@@ -431,17 +516,29 @@
 .trench-edge-widget .te-caveats ul { margin: 4px 0 0 0; padding-left: 18px; font-size: 13px; color: var(--te-text-secondary); }
 .trench-edge-widget .te-caveats li { margin-bottom: 4px; }
 .trench-edge-widget footer { font-size: 11px; color: var(--te-muted); border-top: 1px solid var(--te-gridline); padding-top: 12px; }
+.trench-edge-widget .te-chalkboard { background: #1e3a2f; border-radius: 8px; padding: 16px; }
+.trench-edge-widget .te-chalk-side-label { color: #d8e8de; font-size: 12px; text-align: center; margin-bottom: 8px; }
+.trench-edge-widget .te-chalk-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.trench-edge-widget .te-chalk-player { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 8px 10px; min-width: 84px; text-align: center; }
+.trench-edge-widget .te-chalk-player .te-chalk-pos { font-size: 10px; color: #a9c4b6; letter-spacing: 0.04em; }
+.trench-edge-widget .te-chalk-player .te-chalk-jersey { font-size: 20px; font-weight: 700; color: #ffffff; }
+.trench-edge-widget .te-chalk-player .te-chalk-name { font-size: 11px; color: #e6efe9; margin-top: 2px; }
+.trench-edge-widget .te-chalk-player .te-chalk-detail { font-size: 10px; color: #a9c4b6; margin-top: 2px; }
+.trench-edge-widget .te-chalk-player.te-chalk-ol { border-color: var(--te-blue); }
+.trench-edge-widget .te-chalk-player.te-chalk-dl { border-color: var(--te-red); }
+.trench-edge-widget .te-chalk-los { display: flex; align-items: center; gap: 8px; margin: 12px 0; color: #a9c4b6; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+.trench-edge-widget .te-chalk-los::before, .trench-edge-widget .te-chalk-los::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,0.25); }
 </style>
 
 <header>
   <h2>Wake Forest OL vs Miami DL</h2>
-  <p class="te-subtitle">2026-wk03-miami-wake-forest-b &middot; 2026 season &middot; generated 2026-09-16 17:51 UTC</p>
+  <p class="te-subtitle">2026-wk03-miami-wake-forest-b &middot; 2026 season &middot; generated 2026-09-16 23:34 UTC</p>
 </header>
 
 <section class="te-stat-tiles">
   <div class="te-stat-tile">
     <div class="te-label">Wake Forest OL avg weight</div>
-    <div class="te-value">297 lbs</div>
+    <div class="te-value">296 lbs</div>
   </div>
   <div class="te-stat-tile">
     <div class="te-label">Miami DL avg weight</div>
@@ -449,7 +546,7 @@
   </div>
   <div class="te-stat-tile">
     <div class="te-label">Weight differential</div>
-    <div class="te-value">+26 lbs</div>
+    <div class="te-value">+25 lbs</div>
   </div>
 </section>
 
@@ -470,12 +567,22 @@
     </tr>
     
     <tr>
-      <td>#72</td>
-      <td>Aidan Martin</td>
-      <td>FR</td>
-      <td>265 lbs</td>
-      <td>170</td>
-      <td>86 (3&starf;)</td>
+      <td>#65</td>
+      <td>Clinton Richard</td>
+      <td>SO</td>
+      <td>305 lbs</td>
+      <td>418</td>
+      <td>88 (3&starf;)</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>#70</td>
+      <td>Will Way</td>
+      <td>JR</td>
+      <td>290 lbs</td>
+      <td>113</td>
+      <td>&mdash;</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
@@ -490,22 +597,12 @@
     </tr>
     
     <tr>
-      <td>#78</td>
-      <td>Jack Hines</td>
-      <td>SO</td>
-      <td>311 lbs</td>
-      <td>172</td>
-      <td>87 (3&starf;)</td>
-      <td class="te-badge">&check; confirmed</td>
-    </tr>
-    
-    <tr>
-      <td>#70</td>
-      <td>Will Way</td>
-      <td>JR</td>
-      <td>290 lbs</td>
-      <td>113</td>
-      <td>&mdash;</td>
+      <td>#72</td>
+      <td>Aidan Martin</td>
+      <td>FR</td>
+      <td>265 lbs</td>
+      <td>170</td>
+      <td>86 (3&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
@@ -518,22 +615,12 @@
     <tr><th>#</th><th>Player</th><th>Class</th><th>Weight</th><th>Snaps (multi-yr)</th><th>Recruit</th><th>Confidence</th></tr>
     
     <tr>
-      <td>#8</td>
-      <td>Marquise Lightfoot</td>
-      <td>JR</td>
-      <td>230 lbs</td>
-      <td>361</td>
-      <td>97 (4&starf;)</td>
-      <td class="te-badge">&check; confirmed</td>
-    </tr>
-    
-    <tr>
-      <td>#99</td>
-      <td>Ahmad Moten Sr.</td>
+      <td>#10</td>
+      <td>Damon Wilson II</td>
       <td>SR</td>
-      <td>300 lbs</td>
-      <td>828</td>
-      <td>85 (3&starf;)</td>
+      <td>250 lbs</td>
+      <td>61</td>
+      <td>97 (4&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
@@ -548,16 +635,106 @@
     </tr>
     
     <tr>
-      <td>#10</td>
-      <td>Damon Wilson II</td>
+      <td>#99</td>
+      <td>Ahmad Moten Sr.</td>
       <td>SR</td>
-      <td>250 lbs</td>
-      <td>61</td>
+      <td>300 lbs</td>
+      <td>828</td>
+      <td>85 (3&starf;)</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>#8</td>
+      <td>Marquise Lightfoot</td>
+      <td>JR</td>
+      <td>230 lbs</td>
+      <td>361</td>
       <td>97 (4&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
   </table>
+  
+</section>
+
+<section class="te-chalkboard-section">
+  <h3>Formation</h3>
+  
+  <div class="te-chalkboard">
+    <div class="te-chalk-side-label">Wake Forest offensive line &middot; Multiple</div>
+    <div class="te-chalk-row">
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">LT</div>
+        <div class="te-chalk-jersey">#55</div>
+        <div class="te-chalk-name">Tolu Olajide</div>
+        <div class="te-chalk-detail">300 lbs &middot; 137 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">LG</div>
+        <div class="te-chalk-jersey">#65</div>
+        <div class="te-chalk-name">Clinton Richard</div>
+        <div class="te-chalk-detail">305 lbs &middot; 418 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">C</div>
+        <div class="te-chalk-jersey">#70</div>
+        <div class="te-chalk-name">Will Way</div>
+        <div class="te-chalk-detail">290 lbs &middot; 113 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">RG</div>
+        <div class="te-chalk-jersey">#64</div>
+        <div class="te-chalk-name">Ryan Berger</div>
+        <div class="te-chalk-detail">318 lbs &middot; 120 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">RT</div>
+        <div class="te-chalk-jersey">#72</div>
+        <div class="te-chalk-name">Aidan Martin</div>
+        <div class="te-chalk-detail">265 lbs &middot; 170 snaps</div>
+      </div>
+      
+    </div>
+    <div class="te-chalk-los">Line of scrimmage</div>
+    <div class="te-chalk-row">
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">LDE</div>
+        <div class="te-chalk-jersey">#10</div>
+        <div class="te-chalk-name">Damon Wilson II</div>
+        <div class="te-chalk-detail">250 lbs &middot; 61 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">LDT</div>
+        <div class="te-chalk-jersey">#5</div>
+        <div class="te-chalk-name">Justin Scott</div>
+        <div class="te-chalk-detail">303 lbs &middot; 680 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">RDT</div>
+        <div class="te-chalk-jersey">#99</div>
+        <div class="te-chalk-name">Ahmad Moten Sr.</div>
+        <div class="te-chalk-detail">300 lbs &middot; 828 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">RDE</div>
+        <div class="te-chalk-jersey">#8</div>
+        <div class="te-chalk-name">Marquise Lightfoot</div>
+        <div class="te-chalk-detail">230 lbs &middot; 361 snaps</div>
+      </div>
+      
+    </div>
+    <div class="te-chalk-side-label">Miami defensive line &middot; 4-2-5</div>
+  </div>
   
 </section>
 
@@ -578,10 +755,10 @@
       </div>
       <div class="te-bar-center"></div>
       <div class="te-bar-half te-bar-half-right">
-        <div class="te-bar-fill te-bar-fill-blue" style="width: 26.1%;"></div>
+        <div class="te-bar-fill te-bar-fill-blue" style="width: 24.9%;"></div>
       </div>
     </div>
-    <div class="te-bar-value">+2.6</div>
+    <div class="te-bar-value">+2.5</div>
   
 </div>
 
@@ -610,14 +787,14 @@
     
     <div class="te-bar-track">
       <div class="te-bar-half te-bar-half-left">
-        <div class="te-bar-fill te-bar-fill-red" style="width: 31.2%;"></div>
+        <div class="te-bar-fill te-bar-fill-red" style="width: 27.5%;"></div>
       </div>
       <div class="te-bar-center"></div>
       <div class="te-bar-half te-bar-half-right">
         
       </div>
     </div>
-    <div class="te-bar-value">-3.1</div>
+    <div class="te-bar-value">-2.7</div>
   
 </div>
 
@@ -628,14 +805,14 @@
     
     <div class="te-bar-track">
       <div class="te-bar-half te-bar-half-left">
-        <div class="te-bar-fill te-bar-fill-red" style="width: 21.2%;"></div>
+        <div class="te-bar-fill te-bar-fill-red" style="width: 20.5%;"></div>
       </div>
       <div class="te-bar-center"></div>
       <div class="te-bar-half te-bar-half-right">
         
       </div>
     </div>
-    <div class="te-bar-value">-2.1</div>
+    <div class="te-bar-value">-2.0</div>
   
 </div>
 
@@ -651,14 +828,14 @@
     
     <div class="te-bar-track">
       <div class="te-bar-half te-bar-half-left">
-        <div class="te-bar-fill te-bar-fill-red" style="width: 16.0%;"></div>
+        <div class="te-bar-fill te-bar-fill-red" style="width: 15.5%;"></div>
       </div>
       <div class="te-bar-center"></div>
       <div class="te-bar-half te-bar-half-right">
         
       </div>
     </div>
-    <div class="te-bar-value">-1.6</div>
+    <div class="te-bar-value">-1.5</div>
   
 </div>
 
@@ -667,16 +844,9 @@
 </section>
 
 
-<section class="te-caveats">
-  <h3>Caveats</h3>
-  <ul>
-    <li>[Miami Experience] config/rosters/Miami.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season</li><li>[Wake Forest Experience] config/rosters/Wake Forest.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season</li>
-  </ul>
-</section>
-
 
 <footer>
-  Source: collegefootballdata.com (Tier 1 stats, roster, talent) + human-maintained depth-chart config &middot; generated 2026-09-16 17:51 UTC
+  Source: collegefootballdata.com (Tier 1 stats, roster, talent) + human-maintained depth-chart config &middot; generated 2026-09-16 23:34 UTC
 </footer>
 </div>
 </div>

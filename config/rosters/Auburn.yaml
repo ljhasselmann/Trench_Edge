@@ -1,0 +1,58 @@
+team: Auburn
+starters:
+  OL:
+  - name: Jo Simmons
+    position_tag: LT
+  - name: Jacob Strand
+    position_tag: LG
+    jersey: '69'
+    class_year: SR
+    snaps_multi_year: 110
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Cole Best
+    position_tag: C
+    jersey: '72'
+    class_year: SR
+    snaps_multi_year: 150
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Cole Skinner
+    position_tag: RG
+    jersey: '56'
+    class_year: SR
+    snaps_multi_year: 114
+    recruit_rating: 81
+    recruit_stars: 3
+  - name: Stanton Ramil
+    position_tag: RT
+    jersey: '65'
+    class_year: JR
+    snaps_multi_year: 150
+    recruit_rating: 92
+    recruit_stars: 4
+  DL:
+  - name: Chris Murray
+    position_tag: DE
+    jersey: '13'
+    class_year: SR
+    snaps_multi_year: 318
+    recruit_rating: 89
+    recruit_stars: 3
+  - name: Dallas Walker IV
+    position_tag: NT
+    jersey: '35'
+    class_year: SR
+    snaps_multi_year: 331
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Cody Sigler
+    position_tag: DT
+    jersey: '94'
+    class_year: SR
+    snaps_multi_year: 87
+offense_scheme: Multiple
+defense_scheme: Multiple
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

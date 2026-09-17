@@ -1,0 +1,68 @@
+team: Marshall
+starters:
+  OL:
+  - name: Tariq Montgomery
+    position_tag: LT
+    jersey: '76'
+    class_year: SR
+    snaps_multi_year: 768
+    recruit_rating: 78
+    recruit_stars: 2
+  - name: Robby Martin
+    position_tag: LG
+    jersey: '73'
+    class_year: SO
+    snaps_multi_year: 117
+    recruit_rating: 89
+    recruit_stars: 3
+  - name: Andrew Dudley
+    position_tag: C
+    jersey: '56'
+    class_year: FR
+    snaps_multi_year: 131
+    recruit_rating: 83
+    recruit_stars: 3
+  - name: Jalen Slappy
+    position_tag: RG
+    jersey: '70'
+    class_year: SR
+    snaps_multi_year: 1706
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Xavier Bausley
+    position_tag: RT
+    jersey: '78'
+    class_year: SR
+    snaps_multi_year: 19
+  DL:
+  - name: Cole Funderburk
+    position_tag: LDE
+    jersey: '55'
+    class_year: FR
+    snaps_multi_year: 85
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Kenyatta Hardge
+    position_tag: NT
+    jersey: '44'
+    class_year: SO
+    snaps_multi_year: 87
+  - name: Cam Chmura
+    position_tag: DT
+    jersey: '92'
+    class_year: SO
+    snaps_multi_year: 208
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: Kelvon McBride
+    position_tag: RDE
+    jersey: '7'
+    class_year: JR
+    snaps_multi_year: 106
+    recruit_rating: 87
+    recruit_stars: 3
+offense_scheme: Spread
+defense_scheme: Multiple
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

@@ -1,0 +1,65 @@
+team: Florida
+starters:
+  OL:
+  - name: Bryce Lovett
+    position_tag: LT
+    jersey: '53'
+    class_year: SR
+    snaps_multi_year: 703
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Knijeah Harris
+    position_tag: LG
+    jersey: '77'
+    class_year: SR
+    snaps_multi_year: 1426
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Harrison Moore
+    position_tag: C
+    jersey: '52'
+    class_year: JR
+    snaps_multi_year: 103
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: TJ Shanahan Jr.
+    position_tag: RG
+    jersey: '67'
+    class_year: SR
+    snaps_multi_year: 93
+    recruit_rating: 90
+    recruit_stars: 4
+  - name: Emeka Ugorji
+    position_tag: RT
+    jersey: '66'
+    class_year: SO
+    snaps_multi_year: 86
+    recruit_rating: 87
+    recruit_stars: 3
+  DL:
+  - name: Kamran James
+    position_tag: DE
+    jersey: '24'
+    class_year: SR
+    snaps_multi_year: 811
+    recruit_rating: 95
+    recruit_stars: 4
+  - name: Brendan Bett
+    position_tag: NT
+    jersey: '90'
+    class_year: SR
+    snaps_multi_year: 413
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Jeramiah McCloud
+    position_tag: DT
+    jersey: '91'
+    class_year: SO
+    snaps_multi_year: 240
+    recruit_rating: 88
+    recruit_stars: 3
+offense_scheme: Spread Option
+defense_scheme: 3-4
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

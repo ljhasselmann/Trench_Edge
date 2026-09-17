@@ -1,0 +1,72 @@
+team: Kansas State
+starters:
+  OL:
+  - name: Ryan Howard
+    position_tag: LT
+    jersey: '72'
+    class_year: SO
+    snaps_multi_year: 115
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Tanner Morley
+    position_tag: LG
+    jersey: '77'
+    class_year: JR
+    snaps_multi_year: 39
+    recruit_rating: 81
+    recruit_stars: 3
+  - name: Dylan Villarouel
+    position_tag: C
+    jersey: '71'
+    class_year: FR
+    snaps_multi_year: 159
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Keiton Jones
+    position_tag: RG
+    jersey: '54'
+    class_year: FR
+    snaps_multi_year: 85
+    recruit_rating: 90
+    recruit_stars: 4
+  - name: Gus Hawkins
+    position_tag: RT
+    jersey: '70'
+    class_year: SO
+    snaps_multi_year: 241
+    recruit_rating: 91
+    recruit_stars: 4
+  DL:
+  - name: Wendell Gregory
+    position_tag: LDE
+    jersey: '1'
+    class_year: SO
+    snaps_multi_year: 65
+    recruit_rating: 92
+    recruit_stars: 4
+  - name: Kamari Burns
+    position_tag: NT
+    jersey: '15'
+    class_year: JR
+    snaps_multi_year: 49
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Travis Bates
+    position_tag: DT
+    jersey: '39'
+    class_year: SR
+    snaps_multi_year: 684
+    recruit_rating: 78
+    recruit_stars: 2
+  - name: Jordan Allen
+    position_tag: RDE
+    jersey: '91'
+    class_year: JR
+    snaps_multi_year: 460
+    recruit_rating: 90
+    recruit_stars: 4
+offense_scheme: Spread
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

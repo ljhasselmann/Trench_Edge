@@ -1,0 +1,59 @@
+team: Oregon State
+starters:
+  OL:
+  - name: Josiah Timoteo
+    position_tag: LT
+    jersey: '71'
+    class_year: JR
+    snaps_multi_year: 485
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Nathan Elu
+    position_tag: LG
+    jersey: '78'
+    class_year: SR
+    snaps_multi_year: 547
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Van Wells
+    position_tag: C
+    snaps_multi_year: 1383
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Tyler Voltin
+    position_tag: RG
+    jersey: '79'
+    class_year: SR
+    snaps_multi_year: 676
+  - name: Teko Shoats
+    position_tag: RT
+    jersey: '50'
+    class_year: JR
+    snaps_multi_year: 153
+    recruit_rating: 83
+    recruit_stars: 3
+  DL:
+  - name: Takari Hickle
+    position_tag: DE
+    jersey: '44'
+    class_year: SR
+    snaps_multi_year: 108
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Daniel Matagi
+    position_tag: NT
+    jersey: '90'
+    class_year: SR
+    snaps_multi_year: 85
+  - name: Tevita Pome'e
+    position_tag: DT
+    jersey: '59'
+    class_year: JR
+    snaps_multi_year: 600
+    recruit_rating: 87
+    recruit_stars: 3
+offense_scheme: Spread
+defense_scheme: Multiple 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

@@ -513,6 +513,49 @@ def render_index(week_label: str, games: list[dict]) -> str:
     return template.render(week_label=week_label, games=games)
 
 
+def export_matchup_scores_csv(contexts: list["WidgetContext"], path: Path, week: int, year: int) -> None:
+    """Flat CSV export consumed by the React frontend. One row per direction
+    (two per game). Writes fresh each call — callers accumulate across
+    partial runs by passing the full context list for the run."""
+    import csv
+
+    FIELDS = [
+        "week", "year", "matchup_label", "direction",
+        "team_ol", "team_dl", "team_ol_color", "team_dl_color",
+        "mass_score", "push_score", "experience_score", "recruiting_score",
+        "composite_score", "composite_verdict",
+        "ol_avg_weight", "dl_avg_weight", "weight_diff_lbs",
+        "ol_offense_scheme", "dl_defense_scheme",
+    ]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=FIELDS)
+        w.writeheader()
+        for ctx in contexts:
+            direction = "a" if ctx.side.startswith("team_a_ol") else "b"
+            w.writerow({
+                "week": week,
+                "year": year,
+                "matchup_label": ctx.matchup_label,
+                "direction": direction,
+                "team_ol": ctx.team_a,
+                "team_dl": ctx.team_b,
+                "team_ol_color": ctx.team_a_color,
+                "team_dl_color": ctx.team_b_color,
+                "mass_score": ctx.mass.get("score"),
+                "push_score": ctx.push.get("score"),
+                "experience_score": ctx.experience.get("score"),
+                "recruiting_score": ctx.recruiting.get("score"),
+                "composite_score": ctx.composite["value"] if ctx.composite else "",
+                "composite_verdict": ctx.composite["verdict"] if ctx.composite else "",
+                "ol_avg_weight": ctx.mass.get("team_a_avg_weight") or "",
+                "dl_avg_weight": ctx.mass.get("team_b_avg_weight") or "",
+                "weight_diff_lbs": ctx.mass.get("weight_diff_lbs") if ctx.mass.get("weight_diff_lbs") is not None else "",
+                "ol_offense_scheme": ctx.mass.get("team_a_offense_scheme") or "",
+                "dl_defense_scheme": ctx.mass.get("team_b_defense_scheme") or "",
+            })
+
+
 if __name__ == "__main__":
     import argparse
     import sys

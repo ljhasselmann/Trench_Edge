@@ -98,11 +98,23 @@
 .trench-edge-widget .te-caveats ul { margin: 4px 0 0 0; padding-left: 18px; font-size: 13px; color: var(--te-text-secondary); }
 .trench-edge-widget .te-caveats li { margin-bottom: 4px; }
 .trench-edge-widget footer { font-size: 11px; color: var(--te-muted); border-top: 1px solid var(--te-gridline); padding-top: 12px; }
+.trench-edge-widget .te-chalkboard { background: #1e3a2f; border-radius: 8px; padding: 16px; }
+.trench-edge-widget .te-chalk-side-label { color: #d8e8de; font-size: 12px; text-align: center; margin-bottom: 8px; }
+.trench-edge-widget .te-chalk-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.trench-edge-widget .te-chalk-player { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 8px 10px; min-width: 84px; text-align: center; }
+.trench-edge-widget .te-chalk-player .te-chalk-pos { font-size: 10px; color: #a9c4b6; letter-spacing: 0.04em; }
+.trench-edge-widget .te-chalk-player .te-chalk-jersey { font-size: 20px; font-weight: 700; color: #ffffff; }
+.trench-edge-widget .te-chalk-player .te-chalk-name { font-size: 11px; color: #e6efe9; margin-top: 2px; }
+.trench-edge-widget .te-chalk-player .te-chalk-detail { font-size: 10px; color: #a9c4b6; margin-top: 2px; }
+.trench-edge-widget .te-chalk-player.te-chalk-ol { border-color: var(--te-blue); }
+.trench-edge-widget .te-chalk-player.te-chalk-dl { border-color: var(--te-red); }
+.trench-edge-widget .te-chalk-los { display: flex; align-items: center; gap: 8px; margin: 12px 0; color: #a9c4b6; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+.trench-edge-widget .te-chalk-los::before, .trench-edge-widget .te-chalk-los::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,0.25); }
 </style>
 
 <header>
   <h2>SMU OL vs Louisville DL</h2>
-  <p class="te-subtitle">2026-wk03-smu-louisville-a &middot; 2026 season &middot; generated 2026-09-16 03:57 UTC</p>
+  <p class="te-subtitle">2026-wk03-smu-louisville-a &middot; 2026 season &middot; generated 2026-09-16 23:35 UTC</p>
 </header>
 
 <section class="te-stat-tiles">
@@ -124,35 +136,55 @@
   <h3>SMU starting OL</h3>
   
   <table>
-    <tr><th>Player</th><th>Weight</th><th>Confidence</th></tr>
+    <tr><th>#</th><th>Player</th><th>Class</th><th>Weight</th><th>Snaps (multi-yr)</th><th>Recruit</th><th>Confidence</th></tr>
     
     <tr>
+      <td>#59</td>
       <td>PJ Williams</td>
+      <td>SR</td>
       <td>313 lbs</td>
+      <td>1809</td>
+      <td>97 (4&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
     <tr>
+      <td>#77</td>
       <td>Alex Woods</td>
+      <td>JR</td>
       <td>300 lbs</td>
+      <td>122</td>
+      <td>84 (3&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
     <tr>
+      <td>#64</td>
       <td>Joshua Bates</td>
+      <td>JR</td>
       <td>315 lbs</td>
+      <td>972</td>
+      <td>90 (4&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
     <tr>
+      <td>#63</td>
       <td>Addison Nichols</td>
+      <td>SR</td>
       <td>320 lbs</td>
+      <td>973</td>
+      <td>93 (4&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
     <tr>
+      <td>#74</td>
       <td>Andrew Chamblee</td>
+      <td>SR</td>
       <td>308 lbs</td>
+      <td>624</td>
+      <td>93 (4&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
@@ -162,33 +194,129 @@
   <h3>Louisville starting DL</h3>
   
   <table>
-    <tr><th>Player</th><th>Weight</th><th>Confidence</th></tr>
+    <tr><th>#</th><th>Player</th><th>Class</th><th>Weight</th><th>Snaps (multi-yr)</th><th>Recruit</th><th>Confidence</th></tr>
     
     <tr>
+      <td>#17</td>
       <td>AJ Green</td>
+      <td>JR</td>
       <td>250 lbs</td>
+      <td>429</td>
+      <td>94 (4&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
     <tr>
+      <td>#95</td>
       <td>Joshua Donald</td>
+      <td>GR</td>
       <td>310 lbs</td>
+      <td>59</td>
+      <td>&mdash;</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
     <tr>
+      <td>#90</td>
       <td>Daylen Russell</td>
+      <td>SO</td>
       <td>300 lbs</td>
+      <td>57</td>
+      <td>85 (3&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
     <tr>
+      <td>#50</td>
       <td>Clev Lubin</td>
+      <td>SR</td>
       <td>260 lbs</td>
+      <td>695</td>
+      <td>&mdash;</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
   </table>
+  
+</section>
+
+<section class="te-chalkboard-section">
+  <h3>Formation</h3>
+  
+  <div class="te-chalkboard">
+    <div class="te-chalk-side-label">SMU offensive line &middot; Air Raid</div>
+    <div class="te-chalk-row">
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">LT</div>
+        <div class="te-chalk-jersey">#59</div>
+        <div class="te-chalk-name">PJ Williams</div>
+        <div class="te-chalk-detail">313 lbs &middot; 1809 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">LG</div>
+        <div class="te-chalk-jersey">#77</div>
+        <div class="te-chalk-name">Alex Woods</div>
+        <div class="te-chalk-detail">300 lbs &middot; 122 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">C</div>
+        <div class="te-chalk-jersey">#64</div>
+        <div class="te-chalk-name">Joshua Bates</div>
+        <div class="te-chalk-detail">315 lbs &middot; 972 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">RG</div>
+        <div class="te-chalk-jersey">#63</div>
+        <div class="te-chalk-name">Addison Nichols</div>
+        <div class="te-chalk-detail">320 lbs &middot; 973 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">RT</div>
+        <div class="te-chalk-jersey">#74</div>
+        <div class="te-chalk-name">Andrew Chamblee</div>
+        <div class="te-chalk-detail">308 lbs &middot; 624 snaps</div>
+      </div>
+      
+    </div>
+    <div class="te-chalk-los">Line of scrimmage</div>
+    <div class="te-chalk-row">
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">LDE</div>
+        <div class="te-chalk-jersey">#17</div>
+        <div class="te-chalk-name">AJ Green</div>
+        <div class="te-chalk-detail">250 lbs &middot; 429 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">NT</div>
+        <div class="te-chalk-jersey">#95</div>
+        <div class="te-chalk-name">Joshua Donald</div>
+        <div class="te-chalk-detail">310 lbs &middot; 59 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">DT</div>
+        <div class="te-chalk-jersey">#90</div>
+        <div class="te-chalk-name">Daylen Russell</div>
+        <div class="te-chalk-detail">300 lbs &middot; 57 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">RDE</div>
+        <div class="te-chalk-jersey">#50</div>
+        <div class="te-chalk-name">Clev Lubin</div>
+        <div class="te-chalk-detail">260 lbs &middot; 695 snaps</div>
+      </div>
+      
+    </div>
+    <div class="te-chalk-side-label">Louisville defensive line &middot; 4-2-5, 4-3</div>
+  </div>
   
 </section>
 
@@ -236,12 +364,37 @@
 
   
 <div class="te-bar-row">
-  <div class="te-bar-label">Continuity</div>
+  <div class="te-bar-label">Experience</div>
   
-    <div class="te-bar-track te-bar-unavailable">
-      <span class="te-unavailable-text">data unavailable</span>
+    
+    <div class="te-bar-track">
+      <div class="te-bar-half te-bar-half-left">
+        
+      </div>
+      <div class="te-bar-center"></div>
+      <div class="te-bar-half te-bar-half-right">
+        <div class="te-bar-fill te-bar-fill-blue" style="width: 40.0%;"></div>
+      </div>
     </div>
-    <div class="te-bar-value te-muted">&mdash;</div>
+    <div class="te-bar-value">+4.0</div>
+  
+</div>
+
+  
+<div class="te-bar-row">
+  <div class="te-bar-label">Recruiting</div>
+  
+    
+    <div class="te-bar-track">
+      <div class="te-bar-half te-bar-half-left">
+        
+      </div>
+      <div class="te-bar-center"></div>
+      <div class="te-bar-half te-bar-half-right">
+        <div class="te-bar-fill te-bar-fill-blue" style="width: 3.8%;"></div>
+      </div>
+    </div>
+    <div class="te-bar-value">+0.4</div>
   
 </div>
 
@@ -250,7 +403,25 @@
 <section class="te-composite">
   <h3>Composite</h3>
   
-    <p class="te-muted">Not computed this run &mdash; see caveats below.</p>
+    
+<div class="te-bar-row">
+  <div class="te-bar-label">Trench Edge</div>
+  
+    
+    <div class="te-bar-track">
+      <div class="te-bar-half te-bar-half-left">
+        
+      </div>
+      <div class="te-bar-center"></div>
+      <div class="te-bar-half te-bar-half-right">
+        <div class="te-bar-fill te-bar-fill-blue" style="width: 18.8%;"></div>
+      </div>
+    </div>
+    <div class="te-bar-value">+1.9</div>
+  
+</div>
+
+    <p class="te-composite-verdict">negligible edge</p>
   
 </section>
 
@@ -258,13 +429,13 @@
 <section class="te-caveats">
   <h3>Caveats</h3>
   <ul>
-    <li>[SMU Mass] Ira Singleton IV (SMU, DL) not found in live CFBD roster and no fallback weight supplied in config -- excluded from Mass average</li><li>[SMU Continuity] config/rosters/SMU.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it</li><li>[SMU Continuity] config/rosters/SMU.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season</li><li>[Louisville Continuity] config/rosters/Louisville.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it</li><li>[Louisville Continuity] config/rosters/Louisville.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season</li><li>Composite not computed -- missing: Continuity</li>
+    <li>[SMU Mass] Ira Singleton IV (SMU, DL) matched live CFBD roster as &#39;Ira Singleton&#39; -- the two sources spell this player&#39;s name differently</li>
   </ul>
 </section>
 
 
 <footer>
-  Source: collegefootballdata.com (Tier 1 stats, roster, talent) + human-maintained depth-chart config &middot; generated 2026-09-16 03:57 UTC
+  Source: collegefootballdata.com (Tier 1 stats, roster, talent) + human-maintained depth-chart config &middot; generated 2026-09-16 23:35 UTC
 </footer>
 </div>
 </div>
@@ -352,11 +523,23 @@
 .trench-edge-widget .te-caveats ul { margin: 4px 0 0 0; padding-left: 18px; font-size: 13px; color: var(--te-text-secondary); }
 .trench-edge-widget .te-caveats li { margin-bottom: 4px; }
 .trench-edge-widget footer { font-size: 11px; color: var(--te-muted); border-top: 1px solid var(--te-gridline); padding-top: 12px; }
+.trench-edge-widget .te-chalkboard { background: #1e3a2f; border-radius: 8px; padding: 16px; }
+.trench-edge-widget .te-chalk-side-label { color: #d8e8de; font-size: 12px; text-align: center; margin-bottom: 8px; }
+.trench-edge-widget .te-chalk-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.trench-edge-widget .te-chalk-player { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 8px 10px; min-width: 84px; text-align: center; }
+.trench-edge-widget .te-chalk-player .te-chalk-pos { font-size: 10px; color: #a9c4b6; letter-spacing: 0.04em; }
+.trench-edge-widget .te-chalk-player .te-chalk-jersey { font-size: 20px; font-weight: 700; color: #ffffff; }
+.trench-edge-widget .te-chalk-player .te-chalk-name { font-size: 11px; color: #e6efe9; margin-top: 2px; }
+.trench-edge-widget .te-chalk-player .te-chalk-detail { font-size: 10px; color: #a9c4b6; margin-top: 2px; }
+.trench-edge-widget .te-chalk-player.te-chalk-ol { border-color: var(--te-blue); }
+.trench-edge-widget .te-chalk-player.te-chalk-dl { border-color: var(--te-red); }
+.trench-edge-widget .te-chalk-los { display: flex; align-items: center; gap: 8px; margin: 12px 0; color: #a9c4b6; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+.trench-edge-widget .te-chalk-los::before, .trench-edge-widget .te-chalk-los::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,0.25); }
 </style>
 
 <header>
   <h2>Louisville OL vs SMU DL</h2>
-  <p class="te-subtitle">2026-wk03-smu-louisville-b &middot; 2026 season &middot; generated 2026-09-16 03:57 UTC</p>
+  <p class="te-subtitle">2026-wk03-smu-louisville-b &middot; 2026 season &middot; generated 2026-09-16 23:35 UTC</p>
 </header>
 
 <section class="te-stat-tiles">
@@ -366,11 +549,11 @@
   </div>
   <div class="te-stat-tile">
     <div class="te-label">SMU DL avg weight</div>
-    <div class="te-value">304 lbs</div>
+    <div class="te-value">288 lbs</div>
   </div>
   <div class="te-stat-tile">
     <div class="te-label">Weight differential</div>
-    <div class="te-value">-0 lbs</div>
+    <div class="te-value">+16 lbs</div>
   </div>
 </section>
 
@@ -378,35 +561,55 @@
   <h3>Louisville starting OL</h3>
   
   <table>
-    <tr><th>Player</th><th>Weight</th><th>Confidence</th></tr>
+    <tr><th>#</th><th>Player</th><th>Class</th><th>Weight</th><th>Snaps (multi-yr)</th><th>Recruit</th><th>Confidence</th></tr>
     
     <tr>
+      <td>#53</td>
       <td>Lance Robinson</td>
+      <td>GR</td>
       <td>295 lbs</td>
+      <td>943</td>
+      <td>82 (3&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
     <tr>
+      <td>#56</td>
       <td>Eryx Daugherty</td>
+      <td>JR</td>
       <td>310 lbs</td>
+      <td>126</td>
+      <td>87 (3&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
     <tr>
+      <td>#58</td>
       <td>Evan Wibberley</td>
+      <td>SR</td>
       <td>305 lbs</td>
+      <td>126</td>
+      <td>80 (3&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
     <tr>
+      <td>#66</td>
       <td>Johnnie Brown III</td>
+      <td>SR</td>
       <td>310 lbs</td>
+      <td>126</td>
+      <td>&mdash;</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
     <tr>
+      <td>#71</td>
       <td>Cason Henry</td>
+      <td>SR</td>
       <td>300 lbs</td>
+      <td>70</td>
+      <td>86 (3&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
@@ -416,27 +619,129 @@
   <h3>SMU starting DL</h3>
   
   <table>
-    <tr><th>Player</th><th>Weight</th><th>Confidence</th></tr>
+    <tr><th>#</th><th>Player</th><th>Class</th><th>Weight</th><th>Snaps (multi-yr)</th><th>Recruit</th><th>Confidence</th></tr>
     
     <tr>
+      <td>#6</td>
       <td>Tavion Atkinson</td>
+      <td>JR</td>
       <td>280 lbs</td>
+      <td>32</td>
+      <td>86 (3&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
     <tr>
+      <td>#5</td>
       <td>Malcolm Alcorn-Crowder</td>
+      <td>SR</td>
       <td>305 lbs</td>
+      <td>62</td>
+      <td>88 (3&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
     <tr>
+      <td>#97</td>
       <td>Christian Davis</td>
+      <td>JR</td>
       <td>328 lbs</td>
+      <td>52</td>
+      <td>&mdash;</td>
+      <td class="te-badge">&check; confirmed</td>
+    </tr>
+    
+    <tr>
+      <td>#9</td>
+      <td>Ira Singleton IV</td>
+      <td>JR</td>
+      <td>240 lbs</td>
+      <td>68</td>
+      <td>85 (3&starf;)</td>
       <td class="te-badge">&check; confirmed</td>
     </tr>
     
   </table>
+  
+</section>
+
+<section class="te-chalkboard-section">
+  <h3>Formation</h3>
+  
+  <div class="te-chalkboard">
+    <div class="te-chalk-side-label">Louisville offensive line &middot; Pro Style</div>
+    <div class="te-chalk-row">
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">LT</div>
+        <div class="te-chalk-jersey">#53</div>
+        <div class="te-chalk-name">Lance Robinson</div>
+        <div class="te-chalk-detail">295 lbs &middot; 943 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">LG</div>
+        <div class="te-chalk-jersey">#56</div>
+        <div class="te-chalk-name">Eryx Daugherty</div>
+        <div class="te-chalk-detail">310 lbs &middot; 126 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">C</div>
+        <div class="te-chalk-jersey">#58</div>
+        <div class="te-chalk-name">Evan Wibberley</div>
+        <div class="te-chalk-detail">305 lbs &middot; 126 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">RG</div>
+        <div class="te-chalk-jersey">#66</div>
+        <div class="te-chalk-name">Johnnie Brown III</div>
+        <div class="te-chalk-detail">310 lbs &middot; 126 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-ol">
+        <div class="te-chalk-pos">RT</div>
+        <div class="te-chalk-jersey">#71</div>
+        <div class="te-chalk-name">Cason Henry</div>
+        <div class="te-chalk-detail">300 lbs &middot; 70 snaps</div>
+      </div>
+      
+    </div>
+    <div class="te-chalk-los">Line of scrimmage</div>
+    <div class="te-chalk-row">
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">LDE</div>
+        <div class="te-chalk-jersey">#6</div>
+        <div class="te-chalk-name">Tavion Atkinson</div>
+        <div class="te-chalk-detail">280 lbs &middot; 32 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">LDT</div>
+        <div class="te-chalk-jersey">#5</div>
+        <div class="te-chalk-name">Malcolm Alcorn-Crowder</div>
+        <div class="te-chalk-detail">305 lbs &middot; 62 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">RDT</div>
+        <div class="te-chalk-jersey">#97</div>
+        <div class="te-chalk-name">Christian Davis</div>
+        <div class="te-chalk-detail">328 lbs &middot; 52 snaps</div>
+      </div>
+      
+      <div class="te-chalk-player te-chalk-dl">
+        <div class="te-chalk-pos">RDE</div>
+        <div class="te-chalk-jersey">#9</div>
+        <div class="te-chalk-name">Ira Singleton IV</div>
+        <div class="te-chalk-detail">240 lbs &middot; 68 snaps</div>
+      </div>
+      
+    </div>
+    <div class="te-chalk-side-label">SMU defensive line &middot; 4-2-5</div>
+  </div>
   
 </section>
 
@@ -453,14 +758,14 @@
     
     <div class="te-bar-track">
       <div class="te-bar-half te-bar-half-left">
-        <div class="te-bar-fill te-bar-fill-red" style="width: 0.3%;"></div>
+        
       </div>
       <div class="te-bar-center"></div>
       <div class="te-bar-half te-bar-half-right">
-        
+        <div class="te-bar-fill te-bar-fill-blue" style="width: 15.8%;"></div>
       </div>
     </div>
-    <div class="te-bar-value">-0.0</div>
+    <div class="te-bar-value">+1.6</div>
   
 </div>
 
@@ -484,12 +789,37 @@
 
   
 <div class="te-bar-row">
-  <div class="te-bar-label">Continuity</div>
+  <div class="te-bar-label">Experience</div>
   
-    <div class="te-bar-track te-bar-unavailable">
-      <span class="te-unavailable-text">data unavailable</span>
+    
+    <div class="te-bar-track">
+      <div class="te-bar-half te-bar-half-left">
+        
+      </div>
+      <div class="te-bar-center"></div>
+      <div class="te-bar-half te-bar-half-right">
+        <div class="te-bar-fill te-bar-fill-blue" style="width: 11.0%;"></div>
+      </div>
     </div>
-    <div class="te-bar-value te-muted">&mdash;</div>
+    <div class="te-bar-value">+1.1</div>
+  
+</div>
+
+  
+<div class="te-bar-row">
+  <div class="te-bar-label">Recruiting</div>
+  
+    
+    <div class="te-bar-track">
+      <div class="te-bar-half te-bar-half-left">
+        <div class="te-bar-fill te-bar-fill-red" style="width: 5.2%;"></div>
+      </div>
+      <div class="te-bar-center"></div>
+      <div class="te-bar-half te-bar-half-right">
+        
+      </div>
+    </div>
+    <div class="te-bar-value">-0.5</div>
   
 </div>
 
@@ -498,7 +828,25 @@
 <section class="te-composite">
   <h3>Composite</h3>
   
-    <p class="te-muted">Not computed this run &mdash; see caveats below.</p>
+    
+<div class="te-bar-row">
+  <div class="te-bar-label">Trench Edge</div>
+  
+    
+    <div class="te-bar-track">
+      <div class="te-bar-half te-bar-half-left">
+        
+      </div>
+      <div class="te-bar-center"></div>
+      <div class="te-bar-half te-bar-half-right">
+        <div class="te-bar-fill te-bar-fill-blue" style="width: 5.2%;"></div>
+      </div>
+    </div>
+    <div class="te-bar-value">+0.5</div>
+  
+</div>
+
+    <p class="te-composite-verdict">negligible edge</p>
   
 </section>
 
@@ -506,13 +854,13 @@
 <section class="te-caveats">
   <h3>Caveats</h3>
   <ul>
-    <li>[SMU Mass] Ira Singleton IV (SMU, DL) not found in live CFBD roster and no fallback weight supplied in config -- excluded from Mass average</li><li>[SMU Continuity] config/rosters/SMU.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it</li><li>[SMU Continuity] config/rosters/SMU.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season</li><li>[Louisville Continuity] config/rosters/Louisville.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it</li><li>[Louisville Continuity] config/rosters/Louisville.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season</li><li>Composite not computed -- missing: Continuity</li>
+    <li>[SMU Mass] Ira Singleton IV (SMU, DL) matched live CFBD roster as &#39;Ira Singleton&#39; -- the two sources spell this player&#39;s name differently</li>
   </ul>
 </section>
 
 
 <footer>
-  Source: collegefootballdata.com (Tier 1 stats, roster, talent) + human-maintained depth-chart config &middot; generated 2026-09-16 03:57 UTC
+  Source: collegefootballdata.com (Tier 1 stats, roster, talent) + human-maintained depth-chart config &middot; generated 2026-09-16 23:35 UTC
 </footer>
 </div>
 </div>

@@ -1,0 +1,59 @@
+team: Toledo
+starters:
+  OL:
+  - name: Ibrahim Traore
+    position_tag: LT
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 503
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Jonathan Harder
+    position_tag: LG
+    jersey: '73'
+    class_year: SR
+    snaps_multi_year: 471
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Luke Rector
+    position_tag: C
+    jersey: '50'
+    class_year: JR
+    snaps_multi_year: 97
+  - name: Ahmad Carwise
+    position_tag: RG
+    jersey: '74'
+    class_year: SO
+    snaps_multi_year: 106
+  - name: Matt Hofer
+    position_tag: RT
+    jersey: '71'
+    class_year: SO
+    snaps_multi_year: 221
+    recruit_rating: 83
+    recruit_stars: 3
+  DL:
+  - name: Andrew Zock
+    position_tag: LDE
+    jersey: '00'
+    class_year: JR
+    snaps_multi_year: 93
+  - name: Caden Camese
+    position_tag: LDT
+    jersey: '99'
+    class_year: SR
+    snaps_multi_year: 89
+  - name: Nathaniel Chandler
+    position_tag: RDT
+  - name: Zach Johnson
+    position_tag: RDE
+    jersey: '90'
+    class_year: SO
+    snaps_multi_year: 86
+    recruit_rating: 82
+    recruit_stars: 3
+offense_scheme: Spread
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

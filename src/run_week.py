@@ -363,6 +363,7 @@ def render_all_games(
 
     index_entries = []
     failures = []
+    all_contexts: list = []
     for m in matchups:
         label = m["label"]
 
@@ -383,10 +384,25 @@ def render_all_games(
             render_widget.write_game_history_snapshot(label, m["team_a"], m["team_b"], year, ctx_a, ctx_b, hist_dir)
             href = f"{label}.html"
             index_entries.append(render_widget.game_index_entry(label, m["team_a"], m["team_b"], href, top25, ctx_a, ctx_b))
+            all_contexts.extend([ctx_a, ctx_b])
         except Exception as exc:  # noqa: BLE001 -- one bad matchup must not abort the run
             failures.append({"label": label, "error": str(exc)})
 
+    if all_contexts:
+        render_widget.export_matchup_scores_csv(all_contexts, hist_dir / "matchup_scores.csv", week, year)
+        _copy_csv_to_frontend(hist_dir / "matchup_scores.csv")
+
     return index_entries, failures
+
+
+def _copy_csv_to_frontend(src: Path) -> None:
+    """Copy a CSV to frontend/public/data/ so the Vite dev server can serve it.
+    Silent no-op when the frontend directory doesn't exist (e.g. CI, first-time
+    setup before `npm install` has been run)."""
+    import shutil
+    dest_dir = REPO_ROOT / "frontend" / "public" / "data"
+    if dest_dir.exists():
+        shutil.copy2(src, dest_dir / src.name)
 
 
 def _active_labels(matchups: list[dict], only_teams: Optional[list[str]], only_matchups: Optional[list[str]]) -> Optional[set]:
@@ -462,25 +478,28 @@ def run_week(
     except Exception:  # noqa: BLE001 -- each matchup's own talent fetch will warn per-team
         talent_table = None
 
-    if compute_ol_rank_table:
-        # Deliberately its own fetch pass, not folded into the
-        # fetch_team_data() calls above -- this needs EVERY FBS team's
-        # attributes (see compute_ol_rank_table's docstring above), not
-        # just the teams in this week's matchups. This data product is
-        # independent of matchup rendering below (no widget threading).
-        with open(CONFIG_DIR / "weights.yaml") as f:
-            ol_rank_weights = yaml.safe_load(f)
-        attrs_by_team = compute_ol_rank.fetch_league_ol_attributes(year, session=session)
-        league = list(attrs_by_team.values())
-        ol_rank_results = [compute_ol_rank.compute_ol_rank(a, league, ol_rank_weights) for a in league]
-        ranked = compute_ol_rank.rank_league(ol_rank_results)
-
     # One browser process for the whole run -- roster population (this
-    # year's starters) AND rendering (Experience's live year-1 snap-count
-    # lookup, see fetch_talent.compute_experience_inputs) both drive
-    # puntandrally.com and share this same fetch, rather than each
-    # launching its own Chromium instance.
+    # year's starters), rendering (Experience's live year-1 snap-count
+    # lookup, see fetch_talent.compute_experience_inputs), AND the
+    # league-wide OL Rank pass (same Experience lookup, once per FBS
+    # team) all drive puntandrally.com and share this same fetch, rather
+    # than each launching its own Chromium instance -- confirmed live
+    # this was a real bottleneck when compute_ol_rank_table's league-wide
+    # pass didn't share this session.
     with fetch_puntandrally.browser_session() as browser_fetch:
+        if compute_ol_rank_table:
+            # Deliberately its own fetch pass, not folded into the
+            # fetch_team_data() calls below -- this needs EVERY FBS team's
+            # attributes (see compute_ol_rank_table's docstring above), not
+            # just the teams in this week's matchups. This data product is
+            # independent of matchup rendering below (no widget threading).
+            with open(CONFIG_DIR / "weights.yaml") as f:
+                ol_rank_weights = yaml.safe_load(f)
+            attrs_by_team = compute_ol_rank.fetch_league_ol_attributes(year, session=session, browser_fetch=browser_fetch)
+            league = list(attrs_by_team.values())
+            ol_rank_results = [compute_ol_rank.compute_ol_rank(a, league, ol_rank_weights) for a in league]
+            ranked = compute_ol_rank.rank_league(ol_rank_results)
+
         roster_results: list[dict] = []
         if not skip_roster:
             roster_results = populate_all_rosters(roster_teams, year, today, browser_fetch=browser_fetch)
@@ -501,6 +520,8 @@ def run_week(
         compute_ol_rank.write_ol_rank_table_json(ranked, attrs_by_team, hist_dir / "ol_rank_table.json")
         compute_ol_rank.write_lineman_stats_csv(attrs_by_team, hist_dir / "lineman_stats.csv")
         compute_ol_rank.write_lineman_stats_json(attrs_by_team, hist_dir / "lineman_stats.json")
+        _copy_csv_to_frontend(hist_dir / "ol_rank_table.csv")
+        _copy_csv_to_frontend(hist_dir / "lineman_stats.csv")
 
     return {
         "year": year,

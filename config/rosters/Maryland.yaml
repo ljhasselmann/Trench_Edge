@@ -1,0 +1,64 @@
+team: Maryland
+starters:
+  OL:
+  - name: Rahtrel Perry
+    position_tag: LT
+    jersey: '76'
+    class_year: SR
+    snaps_multi_year: 872
+  - name: Ryan Howerton
+    position_tag: LG
+    jersey: '71'
+    class_year: SO
+    snaps_multi_year: 340
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Michael Hershey
+    position_tag: C
+    jersey: '61'
+    class_year: JR
+    snaps_multi_year: 1056
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Tellek Lockette
+    position_tag: RG
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 64
+    recruit_rating: 82
+    recruit_stars: 3
+  - name: Isaiah Wright
+    position_tag: RT
+    jersey: '74'
+    class_year: GR
+    snaps_multi_year: 735
+    recruit_rating: 85
+    recruit_stars: 3
+  DL:
+  - name: Sidney Stewart
+    position_tag: LDE
+    snaps_multi_year: 585
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Eyan Thomas
+    position_tag: LDT
+    jersey: '98'
+    class_year: JR
+    snaps_multi_year: 435
+  - name: Lavon Johnson
+    position_tag: RDT
+    jersey: '99'
+    class_year: SR
+    snaps_multi_year: 204
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: DD Holmes
+    position_tag: RDE
+    snaps_multi_year: 219
+    recruit_rating: 88
+    recruit_stars: 3
+offense_scheme: Pro Style
+defense_scheme: Multiple
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

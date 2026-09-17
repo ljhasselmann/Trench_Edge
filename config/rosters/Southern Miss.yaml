@@ -1,0 +1,49 @@
+team: Southern Miss
+starters:
+  OL:
+  - name: Braden Cain
+    position_tag: LT
+    jersey: '70'
+    class_year: JR
+    snaps_multi_year: 106
+  - name: Zerian Hudson
+    position_tag: LG
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 37
+  - name: Joe Rounds
+    position_tag: C
+    jersey: '50'
+    class_year: SR
+    snaps_multi_year: 107
+  - name: Aloali'i Maui
+    position_tag: RG
+    jersey: '62'
+    class_year: GR
+    snaps_multi_year: 842
+  - name: Christian Young
+    position_tag: RT
+    jersey: '78'
+    class_year: SR
+    snaps_multi_year: 30
+  DL:
+  - name: Zachariah Keith
+    position_tag: DE
+    jersey: '31'
+    class_year: JR
+    snaps_multi_year: 33
+  - name: Darrell Gross
+    position_tag: NT
+    jersey: '88'
+    class_year: JR
+    snaps_multi_year: 64
+  - name: Nasim Cairo
+    position_tag: DT
+    jersey: '5'
+    class_year: SR
+    snaps_multi_year: 71
+offense_scheme: Multiple
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py

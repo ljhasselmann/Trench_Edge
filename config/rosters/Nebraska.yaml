@@ -1,0 +1,72 @@
+team: Nebraska
+starters:
+  OL:
+  - name: Elijah Pritchett
+    position_tag: LT
+    jersey: '57'
+    class_year: SR
+    snaps_multi_year: 657
+    recruit_rating: 98
+    recruit_stars: 5
+  - name: Paul Mubenga
+    position_tag: LG
+    jersey: '65'
+    class_year: SR
+    snaps_multi_year: 129
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Justin Evans
+    position_tag: C
+    jersey: '51'
+    class_year: SR
+    snaps_multi_year: 1805
+    recruit_rating: 79
+    recruit_stars: 2
+  - name: Brendan Black
+    position_tag: RG
+    jersey: '54'
+    class_year: SR
+    snaps_multi_year: 130
+    recruit_rating: 84
+    recruit_stars: 3
+  - name: Gunnar Gottula
+    position_tag: RT
+    jersey: '77'
+    class_year: SR
+    snaps_multi_year: 984
+    recruit_rating: 87
+    recruit_stars: 3
+  DL:
+  - name: Cameron Lenhardt
+    position_tag: LDE
+    jersey: '11'
+    class_year: SR
+    snaps_multi_year: 650
+    recruit_rating: 89
+    recruit_stars: 3
+  - name: Owen Stoudmire
+    position_tag: NT
+    jersey: '34'
+    class_year: SR
+    snaps_multi_year: 46
+    recruit_rating: 86
+    recruit_stars: 3
+  - name: Jahsear Whittington
+    position_tag: DT
+    jersey: '44'
+    class_year: JR
+    snaps_multi_year: 59
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Anthony Jones Jr.
+    position_tag: RDE
+    jersey: '15'
+    class_year: SR
+    snaps_multi_year: 82
+    recruit_rating: 88
+    recruit_stars: 3
+offense_scheme: Spread Option
+defense_scheme: 4-2-5
+updated_by_human_at: '2026-09-17'
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
