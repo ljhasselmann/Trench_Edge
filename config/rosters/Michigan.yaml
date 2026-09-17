@@ -2,14 +2,63 @@ team: Michigan
 starters:
   OL:
   - name: Blake Frazier
+    position_tag: LT
+    jersey: '77'
+    class_year: JR
+    snaps_multi_year: 620
+    recruit_rating: 92
+    recruit_stars: 4
   - name: Evan Link
+    position_tag: LG
+    jersey: '71'
+    class_year: SR
+    snaps_multi_year: 1134
+    recruit_rating: 88
+    recruit_stars: 3
   - name: Jake Guarnera
+    position_tag: C
+    jersey: '53'
+    class_year: JR
+    snaps_multi_year: 825
+    recruit_rating: 89
+    recruit_stars: 3
   - name: Brady Norton
+    position_tag: RG
+    jersey: '70'
+    class_year: SR
+    snaps_multi_year: 308
+    recruit_rating: 80
+    recruit_stars: 3
   - name: Andrew Sprague
+    position_tag: RT
+    jersey: '54'
+    class_year: JR
+    snaps_multi_year: 928
+    recruit_rating: 96
+    recruit_stars: 4
   DL:
   - name: Dom Nichols
+    position_tag: LDE
+    recruit_rating: 89
+    recruit_stars: 3
   - name: Trey Pierce
+    position_tag: LDT
+    jersey: '95'
+    class_year: SR
+    snaps_multi_year: 649
+    recruit_rating: 89
+    recruit_stars: 3
   - name: Enow Etta
+    position_tag: RDT
+    jersey: '17'
+    class_year: SR
+    snaps_multi_year: 465
+    recruit_rating: 95
+    recruit_stars: 4
   - name: John Daley
+    position_tag: RDE
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Spread Option
+defense_scheme: 4-3, 4-2-5

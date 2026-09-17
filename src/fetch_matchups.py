@@ -39,7 +39,7 @@ from typing import Optional
 
 import requests
 
-from fetch_cfbd import CFBD_BASE_URL, REQUEST_TIMEOUT_SECONDS, get_api_key, CFBDRequestError
+from fetch_cfbd import CFBD_BASE_URL, REQUEST_TIMEOUT_SECONDS, get_api_key, CFBDRequestError, fetch_fbs_teams
 
 GAMES_ENDPOINT = "/games"
 RANKINGS_ENDPOINT = "/rankings"
@@ -101,12 +101,22 @@ def _slugify(name: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 
 
-def derive_matchups(games: list[dict], top25: set, year: int, week: int) -> list[dict]:
+def derive_matchups(games: list[dict], top25: set, year: int, week: int, fbs_teams: Optional[set] = None) -> list[dict]:
     """One dict per game involving a ranked team, shaped exactly like
     config/teams.yaml's matchup entries. `side` defaults to the forward
     direction, but run_week.py scores both directions regardless -- it's
     kept here only for parity with the manually-curated config file
-    schema, where a human might want just one."""
+    schema, where a human might want just one.
+
+    `classification=fbs` on /games filters by the QUERIED team's own
+    classification, not both teams' -- confirmed live: an FBS team's "buy
+    game" against an FCS opponent (e.g. 2026 week 3's Iowa-Northern Iowa,
+    Oregon-Portland State) still comes back, with the FCS opponent's name
+    in home/awayTeam. None of this pipeline's data sources (CFBD roster/
+    talent, puntandrally, 247Sports, the SP+ sheet) cover FCS programs, so
+    every score comes back unavailable for these -- pass `fbs_teams` (from
+    fetch_cfbd.fetch_fbs_teams) to drop them at discovery instead of
+    rendering an all-blank widget for a game we can never actually score."""
     matchups = []
     for game in games:
         home = game.get("homeTeam")
@@ -114,6 +124,8 @@ def derive_matchups(games: list[dict], top25: set, year: int, week: int) -> list
         if not home or not away:
             continue  # a malformed/bye entry, not a real game -- skip, don't guess
         if home not in top25 and away not in top25:
+            continue
+        if fbs_teams is not None and (home not in fbs_teams or away not in fbs_teams):
             continue
 
         matchups.append({
@@ -160,7 +172,8 @@ def fetch_game_results(year: int, week: int, session: Optional[requests.Session]
 def discover_matchups(year: int, week: int, session: Optional[requests.Session] = None) -> list[dict]:
     games = fetch_fbs_schedule(year, week, session=session)
     top25 = fetch_ap_top25(year, week, session=session)
-    return derive_matchups(games, top25, year, week)
+    fbs_teams = {t["school"] for t in fetch_fbs_teams(year, session=session)}
+    return derive_matchups(games, top25, year, week, fbs_teams=fbs_teams)
 
 
 if __name__ == "__main__":

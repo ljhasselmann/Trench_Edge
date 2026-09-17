@@ -1,13 +1,67 @@
 team: Oregon
 starters:
   OL:
-  - name: Ziyare Addison
-  - name: Douglas Utu
-  - name: Iapani Laloulu
-  - name: Michael Bennett III
   - name: Fox Crader
+    jersey: '59'
+    class_year: JR
+    position_tag: T
+    snaps_multi_year: 263
+    recruit_rating: 91
+    recruit_stars: 4
+  - name: Ziyare Addison
+    jersey: '58'
+    class_year: SO
+    position_tag: T
+    snaps_multi_year: 133
+    recruit_rating: 95
+    recruit_stars: 4
+  - name: Dave Iuli
+    jersey: '74'
+    class_year: SR
+    position_tag: G
+    snaps_multi_year: 1179
+    recruit_rating: 90
+    recruit_stars: 4
+  - name: Michael Bennett
+    jersey: '75'
+    class_year: SR
+    position_tag: G
+    snaps_multi_year: 50
+  - name: Iapani Laloulu
+    jersey: '72'
+    class_year: SR
+    position_tag: C
+    snaps_multi_year: 1979
+    recruit_rating: 90
+    recruit_stars: 4
   DL:
-  - name: A'Mauri Washington
   - name: Bear Alexander
+    jersey: '1'
+    class_year: SR
+    position_tag: DT
+    snaps_multi_year: 684
+    recruit_rating: 94
+    recruit_stars: 4
+  - name: A'Mauri Washington
+    jersey: '52'
+    class_year: SR
+    position_tag: DT
+    snaps_multi_year: 1035
+    recruit_rating: 90
+    recruit_stars: 4
+  - name: Matthew Johnson
+    jersey: '55'
+    class_year: SO
+    position_tag: DT
+    snaps_multi_year: 112
+    recruit_rating: 92
+    recruit_stars: 4
+  - name: Aydin Breland
+    jersey: '42'
+    class_year: JR
+    position_tag: DT
+    snaps_multi_year: 124
+    recruit_rating: 97
+    recruit_stars: 4
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: puntandrally.com (live fetch via run_week.py)

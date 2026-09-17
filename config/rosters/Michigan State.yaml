@@ -2,14 +2,67 @@ team: Michigan State
 starters:
   OL:
   - name: Ben Murawski
+    position_tag: LT
+    jersey: '75'
+    class_year: SR
+    snaps_multi_year: 98
+    recruit_rating: 78
+    recruit_stars: 2
   - name: Conner Moore
+    position_tag: LG
+    jersey: '58'
+    class_year: SR
+    snaps_multi_year: 915
   - name: Trent Fraley
+    position_tag: C
+    jersey: '63'
+    class_year: SR
+    snaps_multi_year: 150
+    recruit_rating: 79
+    recruit_stars: 2
   - name: Nick Sharpe
+    position_tag: RG
+    jersey: '52'
+    class_year: GR
+    snaps_multi_year: 117
+    recruit_rating: 83
+    recruit_stars: 3
   - name: Rakeem Johnson
+    position_tag: RT
+    jersey: '55'
+    class_year: SO
+    snaps_multi_year: 513
+    recruit_rating: 87
+    recruit_stars: 3
   DL:
   - name: Isaac Smith
+    position_tag: LDE
+    jersey: '13'
+    class_year: GR
+    snaps_multi_year: 301
+    recruit_rating: 83
+    recruit_stars: 3
   - name: Ben Roberts
+    position_tag: NT
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 335
+    recruit_rating: 91
+    recruit_stars: 4
   - name: Eli Coenen
+    position_tag: DT
+    jersey: '96'
+    class_year: JR
+    snaps_multi_year: 64
   - name: Kenny Soares Jr.
+    position_tag: RDE
+    jersey: '1'
+    class_year: SR
+    snaps_multi_year: 72
+    recruit_rating: 85
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Multiple
+defense_scheme: Multiple 4-2-5

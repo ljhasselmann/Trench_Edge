@@ -2,59 +2,71 @@ team: Miami
 updated_by_human_at: '2026-09-16'
 starters:
   OL:
-  - name: Matthew McCoy
-    jersey: '78'
-    class_year: SR
-    snaps_multi_year: 1355
-    recruit_rating: 86
-    recruit_stars: 3
   - name: Samson Okunlola
+    position_tag: LT
     jersey: '63'
     class_year: JR
     snaps_multi_year: 646
     recruit_rating: 98
     recruit_stars: 5
-  - name: Max Buchanan
-    jersey: '66'
+  - name: Seuseu Alofaituli
+    position_tag: LG
+    jersey: '65'
     class_year: SO
-    snaps_multi_year: 134
-    recruit_rating: 88
-    recruit_stars: 3
-  - name: Jackson Cantwell
-    jersey: '79'
-    class_year: FR
-    snaps_multi_year: 60
-    recruit_rating: 99
-    recruit_stars: 5
+    snaps_multi_year: 143
+    recruit_rating: 93
+    recruit_stars: 4
   - name: Ryan Rodriguez
+    position_tag: C
     jersey: '76'
     class_year: SR
     snaps_multi_year: 221
     recruit_rating: 89
     recruit_stars: 3
-  DL:
-  - name: Marquise Lightfoot
-    jersey: '8'
-    class_year: JR
-    snaps_multi_year: 361
-    recruit_rating: 97
-    recruit_stars: 4
-  - name: Ahmad Moten Sr.
-    jersey: '99'
-    class_year: SR
-    snaps_multi_year: 828
-    recruit_rating: 85
+  - name: Max Buchanan
+    position_tag: RG
+    jersey: '66'
+    class_year: SO
+    snaps_multi_year: 134
+    recruit_rating: 88
     recruit_stars: 3
-  - name: Justin Scott
-    jersey: '5'
-    class_year: JR
-    snaps_multi_year: 680
-    recruit_rating: 98
-    recruit_stars: 5
+  - name: Matthew McCoy
+    position_tag: RT
+    jersey: '78'
+    class_year: SR
+    snaps_multi_year: 1355
+    recruit_rating: 86
+    recruit_stars: 3
+  DL:
   - name: Damon Wilson II
+    position_tag: LDE
     jersey: '10'
     class_year: SR
     snaps_multi_year: 61
     recruit_rating: 97
     recruit_stars: 4
-roster_source: puntandrally.com (live fetch via run_week.py)
+  - name: Justin Scott
+    position_tag: LDT
+    jersey: '5'
+    class_year: JR
+    snaps_multi_year: 680
+    recruit_rating: 98
+    recruit_stars: 5
+  - name: Ahmad Moten Sr.
+    position_tag: RDT
+    jersey: '99'
+    class_year: SR
+    snaps_multi_year: 828
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Marquise Lightfoot
+    position_tag: RDE
+    jersey: '8'
+    class_year: JR
+    snaps_multi_year: 361
+    recruit_rating: 97
+    recruit_stars: 4
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Air Raid
+defense_scheme: 4-2-5

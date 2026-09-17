@@ -2,14 +2,68 @@ team: USC
 starters:
   OL:
   - name: Elijah Paige
+    position_tag: LT
+    jersey: '72'
+    class_year: JR
+    snaps_multi_year: 1267
+    recruit_rating: 93
+    recruit_stars: 4
   - name: Hayden Treter
+    position_tag: LG
+    jersey: '68'
+    class_year: SO
+    snaps_multi_year: 257
+    recruit_rating: 86
+    recruit_stars: 3
   - name: Tobias Raymond
+    position_tag: C
+    jersey: '73'
+    class_year: JR
+    snaps_multi_year: 1172
+    recruit_rating: 87
+    recruit_stars: 3
   - name: Alani Noa
+    position_tag: RG
+    jersey: '77'
+    class_year: SR
+    snaps_multi_year: 1639
+    recruit_rating: 89
+    recruit_stars: 3
   - name: Justin Tauanuu
+    position_tag: RT
+    jersey: '74'
+    class_year: SO
+    snaps_multi_year: 1109
+    recruit_rating: 89
+    recruit_stars: 3
   DL:
   - name: Luke Wafle
+    position_tag: LDE
+    jersey: '94'
+    class_year: FR
+    snaps_multi_year: 73
+    recruit_rating: 99
+    recruit_stars: 5
   - name: Alex VanSumeren
+    position_tag: NT
+    jersey: '91'
+    class_year: SR
+    snaps_multi_year: 81
+    recruit_rating: 92
+    recruit_stars: 4
   - name: Jide Abasiri
+    position_tag: DT
+    jersey: '97'
+    class_year: JR
+    snaps_multi_year: 617
+    recruit_rating: 89
+    recruit_stars: 3
   - name: Kameryn Crawford
+    position_tag: RDE
+    recruit_rating: 96
+    recruit_stars: 4
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Multiple
+defense_scheme: Multiple 4-2-5

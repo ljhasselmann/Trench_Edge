@@ -2,12 +2,64 @@ team: Virginia
 starters:
   OL:
   - name: McKale Boley
+    position_tag: LT
+    jersey: '52'
+    class_year: GR
+    snaps_multi_year: 1417
+    recruit_rating: 87
+    recruit_stars: 3
   - name: Noah Josey
+    position_tag: LG
+    jersey: '76'
+    class_year: GR
+    snaps_multi_year: 1859
+    recruit_rating: 88
+    recruit_stars: 3
   - name: Drake Metcalf
+    position_tag: C
+    jersey: '60'
+    class_year: GR
+    snaps_multi_year: 1010
+    recruit_rating: 89
+    recruit_stars: 3
   - name: Makilan Thomas
+    position_tag: RG
+    jersey: '54'
+    class_year: GR
+    snaps_multi_year: 76
+    recruit_rating: 83
+    recruit_stars: 3
   - name: Monroe Mills
+    position_tag: RT
+    jersey: '71'
+    class_year: GR
+    snaps_multi_year: 86
+    recruit_rating: 83
+    recruit_stars: 3
   DL:
+  - name: Fisher Camac
+    position_tag: DE
+    jersey: '14'
+    class_year: SR
+    snaps_multi_year: 502
+    recruit_rating: 75
+    recruit_stars: 2
   - name: Anthony Britton
+    position_tag: NT
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 724
+    recruit_rating: 85
+    recruit_stars: 3
   - name: Jason Hammond
+    position_tag: DT
+    jersey: '90'
+    class_year: SR
+    snaps_multi_year: 535
+    recruit_rating: 84
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Multiple Pro Style
+defense_scheme: Multiple 4-2-5

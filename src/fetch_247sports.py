@@ -53,7 +53,7 @@ from dataclasses import dataclass
 from typing import Callable, Optional
 from urllib.parse import quote
 
-from fetch_puntandrally import _import_playwright, _navigate_and_get_html
+from fetch_puntandrally import _import_playwright, _navigate_and_get_html, PuntAndRallyFetchError
 
 TEAM_ROSTER_URL_TMPL = "https://247sports.com/college/{slug}/Season/{year}-Football/Roster/"
 CONTENT_SELECTOR = 'table[data-id="data"]'
@@ -196,7 +196,15 @@ def fetch_roster(
     slug = _team_slug(team)
     fetcher = browser_fetch or _browser_fetch_html
     url = TEAM_ROSTER_URL_TMPL.format(slug=quote(slug), year=year)
-    page_html = fetcher(url, wait_for_selector=CONTENT_SELECTOR)
+    try:
+        page_html = fetcher(url, wait_for_selector=CONTENT_SELECTOR)
+    except PuntAndRallyFetchError as exc:
+        # The shared browser-fetch plumbing (see module docstring) raises
+        # puntandrally's own error type on a navigation/timeout failure --
+        # re-raise as this module's own type so callers only ever need to
+        # catch TwoFortySevenFetchError, matching parse_roster_page's
+        # already-documented contract.
+        raise TwoFortySevenFetchError(f"browser fetch failed: {exc}") from exc
 
     players = parse_roster_page(page_html)
     return {p.name.lower(): p for p in players}

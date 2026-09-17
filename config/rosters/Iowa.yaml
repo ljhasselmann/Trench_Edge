@@ -1,15 +1,67 @@
 team: Iowa
 starters:
   OL:
-  - name: Trevor Lauck
-  - name: Leighton Jones
-  - name: Cael Winter
-  - name: Kade Pieper
   - name: Jack Dotzler
+    jersey: '71'
+    class_year: SR
+    position_tag: T
+    snaps_multi_year: 283
+    recruit_rating: 87
+    recruit_stars: 3
+  - name: Trevor Lauck
+    jersey: '59'
+    class_year: JR
+    position_tag: T
+    snaps_multi_year: 823
+    recruit_rating: 89
+    recruit_stars: 3
+  - name: Leighton Jones
+    jersey: '64'
+    class_year: JR
+    position_tag: G
+    snaps_multi_year: 271
+    recruit_rating: 89
+    recruit_stars: 3
+  - name: Kade Pieper
+    jersey: '58'
+    class_year: JR
+    position_tag: G
+    snaps_multi_year: 964
+    recruit_rating: 85
+    recruit_stars: 3
+  - name: Cael Winter
+    jersey: '61'
+    class_year: JR
+    position_tag: C
+    snaps_multi_year: 121
   DL:
-  - name: Kenneth Merrieweather
-  - name: Will Hubert
   - name: Bryce Hawthorne
+    jersey: '96'
+    class_year: JR
+    position_tag: DT
+    snaps_multi_year: 360
+    recruit_rating: 78
+    recruit_stars: 2
   - name: Iose Epenesa
+    jersey: '97'
+    class_year: FR
+    position_tag: DE
+    snaps_multi_year: 84
+    recruit_rating: 98
+    recruit_stars: 5
+  - name: K. Merrieweather
+    jersey: '44'
+    class_year: JR
+    position_tag: DT
+    snaps_multi_year: 279
+    recruit_rating: 88
+    recruit_stars: 3
+  - name: Will Hubert
+    jersey: '57'
+    class_year: SR
+    position_tag: DT
+    snaps_multi_year: 160
+    recruit_rating: 79
+    recruit_stars: 2
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: puntandrally.com (live fetch via run_week.py)

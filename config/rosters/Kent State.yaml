@@ -2,14 +2,67 @@ team: Kent State
 starters:
   OL:
   - name: Tyler Meadows
+    position_tag: LT
+    jersey: '78'
+    class_year: SO
+    snaps_multi_year: 542
+    recruit_rating: 81
+    recruit_stars: 3
   - name: Dustyn Morell
+    position_tag: LG
+    jersey: '54'
+    class_year: SR
+    snaps_multi_year: 1178
+    recruit_rating: 83
+    recruit_stars: 3
   - name: Ben Midea
+    position_tag: C
+    jersey: '50'
+    class_year: JR
+    snaps_multi_year: 119
   - name: William Johnson III
+    position_tag: RG
+    jersey: '73'
+    class_year: FR
+    snaps_multi_year: 121
+    recruit_rating: 84
+    recruit_stars: 3
   - name: Mofe Adewole
+    position_tag: RT
+    jersey: '76'
+    class_year: SR
+    snaps_multi_year: 112
   DL:
   - name: Antonio Bottiggi
+    position_tag: LDE
+    jersey: '44'
+    class_year: SO
+    snaps_multi_year: 157
+    recruit_rating: 77
+    recruit_stars: 2
   - name: Josue Cordoba
+    position_tag: NT
+    jersey: '8'
+    class_year: SO
+    snaps_multi_year: 247
+    recruit_rating: 79
+    recruit_stars: 2
   - name: Thomas Aden
+    position_tag: DT
+    jersey: '5'
+    class_year: SR
+    snaps_multi_year: 449
+    recruit_rating: 79
+    recruit_stars: 2
   - name: Jaihien Roy
+    position_tag: RDE
+    jersey: '33'
+    class_year: SO
+    snaps_multi_year: 399
+    recruit_rating: 81
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Spread
+defense_scheme: 4-3

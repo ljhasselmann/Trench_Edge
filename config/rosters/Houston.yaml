@@ -2,12 +2,60 @@ team: Houston
 starters:
   OL:
   - name: Alvin Ebosele
+    position_tag: LT
+    jersey: '79'
+    class_year: SR
+    snaps_multi_year: 1062
+    recruit_rating: 89
+    recruit_stars: 3
   - name: Shadre Hurst
+    position_tag: LG
+    jersey: '56'
+    class_year: SR
+    snaps_multi_year: 105
   - name: Anthony Boswell
+    position_tag: C
+    jersey: '52'
+    class_year: SO
+    snaps_multi_year: 104
+    recruit_rating: 78
+    recruit_stars: 2
   - name: McKenzie Agnello
+    position_tag: RG
+    jersey: '66'
+    class_year: SR
+    snaps_multi_year: 878
   - name: Drew Terrill
+    position_tag: RT
+    jersey: '73'
+    class_year: SR
+    snaps_multi_year: 17
+    recruit_rating: 78
+    recruit_stars: 2
   DL:
+  - name: Ashton Porter
+    position_tag: DE
+    jersey: '9'
+    class_year: JR
+    snaps_multi_year: 82
+    recruit_rating: 91
+    recruit_stars: 4
   - name: De'Marion Thomas
+    position_tag: NT
+    jersey: '90'
+    class_year: JR
+    snaps_multi_year: 49
+    recruit_rating: 87
+    recruit_stars: 3
   - name: Khalil Laufau
+    position_tag: DT
+    jersey: '18'
+    class_year: SR
+    snaps_multi_year: 769
+    recruit_rating: 83
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Spread
+defense_scheme: 4-2-5

@@ -2,14 +2,63 @@ team: Texas Tech
 starters:
   OL:
   - name: Howard Sampson
+    position_tag: LT
+    jersey: '79'
+    class_year: SR
+    snaps_multi_year: 1077
+    recruit_rating: 83
+    recruit_stars: 3
   - name: Hunter Zambrano
+    position_tag: LG
+    jersey: '57'
+    class_year: SR
+    snaps_multi_year: 208
+    recruit_rating: 80
+    recruit_stars: 3
   - name: Sheridan Wilson
+    position_tag: C
+    jersey: '72'
+    class_year: SR
+    snaps_multi_year: 2134
+    recruit_rating: 85
+    recruit_stars: 3
   - name: Jordan Church
+    position_tag: RG
+    jersey: '54'
+    class_year: JR
+    snaps_multi_year: 151
+    recruit_rating: 85
+    recruit_stars: 3
   - name: Jacob Ponton
+    position_tag: RT
+    jersey: '70'
+    class_year: SO
+    snaps_multi_year: 1194
+    recruit_rating: 88
+    recruit_stars: 3
   DL:
   - name: Trey White
+    position_tag: LDE
+    recruit_rating: 83
+    recruit_stars: 3
   - name: Mateen Ibirogba
+    position_tag: NT
+    jersey: '98'
+    class_year: SR
+    snaps_multi_year: 88
   - name: A.J. Holmes Jr.
+    position_tag: DT
+    jersey: '10'
+    class_year: SR
+    snaps_multi_year: 659
+    recruit_rating: 87
+    recruit_stars: 3
   - name: Adam Trick
+    position_tag: RDE
+    recruit_rating: 83
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Multiple
+defense_scheme: Multiple

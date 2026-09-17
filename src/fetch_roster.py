@@ -22,6 +22,11 @@ CFBD's position tags are NOT standardized across teams -- confirmed live:
 Miami/Wake Forest tag their whole D-line generically as "DL"; Toledo splits
 it into "DE"/"DT" and only tags 3 stragglers "DL". OL_POSITION_TAGS /
 DL_POSITION_TAGS below are unioned sets for this reason, not single strings.
+Same variability hits OL: some teams tag every lineman "OL", others use the
+specific "OT"/"OG"/"C" codes (confirmed live: LSU's Weston Davis and Jordan
+Seaton both tag "OT", Georgia's Zykie Helton tags "C") -- OL_POSITION_TAGS
+covers both, or every specifically-tagged OL starter falsely triggers the
+"verify this is the right player" mismatch warning below.
 """
 
 from __future__ import annotations
@@ -36,11 +41,12 @@ import requests
 import yaml
 
 from fetch_cfbd import CFBD_BASE_URL, REQUEST_TIMEOUT_SECONDS, get_api_key, CFBDRequestError
+from fetch_puntandrally import resolve_any_name_match
 
 ROSTER_ENDPOINT = "/roster"
 STALENESS_LIMIT_DAYS = 7
 
-OL_POSITION_TAGS = {"OL"}
+OL_POSITION_TAGS = {"OL", "OT", "OG", "C"}
 DL_POSITION_TAGS = {"DL", "DE", "DT", "EDGE"}
 
 ROSTERS_DIR = Path(__file__).resolve().parents[1] / "config" / "rosters"
@@ -57,6 +63,7 @@ class StarterWeight:
     snaps_multi_year: Optional[int] = None  # multi-season sum from fetch_puntandrally, NOT a true career total
     recruit_rating: Optional[int] = None  # 0-100 composite, from fetch_247sports -- display only, see fetch_talent.py for the actual scored differential
     recruit_stars: Optional[int] = None  # 0-5, from fetch_247sports's real star icons
+    position_tag: Optional[str] = None  # puntandrally's own "T"|"G"|"C"|"DE"|"DT"|"DL" tag -- used for the chalkboard formation view
 
 
 @dataclass
@@ -66,6 +73,8 @@ class MassInputs:
     dl_starters: list[StarterWeight] = field(default_factory=list)
     avg_ol_weight: Optional[float] = None
     avg_dl_weight: Optional[float] = None
+    offense_scheme: Optional[str] = None  # ourlads' own label, e.g. "Air Raid" -- see fetch_ourlads.py
+    defense_scheme: Optional[str] = None  # e.g. "4-2-5"
     warnings: list[str] = field(default_factory=list)
 
 
@@ -116,6 +125,9 @@ def compute_mass_inputs(
     now = now or _dt.datetime.now(_dt.timezone.utc)
 
     config = _load_starter_config(team)
+    if config is not None:
+        inputs.offense_scheme = config.get("offense_scheme")
+        inputs.defense_scheme = config.get("defense_scheme")
     if config is None:
         inputs.warnings.append(
             f"config/rosters/{team}.yaml does not exist -- no human-confirmed starter "
@@ -137,6 +149,7 @@ def compute_mass_inputs(
 
     live_roster = fetch_full_roster(team, year, session=session)
     live_by_name = {_full_name(p).lower(): p for p in live_roster}
+    live_full_names = [_full_name(p) for p in live_roster]
 
     starters_cfg = config.get("starters", {})
     for group_key, tag_set, bucket in (
@@ -146,6 +159,19 @@ def compute_mass_inputs(
         for entry in starters_cfg.get(group_key, []):
             name = entry["name"]
             live_player = live_by_name.get(name.lower())
+            if live_player is None:
+                # The staged starter name (from ourlads/puntandrally) can
+                # differ from CFBD's own spelling -- a truncated initial,
+                # a dropped generational suffix, or a stripped accent
+                # mark -- which would otherwise silently drop a real
+                # starter entirely. See fetch_puntandrally.resolve_any_name_match.
+                resolved = resolve_any_name_match(name, live_full_names)
+                if resolved is not None:
+                    live_player = live_by_name[resolved.lower()]
+                    inputs.warnings.append(
+                        f"{name} ({team}, {group_key}) matched live CFBD roster as {resolved!r} "
+                        "-- the two sources spell this player's name differently"
+                    )
             if live_player is not None:
                 weight = live_player.get("weight")
                 if weight is None:
@@ -155,6 +181,7 @@ def compute_mass_inputs(
                     jersey=entry.get("jersey"), class_year=entry.get("class_year"),
                     snaps_multi_year=entry.get("snaps_multi_year"),
                     recruit_rating=entry.get("recruit_rating"), recruit_stars=entry.get("recruit_stars"),
+                    position_tag=entry.get("position_tag"),
                 ))
                 if live_player.get("position") not in tag_set:
                     inputs.warnings.append(
@@ -172,6 +199,7 @@ def compute_mass_inputs(
                     jersey=entry.get("jersey"), class_year=entry.get("class_year"),
                     snaps_multi_year=entry.get("snaps_multi_year"),
                     recruit_rating=entry.get("recruit_rating"), recruit_stars=entry.get("recruit_stars"),
+                    position_tag=entry.get("position_tag"),
                 ))
             else:
                 inputs.warnings.append(

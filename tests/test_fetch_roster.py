@@ -69,6 +69,48 @@ def test_matches_live_roster_and_computes_average(monkeypatch, tmp_path):
     assert not any("stale" in w for w in result.warnings)
 
 
+def test_truncated_puntandrally_name_resolves_against_live_roster(monkeypatch, tmp_path):
+    # puntandrally staged this starter as "J. Hawks" (truncated first name)
+    # -- config/rosters/{team}.yaml carries whatever name it staged, so an
+    # exact match against CFBD's "Jacob Hawks" would otherwise fail and
+    # silently drop a real starter (see fetch_puntandrally.resolve_truncated_name).
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    now = dt.datetime(2026, 9, 15, tzinfo=dt.timezone.utc)
+    _write_config(tmp_path, monkeypatch, {
+        "team": "Miami",
+        "updated_by_human_at": "2026-09-14",
+        "starters": {"OL": [{"name": "J. Hawks"}], "DL": []},
+    })
+    session = _FakeSession(_FakeResponse(200, LIVE_ROSTER))
+
+    result = fetch_roster.compute_mass_inputs("Miami", 2026, session=session, now=now)
+
+    assert result.avg_ol_weight == 330
+    assert result.ol_starters[0].confidence == "confirmed"
+    assert any("matched live CFBD roster as 'Jacob Hawks'" in w for w in result.warnings)
+
+
+def test_suffix_dropped_puntandrally_name_resolves_against_live_roster(monkeypatch, tmp_path):
+    # puntandrally staged this starter as "Damon Wilson" (no suffix) --
+    # CFBD's real name carries a generational suffix. See
+    # fetch_puntandrally.resolve_name_variant.
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    now = dt.datetime(2026, 9, 15, tzinfo=dt.timezone.utc)
+    live_roster = [{"firstName": "Damon", "lastName": "Wilson II", "position": "DL", "weight": 250}]
+    _write_config(tmp_path, monkeypatch, {
+        "team": "Miami",
+        "updated_by_human_at": "2026-09-14",
+        "starters": {"OL": [], "DL": [{"name": "Damon Wilson"}]},
+    })
+    session = _FakeSession(_FakeResponse(200, live_roster))
+
+    result = fetch_roster.compute_mass_inputs("Miami", 2026, session=session, now=now)
+
+    assert result.avg_dl_weight == 250
+    assert result.dl_starters[0].confidence == "confirmed"
+    assert any("matched live CFBD roster as 'Damon Wilson II'" in w for w in result.warnings)
+
+
 def test_flags_stale_starter_list(monkeypatch, tmp_path):
     monkeypatch.setenv("CFBD_API_KEY", "k")
     now = dt.datetime(2026, 9, 15, tzinfo=dt.timezone.utc)
@@ -153,3 +195,24 @@ def test_position_tag_mismatch_is_flagged(monkeypatch, tmp_path):
     result = fetch_roster.compute_mass_inputs("Miami", 2026, session=session, now=now)
 
     assert any("verify this is the right player" in w for w in result.warnings)
+
+
+def test_specific_ol_position_tag_is_not_flagged_as_a_mismatch(monkeypatch, tmp_path):
+    # CFBD isn't consistent about OL tagging across teams -- some use the
+    # generic "OL", others the specific "OT"/"OG"/"C" codes (confirmed
+    # live: LSU tags real tackles "OT"). A specifically-tagged OL starter
+    # must not falsely trigger the "verify this is the right player"
+    # warning the way an actual DL/LB mismatch should.
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    now = dt.datetime(2026, 9, 15, tzinfo=dt.timezone.utc)
+    live_roster = [{"firstName": "Jacob", "lastName": "Hawks", "position": "OT", "weight": 330}]
+    _write_config(tmp_path, monkeypatch, {
+        "team": "Miami",
+        "updated_by_human_at": "2026-09-14",
+        "starters": {"OL": [{"name": "Jacob Hawks"}], "DL": []},
+    })
+    session = _FakeSession(_FakeResponse(200, live_roster))
+
+    result = fetch_roster.compute_mass_inputs("Miami", 2026, session=session, now=now)
+
+    assert not any("verify this is the right player" in w for w in result.warnings)

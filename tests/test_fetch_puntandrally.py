@@ -155,20 +155,6 @@ def test_parse_position_section_raises_on_missing_section():
         fetch_puntandrally.parse_position_section(SAMPLE_MIAMI_OL_HTML, "Special Teams", fetch_puntandrally.KNOWN_OL_TAGS)
 
 
-def test_starters_for_group_picks_top_n_by_snaps_per_tag():
-    section = fetch_puntandrally.parse_position_section(SAMPLE_MIAMI_OL_HTML, "Offensive Line", fetch_puntandrally.KNOWN_OL_TAGS)
-    starters = fetch_puntandrally.starters_for_group(section.players, fetch_puntandrally.OL_STARTER_COUNTS)
-    # 2 tackles (McCoy, Okunlola over lower-snap Hawks), 2 guards (both), 1 center
-    assert set(starters) == {"Matthew McCoy", "Samson Okunlola", "Max Buchanan", "Jackson Cantwell", "Ryan Rodriguez"}
-    assert "Jacob Hawks" not in starters  # 3rd-string tackle by snaps
-
-
-def test_starters_for_group_never_prefers_no_snaps_over_recorded_snaps():
-    section = fetch_puntandrally.parse_position_section(SAMPLE_MIAMI_OL_HTML, "Offensive Line", fetch_puntandrally.KNOWN_OL_TAGS)
-    starters = fetch_puntandrally.starters_for_group(section.players, {"OL": 1})
-    assert starters == ["Demetrius Campbell"]  # only OL-tagged player, even with no recorded snaps
-
-
 def test_fetch_roster_uses_injected_browser_fetch_not_real_playwright():
     combined_html = SAMPLE_MIAMI_OL_HTML + SAMPLE_MIAMI_DL_HTML
 
@@ -195,18 +181,70 @@ def test_fetch_roster_puts_year_in_the_url():
     assert "year=2026" in seen_urls[1]
 
 
-def test_dl_starters_for_group_picks_top_n_by_snaps_regardless_of_tag():
-    section = fetch_puntandrally.parse_position_section(SAMPLE_MIAMI_DL_HTML, "Defensive Line", fetch_puntandrally.KNOWN_DL_TAGS)
-    starters = fetch_puntandrally.dl_starters_for_group(section.players, count=2)
-    # Marquise Lightfoot (DE, 69 snaps) and Ahmad Moten Sr. (DT, 64 snaps)
-    # outrank Justin Scott (DT, 62 snaps) -- ranked by snaps, not grouped by tag.
-    assert starters == ["Marquise Lightfoot", "Ahmad Moten Sr."]
+def test_resolve_truncated_name_matches_unique_initial_and_surname():
+    candidates = ["Malcolm Alcorn-Crowder", "Christian Davis", "Ira Singleton"]
+    assert fetch_puntandrally.resolve_truncated_name("M. Alcorn-Crowder", candidates) == "Malcolm Alcorn-Crowder"
 
 
-def test_dl_starters_for_group_default_count_matches_module_constant():
-    section = fetch_puntandrally.parse_position_section(SAMPLE_MIAMI_DL_HTML, "Defensive Line", fetch_puntandrally.KNOWN_DL_TAGS)
-    starters = fetch_puntandrally.dl_starters_for_group(section.players)
-    assert starters == [p.name for p in section.players][:fetch_puntandrally.DL_STARTER_COUNT]
+def test_resolve_truncated_name_returns_none_when_ambiguous():
+    # Two candidates share the initial "M" and surname "Smith" -- must
+    # never guess which one a truncated "M. Smith" actually refers to.
+    candidates = ["Marcus Smith", "Michael Smith"]
+    assert fetch_puntandrally.resolve_truncated_name("M. Smith", candidates) is None
+
+
+def test_resolve_truncated_name_returns_none_when_no_match():
+    candidates = ["Christian Davis", "Ira Singleton"]
+    assert fetch_puntandrally.resolve_truncated_name("M. Alcorn-Crowder", candidates) is None
+
+
+def test_resolve_truncated_name_returns_none_for_a_normal_full_name():
+    # Not every short name is a truncation -- a real "Al Smith" shouldn't
+    # be treated as an initial just because it's two words.
+    assert fetch_puntandrally.resolve_truncated_name("Christian Davis", ["Christian Davis"]) is None
+
+
+def test_resolve_name_variant_matches_dropped_generational_suffix():
+    candidates = ["Mike Wallace Jr.", "Christian Davis"]
+    assert fetch_puntandrally.resolve_name_variant("Mike Wallace", candidates) == "Mike Wallace Jr."
+
+
+def test_resolve_name_variant_matches_stripped_accent_marks():
+    candidates = ["André Otto", "Christian Davis"]
+    assert fetch_puntandrally.resolve_name_variant("Andre Otto", candidates) == "André Otto"
+
+
+def test_resolve_name_variant_returns_none_when_ambiguous():
+    candidates = ["Mike Wallace Jr.", "Mike Wallace Sr."]
+    assert fetch_puntandrally.resolve_name_variant("Mike Wallace", candidates) is None
+
+
+def test_resolve_name_variant_returns_none_when_no_match():
+    assert fetch_puntandrally.resolve_name_variant("Mike Wallace", ["Christian Davis"]) is None
+
+
+def test_resolve_any_name_match_forward_truncation():
+    assert fetch_puntandrally.resolve_any_name_match("M. Alcorn-Crowder", ["Malcolm Alcorn-Crowder"]) == "Malcolm Alcorn-Crowder"
+
+
+def test_resolve_any_name_match_forward_suffix_variant():
+    assert fetch_puntandrally.resolve_any_name_match("Mike Wallace", ["Mike Wallace Jr."]) == "Mike Wallace Jr."
+
+
+def test_resolve_any_name_match_reverse_direction():
+    # `name` here is the FULLER form (e.g. an ourlads-sourced name); the
+    # candidate is the one that's truncated/suffix-dropped -- the
+    # opposite direction from the other two tests.
+    assert fetch_puntandrally.resolve_any_name_match("Malcolm Alcorn-Crowder", ["M. Alcorn-Crowder"]) == "M. Alcorn-Crowder"
+    assert fetch_puntandrally.resolve_any_name_match("Mike Wallace Jr.", ["Mike Wallace"]) == "Mike Wallace"
+
+
+def test_resolve_any_name_match_exact():
+    assert fetch_puntandrally.resolve_any_name_match("Christian Davis", ["Christian Davis", "Ira Singleton"]) == "Christian Davis"
+
+
+def test_resolve_any_name_match_returns_none_when_no_match():
+    assert fetch_puntandrally.resolve_any_name_match("Nobody Here", ["Christian Davis"]) is None
 
 
 def test_browser_session_reuses_one_browser_across_multiple_fetches(monkeypatch):

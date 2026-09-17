@@ -2,14 +2,67 @@ team: New Mexico
 starters:
   OL:
   - name: Cole Millward
+    position_tag: LT
+    jersey: '79'
+    class_year: SR
+    snaps_multi_year: 111
+    recruit_rating: 81
+    recruit_stars: 3
   - name: Malik Aliane
+    position_tag: LG
+    jersey: '51'
+    class_year: GR
+    snaps_multi_year: 1143
   - name: Kaden Robnett
+    position_tag: C
+    jersey: '59'
+    class_year: SR
+    snaps_multi_year: 973
+    recruit_rating: 77
+    recruit_stars: 2
   - name: Jaymar Tasi
+    position_tag: RG
+    jersey: '58'
+    class_year: SO
+    snaps_multi_year: 595
+    recruit_rating: 84
+    recruit_stars: 3
   - name: Tyler Lawrence
+    position_tag: RT
+    jersey: '68'
+    class_year: SR
+    snaps_multi_year: 964
+    recruit_rating: 81
+    recruit_stars: 3
   DL:
   - name: Darren Agu
+    position_tag: LDE
+    jersey: '10'
+    class_year: GR
+    snaps_multi_year: 445
+    recruit_rating: 88
+    recruit_stars: 3
   - name: Brian Booker
+    position_tag: NT
+    jersey: '92'
+    class_year: GR
+    snaps_multi_year: 446
   - name: Xavier Slayton
+    position_tag: DT
+    jersey: '15'
+    class_year: GR
+    snaps_multi_year: 291
+    recruit_rating: 76
+    recruit_stars: 2
   - name: Albert Tuakalau
+    position_tag: RDE
+    jersey: '36'
+    class_year: JR
+    snaps_multi_year: 36
+    recruit_rating: 79
+    recruit_stars: 2
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Pro Style
+defense_scheme: 4-2-5

@@ -2,12 +2,57 @@ team: West Virginia
 starters:
   OL:
   - name: Kevin Brown
+    position_tag: LT
+    jersey: '74'
+    class_year: FR
+    snaps_multi_year: 108
+    recruit_rating: 94
+    recruit_stars: 4
   - name: Nick Krahe
+    position_tag: LG
+    jersey: '52'
+    class_year: JR
+    snaps_multi_year: 973
+    recruit_rating: 83
+    recruit_stars: 3
   - name: Wes King
+    position_tag: C
+    jersey: '78'
+    class_year: SR
+    snaps_multi_year: 108
+    recruit_rating: 83
+    recruit_stars: 3
   - name: Amare Grayson
+    position_tag: RG
+    jersey: '54'
+    class_year: JR
+    snaps_multi_year: 108
+    recruit_rating: 85
+    recruit_stars: 3
   - name: Carsten Casady
+    position_tag: RT
+    jersey: '79'
+    class_year: JR
+    snaps_multi_year: 108
   DL:
+  - name: Zeke Durham-Campbell
+    position_tag: DE
   - name: Nate Gabriel
+    position_tag: NT
+    jersey: '93'
+    class_year: JR
+    snaps_multi_year: 504
+    recruit_rating: 85
+    recruit_stars: 3
   - name: Corey McIntyre Jr.
+    position_tag: DT
+    jersey: '52'
+    class_year: JR
+    snaps_multi_year: 245
+    recruit_rating: 84
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Spread
+defense_scheme: Multiple 4-2-5

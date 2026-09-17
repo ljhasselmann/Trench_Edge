@@ -2,12 +2,64 @@ team: Arkansas
 starters:
   OL:
   - name: Kavion Broussard
+    position_tag: LT
+    jersey: '75'
+    class_year: JR
+    snaps_multi_year: 351
+    recruit_rating: 88
+    recruit_stars: 3
   - name: Malachi Breland
+    position_tag: LG
+    jersey: '71'
+    class_year: SR
+    snaps_multi_year: 170
+    recruit_rating: 85
+    recruit_stars: 3
   - name: Caden Kitler
+    position_tag: C
+    jersey: '52'
+    class_year: SR
+    snaps_multi_year: 883
+    recruit_rating: 82
+    recruit_stars: 3
   - name: Kobe Branham
+    position_tag: RG
+    jersey: '50'
+    class_year: JR
+    snaps_multi_year: 974
+    recruit_rating: 86
+    recruit_stars: 3
   - name: Bryant Williams
+    position_tag: RT
+    jersey: '64'
+    class_year: SR
+    snaps_multi_year: 160
+    recruit_rating: 83
+    recruit_stars: 3
   DL:
+  - name: Quincy Rhodes Jr.
+    position_tag: DE
+    jersey: '97'
+    class_year: SR
+    snaps_multi_year: 941
+    recruit_rating: 93
+    recruit_stars: 4
   - name: Carlon Jones
+    position_tag: NT
+    jersey: '91'
+    class_year: JR
+    snaps_multi_year: 59
+    recruit_rating: 92
+    recruit_stars: 4
   - name: Hunter Osborne
+    position_tag: DT
+    jersey: '00'
+    class_year: SR
+    snaps_multi_year: 62
+    recruit_rating: 93
+    recruit_stars: 4
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Veer and Shoot
+defense_scheme: Multiple 4-2-5

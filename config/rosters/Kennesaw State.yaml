@@ -2,12 +2,56 @@ team: Kennesaw State
 starters:
   OL:
   - name: JaDarious Lee
+    position_tag: LT
+    jersey: '56'
+    class_year: SR
+    snaps_multi_year: 1096
   - name: Precious Ekeh
+    position_tag: LG
+    jersey: '75'
+    class_year: JR
+    snaps_multi_year: 117
   - name: Mateo Guevara
+    position_tag: C
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 117
+    recruit_rating: 82
+    recruit_stars: 3
   - name: Mike Wallace Jr.
+    position_tag: RG
+    jersey: '51'
+    class_year: SO
+    snaps_multi_year: 117
+    recruit_rating: 79
+    recruit_stars: 2
   - name: Nikola Milovac
+    position_tag: RT
+    jersey: '76'
+    class_year: JR
+    snaps_multi_year: 1117
+    recruit_rating: 85
+    recruit_stars: 3
   DL:
+  - name: Marcus Patterson
+    position_tag: DE
+    jersey: '6'
+    class_year: SR
+    snaps_multi_year: 680
   - name: Jackson Cooper
+    position_tag: NT
+    jersey: '92'
+    class_year: SO
+    snaps_multi_year: 276
   - name: Jaiden Grimes
+    position_tag: DT
+    jersey: '96'
+    class_year: JR
+    snaps_multi_year: 669
+    recruit_rating: 80
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Spread
+defense_scheme: 4-2-5

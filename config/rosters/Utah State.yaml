@@ -2,14 +2,26 @@ team: Utah State
 starters:
   OL:
   - name: Ashton Tripp
+    position_tag: LT
   - name: Kyle Martin
+    position_tag: LG
   - name: Noah Dunham
+    position_tag: C
   - name: Nick Bakken
+    position_tag: RG
   - name: Jonny Lester
+    position_tag: RT
   DL:
   - name: Linus Zunk
+    position_tag: LDE
   - name: Jirah Leaupepetele
+    position_tag: LDT
   - name: Kaden Beatty
+    position_tag: RDT
   - name: Matyus McLain
+    position_tag: RDE
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Spread
+defense_scheme: 4-2-5

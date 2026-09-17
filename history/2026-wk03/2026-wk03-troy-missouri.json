@@ -3,63 +3,219 @@
   "team_a": "Troy",
   "team_b": "Missouri",
   "year": 2026,
-  "generated_at": "2026-09-16 03:57 UTC",
+  "generated_at": "2026-09-16 23:35 UTC",
   "direction_a": {
     "matchup_label": "2026-wk03-troy-missouri-a",
     "team_a": "Troy",
     "team_b": "Missouri",
     "side": "team_a_ol_vs_team_b_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 03:57 UTC",
+    "generated_at": "2026-09-16 23:35 UTC",
     "mass": {
       "team_a_avg_weight": 310.4,
-      "team_b_avg_weight": 325.0,
-      "weight_diff_lbs": -14.600000000000023,
-      "score": -1.4600000000000022,
+      "team_b_avg_weight": 305.0,
+      "weight_diff_lbs": 5.399999999999977,
+      "score": 0.5399999999999977,
+      "team_a_offense_scheme": "Spread",
+      "team_b_defense_scheme": "4-2-5",
       "team_a_starters": [
         {
           "name": "Darion Rivers",
           "weight_lbs": 323,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "77",
+          "class_year": "JR",
+          "snaps_multi_year": 61,
+          "recruit_rating": 86,
+          "recruit_stars": 3,
+          "position_tag": "LT"
         },
         {
           "name": "Luke Petit",
           "weight_lbs": 299,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "51",
+          "class_year": "SR",
+          "snaps_multi_year": 138,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "LG"
         },
         {
           "name": "Tyler Cappi",
           "weight_lbs": 295,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "65",
+          "class_year": "SR",
+          "snaps_multi_year": 759,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "C"
         },
         {
           "name": "Patrick Screws Jr.",
           "weight_lbs": 320,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "72",
+          "class_year": "JR",
+          "snaps_multi_year": 210,
+          "recruit_rating": 85,
+          "recruit_stars": 3,
+          "position_tag": "RG"
         },
         {
           "name": "Jordon Jones",
           "weight_lbs": 315,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "55",
+          "class_year": "SR",
+          "snaps_multi_year": 138,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "RT"
         }
       ],
       "team_b_starters": [
         {
+          "name": "Langden Kitchen",
+          "weight_lbs": 265,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "11",
+          "class_year": "SR",
+          "snaps_multi_year": 205,
+          "recruit_rating": 76,
+          "recruit_stars": 2,
+          "position_tag": "DE"
+        },
+        {
           "name": "Marquis Gracial",
           "weight_lbs": 315,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "3",
+          "class_year": "SR",
+          "snaps_multi_year": 414,
+          "recruit_rating": 90,
+          "recruit_stars": 4,
+          "position_tag": "NT"
         },
         {
           "name": "Jalen Marshall",
           "weight_lbs": 335,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "95",
+          "class_year": "SR",
+          "snaps_multi_year": 352,
+          "recruit_rating": 89,
+          "recruit_stars": 3,
+          "position_tag": "DT"
+        }
+      ],
+      "team_a_formation": [
+        {
+          "name": "Darion Rivers",
+          "weight_lbs": 323,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "77",
+          "class_year": "JR",
+          "snaps_multi_year": 61,
+          "recruit_rating": 86,
+          "recruit_stars": 3,
+          "position_tag": "LT"
+        },
+        {
+          "name": "Luke Petit",
+          "weight_lbs": 299,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "51",
+          "class_year": "SR",
+          "snaps_multi_year": 138,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "LG"
+        },
+        {
+          "name": "Tyler Cappi",
+          "weight_lbs": 295,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "65",
+          "class_year": "SR",
+          "snaps_multi_year": 759,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "C"
+        },
+        {
+          "name": "Patrick Screws Jr.",
+          "weight_lbs": 320,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "72",
+          "class_year": "JR",
+          "snaps_multi_year": 210,
+          "recruit_rating": 85,
+          "recruit_stars": 3,
+          "position_tag": "RG"
+        },
+        {
+          "name": "Jordon Jones",
+          "weight_lbs": 315,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "55",
+          "class_year": "SR",
+          "snaps_multi_year": 138,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "RT"
+        }
+      ],
+      "team_b_formation": [
+        {
+          "name": "Langden Kitchen",
+          "weight_lbs": 265,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "11",
+          "class_year": "SR",
+          "snaps_multi_year": 205,
+          "recruit_rating": 76,
+          "recruit_stars": 2,
+          "position_tag": "DE"
+        },
+        {
+          "name": "Marquis Gracial",
+          "weight_lbs": 315,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "3",
+          "class_year": "SR",
+          "snaps_multi_year": 414,
+          "recruit_rating": 90,
+          "recruit_stars": 4,
+          "position_tag": "NT"
+        },
+        {
+          "name": "Jalen Marshall",
+          "weight_lbs": 335,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "95",
+          "class_year": "SR",
+          "snaps_multi_year": 352,
+          "recruit_rating": 89,
+          "recruit_stars": 3,
+          "position_tag": "DT"
         }
       ]
     },
@@ -74,24 +230,27 @@
         "Missouri_defense_line_yards": 2.3666666666666667
       }
     },
-    "continuity": {
-      "team_a_returning": null,
-      "team_b_returning": null,
-      "net_returning": null,
-      "score": null,
+    "experience": {
+      "team_a_returning_pct": 10.6,
+      "team_b_returning_pct": 24.0,
+      "experience_diff_pct": -13.4,
+      "score": -1.34,
       "team_a_driver": null,
       "team_a_note": null,
       "team_b_driver": null,
       "team_b_note": null
     },
-    "composite": null,
-    "warnings": [
-      "[Troy Continuity] config/rosters/Troy.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it",
-      "[Troy Continuity] config/rosters/Troy.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season",
-      "[Missouri Continuity] config/rosters/Missouri.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it",
-      "[Missouri Continuity] config/rosters/Missouri.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season",
-      "Composite not computed -- missing: Continuity"
-    ]
+    "recruiting": {
+      "team_a_rating": 85.5,
+      "team_b_rating": 85.0,
+      "rating_diff": 0.5,
+      "score": 0.1
+    },
+    "composite": {
+      "value": -1.4180000000000006,
+      "verdict": "negligible edge"
+    },
+    "warnings": []
   },
   "direction_b": {
     "matchup_label": "2026-wk03-troy-missouri-b",
@@ -99,56 +258,212 @@
     "team_b": "Troy",
     "side": "team_b_ol_vs_team_a_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 03:57 UTC",
+    "generated_at": "2026-09-16 23:35 UTC",
     "mass": {
       "team_a_avg_weight": 317.0,
-      "team_b_avg_weight": 299.0,
-      "weight_diff_lbs": 18.0,
-      "score": 1.8,
+      "team_b_avg_weight": 284.6666666666667,
+      "weight_diff_lbs": 32.333333333333314,
+      "score": 3.2333333333333316,
+      "team_a_offense_scheme": "Multiple",
+      "team_b_defense_scheme": "Multiple 3-3-5",
       "team_a_starters": [
         {
           "name": "Cayden Green",
           "weight_lbs": 324,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "70",
+          "class_year": "SR",
+          "snaps_multi_year": 1631,
+          "recruit_rating": 95,
+          "recruit_stars": 4,
+          "position_tag": "LT"
         },
         {
           "name": "Tristan Wilson",
           "weight_lbs": 311,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "73",
+          "class_year": "SR",
+          "snaps_multi_year": 324,
+          "recruit_rating": 87,
+          "recruit_stars": 3,
+          "position_tag": "LG"
         },
         {
           "name": "Dominick Giudice",
           "weight_lbs": 305,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "56",
+          "class_year": "SR",
+          "snaps_multi_year": 1004,
+          "recruit_rating": 83,
+          "recruit_stars": 3,
+          "position_tag": "C"
         },
         {
           "name": "Curtis Peagler",
           "weight_lbs": 335,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "77",
+          "class_year": "SR",
+          "snaps_multi_year": 966,
+          "recruit_rating": 83,
+          "recruit_stars": 3,
+          "position_tag": "RG"
         },
         {
           "name": "Luke Work",
           "weight_lbs": 310,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "51",
+          "class_year": "JR",
+          "snaps_multi_year": 107,
+          "recruit_rating": 85,
+          "recruit_stars": 3,
+          "position_tag": "RT"
         }
       ],
       "team_b_starters": [
         {
+          "name": "Kavion Henderson",
+          "weight_lbs": 256,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "25",
+          "class_year": "SO",
+          "snaps_multi_year": 63,
+          "recruit_rating": 89,
+          "recruit_stars": 3,
+          "position_tag": "DE"
+        },
+        {
           "name": "Kam Curry",
           "weight_lbs": 302,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "00",
+          "class_year": "SR",
+          "snaps_multi_year": 721,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "NT"
         },
         {
           "name": "Ty Clemons",
           "weight_lbs": 296,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "11",
+          "class_year": "SR",
+          "snaps_multi_year": 82,
+          "recruit_rating": 85,
+          "recruit_stars": 3,
+          "position_tag": "DT"
+        }
+      ],
+      "team_a_formation": [
+        {
+          "name": "Cayden Green",
+          "weight_lbs": 324,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "70",
+          "class_year": "SR",
+          "snaps_multi_year": 1631,
+          "recruit_rating": 95,
+          "recruit_stars": 4,
+          "position_tag": "LT"
+        },
+        {
+          "name": "Tristan Wilson",
+          "weight_lbs": 311,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "73",
+          "class_year": "SR",
+          "snaps_multi_year": 324,
+          "recruit_rating": 87,
+          "recruit_stars": 3,
+          "position_tag": "LG"
+        },
+        {
+          "name": "Dominick Giudice",
+          "weight_lbs": 305,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "56",
+          "class_year": "SR",
+          "snaps_multi_year": 1004,
+          "recruit_rating": 83,
+          "recruit_stars": 3,
+          "position_tag": "C"
+        },
+        {
+          "name": "Curtis Peagler",
+          "weight_lbs": 335,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "77",
+          "class_year": "SR",
+          "snaps_multi_year": 966,
+          "recruit_rating": 83,
+          "recruit_stars": 3,
+          "position_tag": "RG"
+        },
+        {
+          "name": "Luke Work",
+          "weight_lbs": 310,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "51",
+          "class_year": "JR",
+          "snaps_multi_year": 107,
+          "recruit_rating": 85,
+          "recruit_stars": 3,
+          "position_tag": "RT"
+        }
+      ],
+      "team_b_formation": [
+        {
+          "name": "Kavion Henderson",
+          "weight_lbs": 256,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "25",
+          "class_year": "SO",
+          "snaps_multi_year": 63,
+          "recruit_rating": 89,
+          "recruit_stars": 3,
+          "position_tag": "DE"
+        },
+        {
+          "name": "Kam Curry",
+          "weight_lbs": 302,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "00",
+          "class_year": "SR",
+          "snaps_multi_year": 721,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "NT"
+        },
+        {
+          "name": "Ty Clemons",
+          "weight_lbs": 296,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "11",
+          "class_year": "SR",
+          "snaps_multi_year": 82,
+          "recruit_rating": 85,
+          "recruit_stars": 3,
+          "position_tag": "DT"
         }
       ]
     },
@@ -163,23 +478,26 @@
         "Troy_defense_line_yards": 1.4537037037037037
       }
     },
-    "continuity": {
-      "team_a_returning": null,
-      "team_b_returning": null,
-      "net_returning": null,
-      "score": null,
+    "experience": {
+      "team_a_returning_pct": 109.4,
+      "team_b_returning_pct": 11.0,
+      "experience_diff_pct": 98.4,
+      "score": 9.84,
       "team_a_driver": null,
       "team_a_note": null,
       "team_b_driver": null,
       "team_b_note": null
     },
-    "composite": null,
-    "warnings": [
-      "[Troy Continuity] config/rosters/Troy.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it",
-      "[Troy Continuity] config/rosters/Troy.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season",
-      "[Missouri Continuity] config/rosters/Missouri.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it",
-      "[Missouri Continuity] config/rosters/Missouri.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season",
-      "Composite not computed -- missing: Continuity"
-    ]
+    "recruiting": {
+      "team_a_rating": 86.6,
+      "team_b_rating": 87.0,
+      "rating_diff": -0.4000000000000057,
+      "score": -0.08000000000000114
+    },
+    "composite": {
+      "value": 4.254,
+      "verdict": "slight-to-moderate edge"
+    },
+    "warnings": []
   }
 }

@@ -18,15 +18,18 @@ class _FakeResponse:
 
 class _FakeSession:
     """Stands in for requests.Session; routes by URL suffix since this
-    module hits two different endpoints."""
+    module hits multiple endpoints."""
 
-    def __init__(self, games_response=None, rankings_response=None):
+    def __init__(self, games_response=None, rankings_response=None, fbs_teams_response=None):
         self._games_response = games_response
         self._rankings_response = rankings_response
+        self._fbs_teams_response = fbs_teams_response
         self.calls = []
 
     def get(self, url, params, headers, timeout):
         self.calls.append({"url": url, "params": params})
+        if url.endswith("/teams/fbs"):
+            return self._fbs_teams_response
         if url.endswith("/games"):
             return self._games_response
         if url.endswith("/rankings"):
@@ -130,15 +133,45 @@ def test_derive_matchups_both_ranked_game_included_once():
     assert len(matching) == 1
 
 
+SAMPLE_FBS_TEAMS = [{"school": s} for s in ("Miami", "Wake Forest", "Georgia", "Arkansas", "Texas", "Ohio State", "Vanderbilt", "Kentucky")]
+
+
 def test_discover_matchups_composes_schedule_and_rankings(monkeypatch):
     monkeypatch.setenv("CFBD_API_KEY", "k")
     session = _FakeSession(
         games_response=_FakeResponse(200, SAMPLE_GAMES),
         rankings_response=_FakeResponse(200, SAMPLE_RANKINGS),
+        fbs_teams_response=_FakeResponse(200, SAMPLE_FBS_TEAMS),
     )
     matchups = fetch_matchups.discover_matchups(2026, 3, session=session)
     assert len(matchups) == 3
     assert all(m["week"] == 3 for m in matchups)
+
+
+def test_derive_matchups_excludes_a_game_against_a_non_fbs_opponent():
+    # classification=fbs on /games filters by the QUERIED team's own
+    # classification -- an FBS team's "buy game" against an FCS opponent
+    # still comes back (confirmed live: 2026 wk3's Iowa-Northern Iowa).
+    # None of this pipeline's sources cover FCS programs, so these should
+    # never reach rendering.
+    games = [{"id": 1, "homeTeam": "Iowa", "awayTeam": "Northern Iowa"}]
+    top25 = {"Iowa"}
+    fbs_teams = {"Iowa"}  # Northern Iowa is FCS -- deliberately absent
+
+    matchups = fetch_matchups.derive_matchups(games, top25, 2026, 3, fbs_teams=fbs_teams)
+
+    assert matchups == []
+
+
+def test_derive_matchups_keeps_a_game_when_fbs_teams_not_provided():
+    # fbs_teams=None (the default) must not change existing behavior --
+    # only discover_matchups/run_week.py opt into the FCS filter.
+    games = [{"id": 1, "homeTeam": "Iowa", "awayTeam": "Northern Iowa"}]
+    top25 = {"Iowa"}
+
+    matchups = fetch_matchups.derive_matchups(games, top25, 2026, 3)
+
+    assert len(matchups) == 1
 
 
 def test_slugify_handles_special_characters():

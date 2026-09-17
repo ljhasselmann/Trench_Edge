@@ -61,6 +61,7 @@ import yaml
 
 import requests
 
+import fetch_ourlads
 import fetch_sp_plus
 from fetch_cfbd import fetch_team_trench_stats
 from fetch_roster import compute_mass_inputs
@@ -80,6 +81,8 @@ class WidgetContext:
     side: str
     year: int
     generated_at: str
+    team_a_color: str
+    team_b_color: str
     mass: dict
     push: dict
     experience: dict
@@ -141,6 +144,27 @@ def fetch_team_data(
     return TeamData(team=team, mass=mass, experience=experience, recruiting=recruiting, tier1=tier1, warnings=warnings)
 
 
+def _formation_order(starters: list, order: list) -> list:
+    """Arrange starters left-to-right for the chalkboard view using
+    ourlads' own real slot label (LT/LG/C/RG/RT, LDE/RDE/DT/NT/... -- see
+    fetch_ourlads.py's OL_ROW_ORDER/DL_ROW_ORDER), staged onto each
+    starter as `position_tag` by run_week.py. This is real positional
+    order, not a guess -- ourlads' label already says which side each
+    player plays. `sorted()` is stable, so a starter whose tag isn't in
+    `order` (missing data, or a stale entry from before the ourlads
+    revert) keeps its original relative position rather than being
+    dropped or guessed at."""
+    return sorted(starters, key=lambda s: order.index(s.position_tag) if s.position_tag in order else len(order))
+
+
+def _ol_formation_order(starters: list) -> list:
+    return _formation_order(starters, fetch_ourlads.OL_ROW_ORDER)
+
+
+def _dl_formation_order(starters: list) -> list:
+    return _formation_order(starters, fetch_ourlads.DL_ROW_ORDER)
+
+
 def _resolve_sp_plus_gap(
     matchup: dict, team_a: str, team_b: str, sp_plus_table: Optional[dict] = None, session: Optional[requests.Session] = None
 ) -> tuple[Optional[float], list[str]]:
@@ -163,6 +187,10 @@ def _resolve_sp_plus_gap(
     return gap, warnings
 
 
+DEFAULT_OL_COLOR = "#ffd400"  # brand yellow -- used when CFBD has no real color for this team
+DEFAULT_DL_COLOR = "#1f6feb"  # brand blue -- same fallback role
+
+
 def combine_context(
     matchup_label: str,
     team_a: str,
@@ -173,13 +201,19 @@ def combine_context(
     team_b_data: TeamData,
     sp_plus_gap: Optional[float],
     weights: dict,
+    team_colors: Optional[dict] = None,
 ) -> WidgetContext:
     """Pure, no-network: decides which team is playing OL and which is
     playing DL for `side`, and builds one WidgetContext from two already-
     fetched TeamData. WidgetContext.team_a/team_b mean "the OL team"/"the
     DL team" for THIS direction (matching widget.html.jinja's "{{ ctx.team_a }}
     OL vs {{ ctx.team_b }} DL" heading) -- not necessarily the matchup's
-    own team_a/team_b, which is why the reverse direction swaps them."""
+    own team_a/team_b, which is why the reverse direction swaps them.
+
+    `team_colors` is fetch_cfbd.team_colors_from_fbs_teams()'s output
+    (real hex `color`/`alt_color` per team, confirmed live) -- a team
+    missing from it (or missing a `color` value) falls back to the
+    widget's own brand yellow/blue rather than a fabricated color."""
     warnings = list(team_a_data.warnings) + list(team_b_data.warnings)
 
     if side == "team_a_ol_vs_team_b_dl":
@@ -191,6 +225,9 @@ def combine_context(
     else:
         raise ValueError(f"unknown side {side!r}")
     ol_label, dl_label = ol_data.team, dl_data.team
+    team_colors = team_colors or {}
+    ol_color = (team_colors.get(ol_label) or {}).get("color") or DEFAULT_OL_COLOR
+    dl_color = (team_colors.get(dl_label) or {}).get("color") or DEFAULT_DL_COLOR
 
     mass_score = None
     weight_diff = None
@@ -246,6 +283,8 @@ def combine_context(
         side=side,
         year=year,
         generated_at=_dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+        team_a_color=ol_color,
+        team_b_color=dl_color,
         mass={
             "team_a_avg_weight": ol_data.mass.avg_ol_weight,
             "team_b_avg_weight": dl_data.mass.avg_dl_weight,
@@ -253,6 +292,10 @@ def combine_context(
             "score": mass_score,
             "team_a_starters": ol_data.mass.ol_starters,
             "team_b_starters": dl_data.mass.dl_starters,
+            "team_a_formation": _ol_formation_order(ol_data.mass.ol_starters),
+            "team_b_formation": _dl_formation_order(dl_data.mass.dl_starters),
+            "team_a_offense_scheme": ol_data.mass.offense_scheme,
+            "team_b_defense_scheme": dl_data.mass.defense_scheme,
         },
         push={"available": push_score is not None, "score": push_score, "sp_plus_gap": gap, "raw": push_raw},
         experience={
@@ -282,11 +325,13 @@ def build_context(
     sp_plus_table: Optional[dict] = None,
     talent_table: Optional[dict] = None,
     browser_fetch=None,
+    team_colors: Optional[dict] = None,
 ) -> WidgetContext:
     """Single direction -- this module's original contract, unchanged for
     the existing CLI and any caller that only wants one side scored.
     `browser_fetch` passes through to fetch_team_data's Experience lookup
-    -- see that function's docstring."""
+    -- see that function's docstring. `team_colors` is
+    fetch_cfbd.team_colors_from_fbs_teams()'s output."""
     team_a = matchup["team_a"]
     team_b = matchup["team_b"]
     side = matchup.get("side", "team_a_ol_vs_team_b_dl")
@@ -298,7 +343,7 @@ def build_context(
     with open(WEIGHTS_FILE) as f:
         weights = yaml.safe_load(f)
 
-    ctx = combine_context(matchup["label"], team_a, team_b, side, year, team_a_data, team_b_data, sp_plus_gap, weights)
+    ctx = combine_context(matchup["label"], team_a, team_b, side, year, team_a_data, team_b_data, sp_plus_gap, weights, team_colors=team_colors)
     ctx.warnings = sp_warnings + ctx.warnings
     return ctx
 
@@ -309,13 +354,15 @@ def build_both_directions(
     sp_plus_table: Optional[dict] = None,
     talent_table: Optional[dict] = None,
     browser_fetch=None,
+    team_colors: Optional[dict] = None,
 ) -> tuple[WidgetContext, WidgetContext]:
     """Four corners: both OL-vs-DL directions for one game. Fetches each
     team's data exactly once (not once per direction) -- see module
     docstring. `browser_fetch` passes through to fetch_team_data's
     Experience lookup -- pass a browser_session() fetch when rendering a
     whole week's matchups so every team's year-1 snap lookup shares one
-    browser process."""
+    browser process. `team_colors` is
+    fetch_cfbd.team_colors_from_fbs_teams()'s output."""
     team_a = matchup["team_a"]
     team_b = matchup["team_b"]
     label = matchup["label"]
@@ -327,10 +374,10 @@ def build_both_directions(
     with open(WEIGHTS_FILE) as f:
         weights = yaml.safe_load(f)
 
-    ctx_a = combine_context(f"{label}-a", team_a, team_b, "team_a_ol_vs_team_b_dl", year, team_a_data, team_b_data, sp_plus_gap, weights)
+    ctx_a = combine_context(f"{label}-a", team_a, team_b, "team_a_ol_vs_team_b_dl", year, team_a_data, team_b_data, sp_plus_gap, weights, team_colors=team_colors)
     ctx_a.warnings = sp_warnings + ctx_a.warnings
 
-    ctx_b = combine_context(f"{label}-b", team_a, team_b, "team_b_ol_vs_team_a_dl", year, team_a_data, team_b_data, sp_plus_gap, weights)
+    ctx_b = combine_context(f"{label}-b", team_a, team_b, "team_b_ol_vs_team_a_dl", year, team_a_data, team_b_data, sp_plus_gap, weights, team_colors=team_colors)
     ctx_b.warnings = sp_warnings + ctx_b.warnings
 
     return ctx_a, ctx_b
@@ -359,9 +406,14 @@ def context_to_history_dict(context: WidgetContext) -> dict:
         "year": context.year,
         "generated_at": context.generated_at,
         "mass": {
-            **{k: v for k, v in context.mass.items() if k not in ("team_a_starters", "team_b_starters")},
+            **{
+                k: v for k, v in context.mass.items()
+                if k not in ("team_a_starters", "team_b_starters", "team_a_formation", "team_b_formation")
+            },
             "team_a_starters": _starters_to_dicts(context.mass["team_a_starters"]),
             "team_b_starters": _starters_to_dicts(context.mass["team_b_starters"]),
+            "team_a_formation": _starters_to_dicts(context.mass.get("team_a_formation", [])),
+            "team_b_formation": _starters_to_dicts(context.mass.get("team_b_formation", [])),
         },
         "push": context.push,
         "experience": context.experience,

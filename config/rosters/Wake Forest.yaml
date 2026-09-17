@@ -3,50 +3,62 @@ updated_by_human_at: '2026-09-16'
 starters:
   OL:
   - name: Tolu Olajide
+    position_tag: LT
     jersey: '55'
     class_year: SR
     snaps_multi_year: 137
-  - name: Aidan Martin
-    jersey: '72'
-    class_year: FR
-    snaps_multi_year: 170
-    recruit_rating: 86
+  - name: Clinton Richard
+    position_tag: LG
+    jersey: '65'
+    class_year: SO
+    snaps_multi_year: 418
+    recruit_rating: 88
     recruit_stars: 3
+  - name: Will Way
+    position_tag: C
+    jersey: '70'
+    class_year: JR
+    snaps_multi_year: 113
   - name: Ryan Berger
+    position_tag: RG
     jersey: '64'
     class_year: JR
     snaps_multi_year: 120
     recruit_rating: 78
     recruit_stars: 2
-  - name: Jack Hines
-    jersey: '78'
-    class_year: SO
-    snaps_multi_year: 172
-    recruit_rating: 87
+  - name: Aidan Martin
+    position_tag: RT
+    jersey: '72'
+    class_year: FR
+    snaps_multi_year: 170
+    recruit_rating: 86
     recruit_stars: 3
-  - name: Will Way
-    jersey: '70'
-    class_year: JR
-    snaps_multi_year: 113
   DL:
-  - name: Langston Hardy
-    jersey: '11'
-    class_year: SR
-    snaps_multi_year: 779
-    recruit_rating: 81
-    recruit_stars: 3
   - name: Gabe Kirschke
+    position_tag: LDE
     jersey: '10'
     class_year: SR
     snaps_multi_year: 595
+  - name: Zach Lohavichan
+    position_tag: NT
+    jersey: '94'
+    class_year: SR
+    snaps_multi_year: 878
   - name: Dallas Afalava
+    position_tag: DT
     jersey: '52'
     class_year: SR
     snaps_multi_year: 606
     recruit_rating: 80
     recruit_stars: 3
-  - name: Zach Lohavichan
-    jersey: '94'
+  - name: Langston Hardy
+    position_tag: RDE
+    jersey: '11'
     class_year: SR
-    snaps_multi_year: 878
-roster_source: puntandrally.com (live fetch via run_week.py)
+    snaps_multi_year: 779
+    recruit_rating: 81
+    recruit_stars: 3
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Multiple
+defense_scheme: 4-2-5

@@ -2,14 +2,53 @@ team: Rutgers
 starters:
   OL:
   - name: Tyler Needham
+    position_tag: LT
+    jersey: '56'
+    class_year: SR
+    snaps_multi_year: 1544
   - name: Chris Vigna
+    position_tag: LG
+    jersey: '67'
+    class_year: SO
+    snaps_multi_year: 74
   - name: Terrence Salami
+    position_tag: C
+    jersey: '73'
+    class_year: SR
+    snaps_multi_year: 239
   - name: Kwabena Asamoah
+    position_tag: RG
+    jersey: '69'
+    class_year: SR
+    snaps_multi_year: 1901
   - name: Moshood Giwa
+    position_tag: RT
+    jersey: '74'
+    class_year: SR
+    snaps_multi_year: 221
   DL:
   - name: Sekou Kromah
+    position_tag: LDE
+    jersey: '8'
+    class_year: SR
+    snaps_multi_year: 74
   - name: Rondo Porter
+    position_tag: LDT
+    jersey: '99'
+    class_year: SR
+    snaps_multi_year: 70
   - name: Keshon Griffin
+    position_tag: RDT
+    jersey: '96'
+    class_year: SR
+    snaps_multi_year: 655
   - name: Malachi Davis
+    position_tag: RDE
+    jersey: '11'
+    class_year: SR
+    snaps_multi_year: 90
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Spread
+defense_scheme: 4-2-5

@@ -2,14 +2,71 @@ team: Ohio State
 starters:
   OL:
   - name: Ian Moore
+    position_tag: LT
+    jersey: '69'
+    class_year: JR
+    snaps_multi_year: 292
+    recruit_rating: 92
+    recruit_stars: 4
   - name: Luke Montgomery
+    position_tag: LG
+    jersey: '51'
+    class_year: SR
+    snaps_multi_year: 1210
+    recruit_rating: 94
+    recruit_stars: 4
   - name: Carson Hinzman
+    position_tag: C
+    jersey: '75'
+    class_year: SR
+    snaps_multi_year: 1550
+    recruit_rating: 93
+    recruit_stars: 4
   - name: Austin Siereveld
+    position_tag: RG
+    jersey: '67'
+    class_year: SR
+    snaps_multi_year: 1417
+    recruit_rating: 89
+    recruit_stars: 3
   - name: Phillip Daniels
+    position_tag: RT
+    jersey: '70'
+    class_year: SR
+    snaps_multi_year: 852
+    recruit_rating: 88
+    recruit_stars: 3
   DL:
   - name: Kenyatta Jackson Jr.
+    position_tag: LDE
+    jersey: '2'
+    class_year: SR
+    snaps_multi_year: 967
+    recruit_rating: 95
+    recruit_stars: 4
   - name: John Walker
+    position_tag: NT
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 74
+    recruit_rating: 95
+    recruit_stars: 4
   - name: Eddrick Houston
+    position_tag: DT
+    jersey: '96'
+    class_year: JR
+    snaps_multi_year: 542
+    recruit_rating: 97
+    recruit_stars: 4
   - name: Beau Atkinson
+    position_tag: RDE
+    jersey: '12'
+    class_year: SR
+    snaps_multi_year: 251
+    recruit_rating: 89
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Spread Option
+defense_scheme: 4-2-5

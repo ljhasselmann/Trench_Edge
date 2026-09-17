@@ -2,12 +2,52 @@ team: UTEP
 starters:
   OL:
   - name: Tyler Roberts
+    position_tag: LT
+    jersey: '73'
+    class_year: FR
+    snaps_multi_year: 211
+    recruit_rating: 83
+    recruit_stars: 3
   - name: Jaymon Lamb
+    position_tag: LG
+    jersey: '54'
+    class_year: JR
+    snaps_multi_year: 70
   - name: Brian Williams Jr.
+    position_tag: C
+    jersey: '56'
+    class_year: SO
+    snaps_multi_year: 98
   - name: Omoruyi Aliu-Otokiti
+    position_tag: RG
+    jersey: '55'
+    class_year: JR
+    snaps_multi_year: 57
   - name: Grayson Johnson
+    position_tag: RT
+    jersey: '74'
+    class_year: JR
+    snaps_multi_year: 98
   DL:
+  - name: Shakaun Bowser
+    position_tag: DE
+    jersey: '3'
+    class_year: SR
+    snaps_multi_year: 376
   - name: Ashton Coker
+    position_tag: NT
+    jersey: '90'
+    class_year: JR
+    snaps_multi_year: 654
+    recruit_rating: 86
+    recruit_stars: 3
   - name: Elijah Fields
+    position_tag: DT
+    jersey: '99'
+    class_year: SR
+    snaps_multi_year: 73
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Spread
+defense_scheme: 4-3

@@ -130,13 +130,25 @@ def _avg_returning_snap_pct(current_names: list[str], prior_players: list) -> Op
     never excluded, so it correctly drags the team's average down. Never
     given another team's roster to search: fetch_puntandrally.fetch_roster
     only ever returns the one team's own page, so a transfer's snaps at
-    their old school structurally can't count here."""
+    their old school structurally can't count here.
+
+    `current_names` now comes from config/rosters/{team}.yaml's staged
+    starters -- ourlads-sourced since the depth-chart revert -- which can
+    spell a name differently than puntandrally's own historical page
+    (truncated initial, dropped suffix, stripped accent); fall back to
+    fetch_puntandrally.resolve_any_name_match before treating a real
+    returning starter as a non-match."""
     if not current_names:
         return None
     prior_by_name = {p.name.lower(): p.snap_share_pct for p in prior_players}
+    prior_full_names = [p.name for p in prior_players]
     total = 0.0
     for name in current_names:
         pct = prior_by_name.get(name.lower())
+        if pct is None:
+            resolved = fetch_puntandrally.resolve_any_name_match(name, prior_full_names)
+            if resolved is not None:
+                pct = prior_by_name.get(resolved.lower())
         total += pct if pct is not None else 0.0
     return total / len(current_names)
 
@@ -210,13 +222,12 @@ def compute_experience_inputs(
                 inputs.returning_ol_snap_pct = _overlap_pct(current.get("OL", []), prior.get("OL", []))
                 inputs.returning_dl_snap_pct = _overlap_pct(current.get("DL", []), prior.get("DL", []))
 
+    # continuity_note is a purely optional, human-typed annotation -- not
+    # warned on when absent (the common case for every team that hasn't
+    # had one hand-written) since it isn't used to gate or compute
+    # anything; it was drowning out real data-quality warnings.
     note_block = config.get("continuity_note")
-    if note_block is None:
-        inputs.warnings.append(
-            f"config/rosters/{team}.yaml has no continuity_note -- talent-driven vs. "
-            "scheme-driven flag (DESIGN.md 4c) not set for this team/season"
-        )
-    else:
+    if note_block is not None:
         inputs.continuity_driver = note_block.get("driver")
         inputs.continuity_note = note_block.get("note")
 

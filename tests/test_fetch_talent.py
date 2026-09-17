@@ -88,6 +88,32 @@ def test_compute_experience_inputs_full_config_uses_live_snap_share(monkeypatch,
     assert result.warnings == []
 
 
+def test_compute_experience_inputs_resolves_name_variant_against_prior_year_roster(monkeypatch, tmp_path):
+    # config's staged starter names now come from ourlads (since the
+    # depth-chart revert) and can be spelled slightly differently than
+    # puntandrally's own historical roster (dropped suffix here) -- an
+    # exact match would otherwise wrongly count a real returning starter
+    # as a non-returning 0%. See fetch_puntandrally.resolve_any_name_match.
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    _write_config(tmp_path, monkeypatch, {
+        "team": "Miami",
+        "updated_by_human_at": "2026-09-14",
+        "starters": {"OL": [{"name": "Mike Wallace"}], "DL": []},
+    })
+    session = _FakeSession(_FakeResponse(200, TALENT_ROWS))
+    monkeypatch.setattr(
+        fetch_talent.fetch_puntandrally, "fetch_roster",
+        lambda team, year, browser_fetch=None: (
+            fetch_puntandrally.RosterSection(players=_players(("Mike Wallace Jr.", 75.0))),
+            fetch_puntandrally.RosterSection(players=[]),
+        ),
+    )
+
+    result = fetch_talent.compute_experience_inputs("Miami", 2026, session=session)
+
+    assert result.returning_ol_snap_pct == 75.0
+
+
 def test_compute_experience_inputs_never_counts_a_transfers_snaps_at_their_old_team(monkeypatch, tmp_path):
     # fetch_puntandrally.fetch_roster(team, year, ...) only ever returns
     # THIS team's own page -- a transfer's real snaps happened on a
@@ -192,7 +218,6 @@ def test_compute_experience_inputs_missing_prior_season_block_and_live_fetch_fai
 
     assert result.returning_ol_snap_pct is None
     assert any("prior_season_starters fallback either" in w for w in result.warnings)
-    assert any("continuity_note" in w for w in result.warnings)
 
 
 def test_fetch_talent_table_returns_all_teams_in_one_call(monkeypatch):

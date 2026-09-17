@@ -44,7 +44,9 @@ turn up, the same pattern as fetch_roster.py's CFBD position-tag sets.
 
 from __future__ import annotations
 
+import html
 import re
+from dataclasses import dataclass, field
 from difflib import get_close_matches
 from typing import Optional
 
@@ -57,7 +59,12 @@ REQUEST_TIMEOUT_SECONDS = 20
 DEFAULT_HEADERS = {"User-Agent": "Mozilla/5.0"}
 
 OL_ROW_LABELS = {"LT", "LG", "C", "RG", "RT", "OT", "OG"}
-DL_ROW_LABELS = {"LDE", "RDE", "LE", "RE", "DT", "NT", "DL", "LDT", "RDT"}
+# "DE" (no left/right split) is confirmed live to be the COMMON case, not
+# a rare one -- most teams checked (Colorado State, Florida State,
+# Georgia, Arkansas, West Virginia, Indiana, Virginia, ...) list a single
+# generic "DE" row rather than separate LDE/RDE rows. Omitting it here
+# silently dropped a real starter for a majority of teams in a live run.
+DL_ROW_LABELS = {"LDE", "RDE", "LE", "RE", "DE", "DT", "NT", "DL", "LDT", "RDT"}
 
 # CFBD's canonical name -> ourlads's own spelling. Seeded live via
 # scripts/check_team_name_coverage.py (2026-09-16); each entry verified by
@@ -79,6 +86,18 @@ _TEAM_INDEX_PATTERN = re.compile(
 )
 _ROW_PATTERN = re.compile(r"<td class='row-dc-\w+'>([A-Z]+)</td>(.*?)</tr>", re.S)
 _PLAYER_PATTERN = re.compile(r"player/[a-z0-9.'-]+/\d+'\s*class='[a-z_]*'>([^<]+)<")
+# ourlads' own scheme label, confirmed live on every team page checked
+# (e.g. Miami: "Offense <small><b>Air Raid</b></small>", "Defense
+# <small><b>4-2-5</b></small>") -- this is the real, human-assigned
+# scheme name, not a guess; used to size the chalkboard's DL front
+# instead of always assuming 4 down linemen (see DESIGN.md).
+_SCHEME_PATTERN = re.compile(r"<h2 class='[^']*'>(Offense|Defense) <small><b>([^<]+)</b></small></h2>")
+
+# Real left/right ordering, confirmed live (Miami: LT/LG/C/RG/RT and
+# LDT/RDT/LDE/RDE; Wake Forest: NT/DT/LDE/RDE) -- an unlisted label sorts
+# after all of these, keeping the chart's own row order among itself.
+OL_ROW_ORDER = ["LT", "LG", "C", "RG", "RT", "OT", "OG"]
+DL_ROW_ORDER = ["LDE", "LE", "DE", "LDT", "NT", "DT", "RDT", "RDE", "RE", "DL"]
 
 
 class OurladsFetchError(RuntimeError):
@@ -114,16 +133,34 @@ def fetch_team_index(session: Optional[requests.Session] = None) -> dict:
     return index
 
 
-def parse_depth_chart(html: str) -> dict:
+def parse_depth_chart(chart_html: str) -> dict:
     chart = {}
-    for label, row_html in _ROW_PATTERN.findall(html):
+    for label, row_html in _ROW_PATTERN.findall(chart_html):
         players = [_to_first_last(p) for p in _PLAYER_PATTERN.findall(row_html)]
         if players:
             chart[label] = players  # depth order; [0] is the starter
     return chart
 
 
-def fetch_depth_chart(team: str, session: Optional[requests.Session] = None, index: Optional[dict] = None) -> dict:
+def parse_schemes(page_html: str) -> dict:
+    """{"offense": "Air Raid", "defense": "4-2-5"} -- ourlads' own,
+    human-assigned scheme name for each side, confirmed live. Either key
+    is absent (not None) if that heading wasn't found on the page, so a
+    caller can tell "not published" from "we didn't look."""
+    schemes = {}
+    for side, name in _SCHEME_PATTERN.findall(page_html):
+        schemes[side.lower()] = html.unescape(name).strip()
+    return schemes
+
+
+@dataclass
+class TeamDepthChart:
+    rows: dict = field(default_factory=dict)  # {label: [names in depth order]}
+    offense_scheme: Optional[str] = None  # e.g. "Air Raid" -- ourlads' own label, not inferred
+    defense_scheme: Optional[str] = None  # e.g. "4-2-5" -- the real front size lives in this string
+
+
+def fetch_depth_chart(team: str, session: Optional[requests.Session] = None, index: Optional[dict] = None) -> TeamDepthChart:
     index = index if index is not None else fetch_team_index(session=session)
     site_name = TEAM_NAME_ALIASES.get(team, team)
     if site_name not in index:
@@ -144,19 +181,31 @@ def fetch_depth_chart(team: str, session: Optional[requests.Session] = None, ind
     if response.status_code != 200:
         raise OurladsFetchError(f"ourlads depth chart returned HTTP {response.status_code} for {team!r}")
 
-    chart = parse_depth_chart(response.text)
-    if not chart:
+    rows = parse_depth_chart(response.text)
+    if not rows:
         raise OurladsFetchError(
             f"ourlads depth chart for {team!r} parsed to zero position rows -- page structure may have changed"
         )
-    return chart
+    schemes = parse_schemes(response.text)
+    return TeamDepthChart(rows=rows, offense_scheme=schemes.get("offense"), defense_scheme=schemes.get("defense"))
 
 
-def starters_for_group(chart: dict, labels: set) -> list:
-    """First-string name per matching row label. A team missing some
-    labels (e.g. a 3-man front with no DT row) just yields fewer names --
-    never pads with a guess."""
-    return [chart[label][0] for label in chart if label in labels and chart[label]]
+def starters_for_group(chart: TeamDepthChart, labels: set, order: list) -> list:
+    """First-string name per matching row label, in `order`'s left-to-
+    right sequence. A team missing some labels (e.g. a 3-man front with
+    no DT row) just yields fewer names -- never pads with a guess."""
+    return [name for _label, name in starters_with_labels(chart, labels, order)]
+
+
+def starters_with_labels(chart: TeamDepthChart, labels: set, order: list) -> list:
+    """(label, first-string name) per matching row, ordered left-to-right
+    by `order` (pass OL_ROW_ORDER or DL_ROW_ORDER) -- real positional
+    order, not a guess, since ourlads' own labels already say which side
+    each starter plays. A label this repo doesn't recognize (a scheme
+    variant not seen yet) sorts after the known ones, in the chart's own
+    original row order, rather than being dropped."""
+    matched = [(label, chart.rows[label][0]) for label in chart.rows if label in labels and chart.rows[label]]
+    return sorted(matched, key=lambda pair: order.index(pair[0]) if pair[0] in order else len(order))
 
 
 if __name__ == "__main__":
@@ -169,9 +218,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     labels = OL_ROW_LABELS if args.group == "OL" else DL_ROW_LABELS
+    order = OL_ROW_ORDER if args.group == "OL" else DL_ROW_ORDER
     chart = fetch_depth_chart(args.team)
     print(json.dumps({
         "team": args.team,
-        "full_chart": chart,
-        "starters": starters_for_group(chart, labels),
+        "full_chart": chart.rows,
+        "offense_scheme": chart.offense_scheme,
+        "defense_scheme": chart.defense_scheme,
+        "starters": starters_with_labels(chart, labels, order),
     }, indent=2))

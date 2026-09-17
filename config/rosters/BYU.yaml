@@ -2,14 +2,69 @@ team: BYU
 starters:
   OL:
   - name: Paki Finau
+    position_tag: LT
+    jersey: '58'
+    class_year: SO
+    snaps_multi_year: 105
+    recruit_rating: 90
+    recruit_stars: 4
   - name: Sonny Makasini
+    position_tag: LG
+    jersey: '51'
+    class_year: SR
+    snaps_multi_year: 833
+    recruit_rating: 81
+    recruit_stars: 3
   - name: Bruce Mitchell
+    position_tag: C
+    jersey: '63'
+    class_year: SR
+    snaps_multi_year: 1500
+    recruit_rating: 79
+    recruit_stars: 2
   - name: Kyle Sfarcioc
+    position_tag: RG
+    jersey: '64'
+    class_year: SR
+    snaps_multi_year: 714
+    recruit_rating: 79
+    recruit_stars: 2
   - name: Andrew Gentry
+    position_tag: RT
+    jersey: '75'
+    class_year: SR
+    snaps_multi_year: 901
+    recruit_rating: 94
+    recruit_stars: 4
   DL:
   - name: Bodie Schoonover
+    position_tag: LDE
+    jersey: '48'
+    class_year: SR
+    snaps_multi_year: 571
+    recruit_rating: 88
+    recruit_stars: 3
   - name: Justin Kirkland
+    position_tag: NT
+    jersey: '96'
+    class_year: SR
+    snaps_multi_year: 128
   - name: Keanu Tanuvasa
+    position_tag: DT
+    jersey: '57'
+    class_year: SR
+    snaps_multi_year: 604
+    recruit_rating: 87
+    recruit_stars: 3
   - name: Tausili Akana
+    position_tag: RDE
+    jersey: '13'
+    class_year: JR
+    snaps_multi_year: 237
+    recruit_rating: 96
+    recruit_stars: 4
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Multiple
+defense_scheme: Multiple

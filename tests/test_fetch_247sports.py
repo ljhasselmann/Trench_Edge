@@ -106,3 +106,19 @@ def test_fetch_roster_raises_typed_error_on_browser_failure():
 
     with pytest.raises(fs.TwoFortySevenFetchError, match="timeout"):
         fs.fetch_roster("Miami", 2026, browser_fetch=failing_fetch)
+
+
+def test_fetch_roster_wraps_puntandrally_navigation_error_as_its_own_type():
+    """The real browser_fetch (shared with fetch_puntandrally.py, see module
+    docstring) raises PuntAndRallyFetchError on a navigation/timeout failure
+    -- fetch_roster must present TwoFortySevenFetchError to its own callers
+    regardless, so run_week.py's `except fetch_247sports.TwoFortySevenFetchError`
+    actually catches it instead of the whole pipeline crashing."""
+    import fetch_puntandrally
+
+    def timing_out_fetch(url, wait_for_selector=None):
+        raise fetch_puntandrally.PuntAndRallyFetchError(f"browser navigation to {url!r} failed: timeout")
+
+    with pytest.raises(fs.TwoFortySevenFetchError, match="timeout") as exc_info:
+        fs.fetch_roster("Miami", 2026, browser_fetch=timing_out_fetch)
+    assert isinstance(exc_info.value.__cause__, fetch_puntandrally.PuntAndRallyFetchError)

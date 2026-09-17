@@ -2,12 +2,59 @@ team: Indiana
 starters:
   OL:
   - name: Carter Smith
+    position_tag: LT
+    jersey: '65'
+    class_year: GR
+    snaps_multi_year: 1953
+    recruit_rating: 93
+    recruit_stars: 4
   - name: Drew Evans
+    position_tag: LG
+    jersey: '62'
+    class_year: GR
+    snaps_multi_year: 1469
+    recruit_rating: 76
+    recruit_stars: 2
   - name: Bray Lynch
+    position_tag: C
+    jersey: '74'
+    class_year: GR
+    snaps_multi_year: 1918
+    recruit_rating: 87
+    recruit_stars: 3
   - name: Adedamola Ajani
+    position_tag: RG
+    jersey: '72'
+    class_year: SO
+    snaps_multi_year: 495
+    recruit_rating: 87
+    recruit_stars: 3
   - name: Joe Brunner
+    position_tag: RT
+    jersey: '56'
+    class_year: SR
+    snaps_multi_year: 95
+    recruit_rating: 94
+    recruit_stars: 4
   DL:
+  - name: Josh Burnham
+    position_tag: DE
+    recruit_rating: 96
+    recruit_stars: 4
   - name: Tyrique Tucker
+    position_tag: NT
+    jersey: '95'
+    class_year: GR
+    snaps_multi_year: 974
   - name: Mario Landino
+    position_tag: DT
+    jersey: '97'
+    class_year: JR
+    snaps_multi_year: 779
+    recruit_rating: 80
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Spread
+defense_scheme: Multiple 4-2-5

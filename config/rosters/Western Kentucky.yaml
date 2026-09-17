@@ -2,14 +2,67 @@ team: Western Kentucky
 starters:
   OL:
   - name: Tai Ray
+    position_tag: LT
+    jersey: '67'
+    class_year: JR
+    snaps_multi_year: 91
+    recruit_rating: 85
+    recruit_stars: 3
   - name: Nonso Omezi
+    position_tag: LG
+    jersey: '73'
+    class_year: SR
+    snaps_multi_year: 162
   - name: Alec Johnson
+    position_tag: C
+    jersey: '50'
+    class_year: SR
+    snaps_multi_year: 137
+    recruit_rating: 79
+    recruit_stars: 2
   - name: Rhett Larson
+    position_tag: RG
+    jersey: '70'
+    class_year: SR
+    snaps_multi_year: 159
+    recruit_rating: 84
+    recruit_stars: 3
   - name: Karsten Upchurch
+    position_tag: RT
+    jersey: '74'
+    class_year: SR
+    snaps_multi_year: 891
+    recruit_rating: 82
+    recruit_stars: 3
   DL:
   - name: LaTrevion Thompson
+    position_tag: LDE
+    jersey: '13'
+    class_year: SR
+    snaps_multi_year: 57
   - name: Kiawan Murphy
+    position_tag: NT
+    jersey: '56'
+    class_year: SR
+    snaps_multi_year: 12
+    recruit_rating: 83
+    recruit_stars: 3
   - name: Zeiqui Lawton
+    position_tag: DT
+    jersey: '33'
+    class_year: SR
+    snaps_multi_year: 31
+    recruit_rating: 88
+    recruit_stars: 3
   - name: Nathan Gonzales
+    position_tag: RDE
+    jersey: '98'
+    class_year: SR
+    snaps_multi_year: 30
+    recruit_rating: 80
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Air Raid
+defense_scheme: 3-3-5

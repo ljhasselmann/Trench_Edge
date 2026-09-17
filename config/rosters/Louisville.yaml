@@ -2,14 +2,65 @@ team: Louisville
 starters:
   OL:
   - name: Lance Robinson
+    position_tag: LT
+    jersey: '53'
+    class_year: GR
+    snaps_multi_year: 943
+    recruit_rating: 82
+    recruit_stars: 3
   - name: Eryx Daugherty
+    position_tag: LG
+    jersey: '56'
+    class_year: JR
+    snaps_multi_year: 126
+    recruit_rating: 87
+    recruit_stars: 3
   - name: Evan Wibberley
+    position_tag: C
+    jersey: '58'
+    class_year: SR
+    snaps_multi_year: 126
+    recruit_rating: 80
+    recruit_stars: 3
   - name: Johnnie Brown III
+    position_tag: RG
+    jersey: '66'
+    class_year: SR
+    snaps_multi_year: 126
   - name: Cason Henry
+    position_tag: RT
+    jersey: '71'
+    class_year: SR
+    snaps_multi_year: 70
+    recruit_rating: 86
+    recruit_stars: 3
   DL:
   - name: AJ Green
+    position_tag: LDE
+    jersey: '17'
+    class_year: JR
+    snaps_multi_year: 429
+    recruit_rating: 94
+    recruit_stars: 4
   - name: Joshua Donald
+    position_tag: NT
+    jersey: '95'
+    class_year: GR
+    snaps_multi_year: 59
   - name: Daylen Russell
+    position_tag: DT
+    jersey: '90'
+    class_year: SO
+    snaps_multi_year: 57
+    recruit_rating: 85
+    recruit_stars: 3
   - name: Clev Lubin
+    position_tag: RDE
+    jersey: '50'
+    class_year: SR
+    snaps_multi_year: 695
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Pro Style
+defense_scheme: 4-2-5, 4-3

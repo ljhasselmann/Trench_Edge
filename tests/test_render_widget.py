@@ -19,6 +19,8 @@ def _sample_context(**overrides):
         side="team_a_ol_vs_team_b_dl",
         year=2026,
         generated_at="2026-09-15 12:00 UTC",
+        team_a_color="#f47321",
+        team_b_color="#ceb888",
         mass={
             "team_a_avg_weight": 320.0,
             "team_b_avg_weight": 290.0,
@@ -26,6 +28,8 @@ def _sample_context(**overrides):
             "score": 3.0,
             "team_a_starters": [StarterWeight(name="Jacob Hawks", weight_lbs=330, confidence="confirmed", source="cfbd_roster")],
             "team_b_starters": [],
+            "team_a_formation": [StarterWeight(name="Jacob Hawks", weight_lbs=330, confidence="confirmed", source="cfbd_roster", jersey="78", position_tag="T")],
+            "team_b_formation": [],
         },
         push={"available": False, "score": None, "sp_plus_gap": None, "raw": {}},
         experience={
@@ -51,6 +55,43 @@ def test_render_is_pure_and_produces_html():
     assert "Composite not computed -- missing: Push" in html  # caveat
 
 
+def _sw(name, tag, jersey=None):
+    return StarterWeight(name=name, weight_lbs=300, confidence="confirmed", source="cfbd_roster",
+                          jersey=jersey, position_tag=tag)
+
+
+def test_ol_formation_order_arranges_by_real_ourlads_left_to_right_slot():
+    # ourlads' own labels already say which side each starter plays --
+    # real positional order, not a guess (see fetch_ourlads.OL_ROW_ORDER).
+    starters = [_sw("G1", "RG"), _sw("T1", "LT"), _sw("C1", "C"), _sw("T2", "RT"), _sw("G2", "LG")]
+    ordered = render_widget._ol_formation_order(starters)
+    assert [s.name for s in ordered] == ["T1", "G2", "C1", "G1", "T2"]
+
+
+def test_ol_formation_order_keeps_relative_order_for_unrecognized_tags():
+    # A stale entry from before the ourlads revert (puntandrally's
+    # generic "T"/"G"/"C" tags, not real left/right labels) isn't in
+    # OL_ROW_ORDER -- must never crash or guess a side, just keep the
+    # staged order as-is (stable sort).
+    starters = [_sw("G1", "G"), _sw("T1", "T"), _sw("T2", "T")]
+    ordered = render_widget._ol_formation_order(starters)
+    assert ordered == starters
+
+
+def test_dl_formation_order_arranges_by_real_ourlads_left_to_right_slot():
+    starters = [_sw("DT1", "RDT"), _sw("DE1", "LDE"), _sw("DE2", "RDE"), _sw("DT2", "LDT")]
+    ordered = render_widget._dl_formation_order(starters)
+    assert [s.name for s in ordered] == ["DE1", "DT2", "DT1", "DE2"]
+
+
+def test_dl_formation_order_handles_a_real_3_4_front():
+    # ourlads reports the team's REAL front size -- a 3-4 team's chart
+    # genuinely has only 3 down-linemen rows (no forced 4th box).
+    starters = [_sw("DE1", "LDE"), _sw("NT1", "NT"), _sw("DE2", "RDE")]
+    ordered = render_widget._dl_formation_order(starters)
+    assert [s.name for s in ordered] == ["DE1", "NT1", "DE2"]
+
+
 def test_render_shows_push_score_when_available():
     ctx = _sample_context(push={"available": True, "score": 4.4, "sp_plus_gap": 22.2, "raw": {}})
     html = render(ctx)
@@ -73,11 +114,13 @@ def test_render_never_double_escapes_team_names_with_special_chars():
 
 
 class _FakeMass:
-    def __init__(self, avg_ol=None, avg_dl=None, starters=None, warnings=None):
+    def __init__(self, avg_ol=None, avg_dl=None, starters=None, warnings=None, offense_scheme=None, defense_scheme=None):
         self.avg_ol_weight = avg_ol
         self.avg_dl_weight = avg_dl
         self.ol_starters = starters or []
         self.dl_starters = starters or []
+        self.offense_scheme = offense_scheme
+        self.defense_scheme = defense_scheme
         self.warnings = warnings or []
 
 
@@ -210,7 +253,7 @@ def test_write_history_snapshot_produces_readable_json_with_starter_detail(tmp_p
     assert data["mass"]["team_a_starters"] == [
         {"name": "Jacob Hawks", "weight_lbs": 330, "confidence": "confirmed", "source": "cfbd_roster",
          "jersey": None, "class_year": None, "snaps_multi_year": None,
-         "recruit_rating": None, "recruit_stars": None}
+         "recruit_rating": None, "recruit_stars": None, "position_tag": None}
     ]
     assert data["mass"]["score"] == 3.0
     assert data["composite"] is None

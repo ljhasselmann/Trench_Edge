@@ -61,16 +61,6 @@ matchups:
   team_b: Oklahoma
   side: team_a_ol_vs_team_b_dl
   week: 3
-- label: 2026-wk03-northern-iowa-iowa
-  team_a: Northern Iowa
-  team_b: Iowa
-  side: team_a_ol_vs_team_b_dl
-  week: 3
-- label: 2026-wk03-portland-state-oregon
-  team_a: Portland State
-  team_b: Oregon
-  side: team_a_ol_vs_team_b_dl
-  week: 3
 - label: 2026-wk03-smu-louisville
   team_a: SMU
   team_b: Louisville

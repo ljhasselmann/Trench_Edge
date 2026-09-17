@@ -2,14 +2,69 @@ team: SMU
 starters:
   OL:
   - name: PJ Williams
+    position_tag: LT
+    jersey: '59'
+    class_year: SR
+    snaps_multi_year: 1809
+    recruit_rating: 97
+    recruit_stars: 4
   - name: Alex Woods
+    position_tag: LG
+    jersey: '77'
+    class_year: JR
+    snaps_multi_year: 122
+    recruit_rating: 84
+    recruit_stars: 3
   - name: Joshua Bates
+    position_tag: C
+    jersey: '64'
+    class_year: JR
+    snaps_multi_year: 972
+    recruit_rating: 90
+    recruit_stars: 4
   - name: Addison Nichols
+    position_tag: RG
+    jersey: '63'
+    class_year: SR
+    snaps_multi_year: 973
+    recruit_rating: 93
+    recruit_stars: 4
   - name: Andrew Chamblee
+    position_tag: RT
+    jersey: '74'
+    class_year: SR
+    snaps_multi_year: 624
+    recruit_rating: 93
+    recruit_stars: 4
   DL:
   - name: Tavion Atkinson
+    position_tag: LDE
+    jersey: '6'
+    class_year: JR
+    snaps_multi_year: 32
+    recruit_rating: 86
+    recruit_stars: 3
   - name: Malcolm Alcorn-Crowder
+    position_tag: LDT
+    jersey: '5'
+    class_year: SR
+    snaps_multi_year: 62
+    recruit_rating: 88
+    recruit_stars: 3
   - name: Christian Davis
+    position_tag: RDT
+    jersey: '97'
+    class_year: JR
+    snaps_multi_year: 52
   - name: Ira Singleton IV
+    position_tag: RDE
+    jersey: '9'
+    class_year: JR
+    snaps_multi_year: 68
+    recruit_rating: 85
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Air Raid
+defense_scheme: 4-2-5

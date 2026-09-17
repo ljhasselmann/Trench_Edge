@@ -3,49 +3,81 @@
   "team_a": "Kentucky",
   "team_b": "Texas A&M",
   "year": 2026,
-  "generated_at": "2026-09-16 03:57 UTC",
+  "generated_at": "2026-09-16 23:33 UTC",
   "direction_a": {
     "matchup_label": "2026-wk03-kentucky-texas-a-m-a",
     "team_a": "Kentucky",
     "team_b": "Texas A&M",
     "side": "team_a_ol_vs_team_b_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 03:57 UTC",
+    "generated_at": "2026-09-16 23:33 UTC",
     "mass": {
       "team_a_avg_weight": 324.0,
       "team_b_avg_weight": 281.5,
       "weight_diff_lbs": 42.5,
       "score": 4.25,
+      "team_a_offense_scheme": "Multiple Pro Style",
+      "team_b_defense_scheme": "Multiple",
       "team_a_starters": [
         {
           "name": "Lance Heard",
           "weight_lbs": 325,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "53",
+          "class_year": "SR",
+          "snaps_multi_year": 123,
+          "recruit_rating": 98,
+          "recruit_stars": 5,
+          "position_tag": "LT"
         },
         {
           "name": "Olaus Alinen",
           "weight_lbs": 329,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "73",
+          "class_year": "SR",
+          "snaps_multi_year": 123,
+          "recruit_rating": 94,
+          "recruit_stars": 4,
+          "position_tag": "LG"
         },
         {
           "name": "Coleton Price",
           "weight_lbs": 308,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "72",
+          "class_year": "SR",
+          "snaps_multi_year": 122,
+          "recruit_rating": 84,
+          "recruit_stars": 3,
+          "position_tag": "C"
         },
         {
           "name": "Tegra Tshabola",
           "weight_lbs": 329,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "77",
+          "class_year": "SR",
+          "snaps_multi_year": 98,
+          "recruit_rating": 97,
+          "recruit_stars": 4,
+          "position_tag": "RG"
         },
         {
           "name": "Malachi Wood",
           "weight_lbs": 329,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "71",
+          "class_year": "SR",
+          "snaps_multi_year": 458,
+          "recruit_rating": 85,
+          "recruit_stars": 3,
+          "position_tag": "RT"
         }
       ],
       "team_b_starters": [
@@ -53,25 +85,161 @@
           "name": "T.J. Searcy",
           "weight_lbs": 260,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "18",
+          "class_year": "SR",
+          "snaps_multi_year": 443,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "LDE"
         },
         {
           "name": "CJ Mims",
           "weight_lbs": 312,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "92",
+          "class_year": "SR",
+          "snaps_multi_year": 46,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "NT"
         },
         {
           "name": "DJ Hicks",
           "weight_lbs": 293,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "5",
+          "class_year": "SR",
+          "snaps_multi_year": 756,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "DT"
         },
         {
           "name": "Marco Jones",
           "weight_lbs": 261,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "10",
+          "class_year": "SO",
+          "snaps_multi_year": 187,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "RDE"
+        }
+      ],
+      "team_a_formation": [
+        {
+          "name": "Lance Heard",
+          "weight_lbs": 325,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "53",
+          "class_year": "SR",
+          "snaps_multi_year": 123,
+          "recruit_rating": 98,
+          "recruit_stars": 5,
+          "position_tag": "LT"
+        },
+        {
+          "name": "Olaus Alinen",
+          "weight_lbs": 329,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "73",
+          "class_year": "SR",
+          "snaps_multi_year": 123,
+          "recruit_rating": 94,
+          "recruit_stars": 4,
+          "position_tag": "LG"
+        },
+        {
+          "name": "Coleton Price",
+          "weight_lbs": 308,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "72",
+          "class_year": "SR",
+          "snaps_multi_year": 122,
+          "recruit_rating": 84,
+          "recruit_stars": 3,
+          "position_tag": "C"
+        },
+        {
+          "name": "Tegra Tshabola",
+          "weight_lbs": 329,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "77",
+          "class_year": "SR",
+          "snaps_multi_year": 98,
+          "recruit_rating": 97,
+          "recruit_stars": 4,
+          "position_tag": "RG"
+        },
+        {
+          "name": "Malachi Wood",
+          "weight_lbs": 329,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "71",
+          "class_year": "SR",
+          "snaps_multi_year": 458,
+          "recruit_rating": 85,
+          "recruit_stars": 3,
+          "position_tag": "RT"
+        }
+      ],
+      "team_b_formation": [
+        {
+          "name": "T.J. Searcy",
+          "weight_lbs": 260,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "18",
+          "class_year": "SR",
+          "snaps_multi_year": 443,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "LDE"
+        },
+        {
+          "name": "CJ Mims",
+          "weight_lbs": 312,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "92",
+          "class_year": "SR",
+          "snaps_multi_year": 46,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "NT"
+        },
+        {
+          "name": "DJ Hicks",
+          "weight_lbs": 293,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "5",
+          "class_year": "SR",
+          "snaps_multi_year": 756,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "DT"
+        },
+        {
+          "name": "Marco Jones",
+          "weight_lbs": 261,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "10",
+          "class_year": "SO",
+          "snaps_multi_year": 187,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "RDE"
         }
       ]
     },
@@ -86,23 +254,27 @@
         "Texas A&M_defense_line_yards": 2.2442307692307693
       }
     },
-    "continuity": {
-      "team_a_returning": null,
-      "team_b_returning": null,
-      "net_returning": null,
-      "score": null,
+    "experience": {
+      "team_a_returning_pct": 3.6,
+      "team_b_returning_pct": 19.5,
+      "experience_diff_pct": -15.9,
+      "score": -1.59,
       "team_a_driver": null,
       "team_a_note": null,
       "team_b_driver": null,
       "team_b_note": null
     },
+    "recruiting": {
+      "team_a_rating": 91.6,
+      "team_b_rating": null,
+      "rating_diff": null,
+      "score": null
+    },
     "composite": null,
     "warnings": [
-      "[Kentucky Continuity] config/rosters/Kentucky.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it",
-      "[Kentucky Continuity] config/rosters/Kentucky.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season",
-      "[Texas A&M Continuity] config/rosters/Texas A&M.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it",
-      "[Texas A&M Continuity] config/rosters/Texas A&M.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season",
-      "Composite not computed -- missing: Continuity"
+      "[Texas A&M Recruiting] no OL starter for Texas A&M has a 247Sports recruit_rating staged -- recruiting talent unavailable for this side",
+      "[Texas A&M Recruiting] no DL starter for Texas A&M has a 247Sports recruit_rating staged -- recruiting talent unavailable for this side",
+      "Composite not computed -- missing: Recruiting"
     ]
   },
   "direction_b": {
@@ -111,56 +283,212 @@
     "team_b": "Kentucky",
     "side": "team_b_ol_vs_team_a_dl",
     "year": 2026,
-    "generated_at": "2026-09-16 03:57 UTC",
+    "generated_at": "2026-09-16 23:33 UTC",
     "mass": {
       "team_a_avg_weight": 318.2,
-      "team_b_avg_weight": 324.5,
-      "weight_diff_lbs": -6.300000000000011,
-      "score": -0.6300000000000011,
+      "team_b_avg_weight": 306.6666666666667,
+      "weight_diff_lbs": 11.533333333333303,
+      "score": 1.1533333333333302,
+      "team_a_offense_scheme": "Pro Style",
+      "team_b_defense_scheme": "Multiple",
       "team_a_starters": [
         {
           "name": "Tyree Adams",
           "weight_lbs": 305,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "71",
+          "class_year": "SR",
+          "snaps_multi_year": 131,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "LT"
         },
         {
           "name": "Blake Ivy",
           "weight_lbs": 324,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "52",
+          "class_year": "JR",
+          "snaps_multi_year": 191,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "LG"
         },
         {
           "name": "Mark Nabou Jr.",
           "weight_lbs": 307,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "54",
+          "class_year": "GR",
+          "snaps_multi_year": 909,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "C"
         },
         {
           "name": "Trovon Baugh",
           "weight_lbs": 335,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "76",
+          "class_year": "GR",
+          "snaps_multi_year": 124,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "RG"
         },
         {
           "name": "Wilkin Formby",
           "weight_lbs": 320,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "75",
+          "class_year": "GR",
+          "snaps_multi_year": 111,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "RT"
         }
       ],
       "team_b_starters": [
         {
+          "name": "Mi'Quise Humphrey-Grace",
+          "weight_lbs": 271,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "90",
+          "class_year": "SR",
+          "snaps_multi_year": 599,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "DE"
+        },
+        {
           "name": "Jamarrion Harkless",
           "weight_lbs": 346,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "7",
+          "class_year": "SR",
+          "snaps_multi_year": 40,
+          "recruit_rating": 87,
+          "recruit_stars": 3,
+          "position_tag": "NT"
         },
         {
           "name": "Tavion Gadson",
           "weight_lbs": 303,
           "confidence": "confirmed",
-          "source": "cfbd_roster"
+          "source": "cfbd_roster",
+          "jersey": "94",
+          "class_year": "SR",
+          "snaps_multi_year": 433,
+          "recruit_rating": 88,
+          "recruit_stars": 3,
+          "position_tag": "DT"
+        }
+      ],
+      "team_a_formation": [
+        {
+          "name": "Tyree Adams",
+          "weight_lbs": 305,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "71",
+          "class_year": "SR",
+          "snaps_multi_year": 131,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "LT"
+        },
+        {
+          "name": "Blake Ivy",
+          "weight_lbs": 324,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "52",
+          "class_year": "JR",
+          "snaps_multi_year": 191,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "LG"
+        },
+        {
+          "name": "Mark Nabou Jr.",
+          "weight_lbs": 307,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "54",
+          "class_year": "GR",
+          "snaps_multi_year": 909,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "C"
+        },
+        {
+          "name": "Trovon Baugh",
+          "weight_lbs": 335,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "76",
+          "class_year": "GR",
+          "snaps_multi_year": 124,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "RG"
+        },
+        {
+          "name": "Wilkin Formby",
+          "weight_lbs": 320,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "75",
+          "class_year": "GR",
+          "snaps_multi_year": 111,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "RT"
+        }
+      ],
+      "team_b_formation": [
+        {
+          "name": "Mi'Quise Humphrey-Grace",
+          "weight_lbs": 271,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "90",
+          "class_year": "SR",
+          "snaps_multi_year": 599,
+          "recruit_rating": null,
+          "recruit_stars": null,
+          "position_tag": "DE"
+        },
+        {
+          "name": "Jamarrion Harkless",
+          "weight_lbs": 346,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "7",
+          "class_year": "SR",
+          "snaps_multi_year": 40,
+          "recruit_rating": 87,
+          "recruit_stars": 3,
+          "position_tag": "NT"
+        },
+        {
+          "name": "Tavion Gadson",
+          "weight_lbs": 303,
+          "confidence": "confirmed",
+          "source": "cfbd_roster",
+          "jersey": "94",
+          "class_year": "SR",
+          "snaps_multi_year": 433,
+          "recruit_rating": 88,
+          "recruit_stars": 3,
+          "position_tag": "DT"
         }
       ]
     },
@@ -175,23 +503,27 @@
         "Kentucky_defense_line_yards": 2.6016129032258064
       }
     },
-    "continuity": {
-      "team_a_returning": null,
-      "team_b_returning": null,
-      "net_returning": null,
-      "score": null,
+    "experience": {
+      "team_a_returning_pct": 18.6,
+      "team_b_returning_pct": 26.666666666666668,
+      "experience_diff_pct": -8.066666666666666,
+      "score": -0.8066666666666666,
       "team_a_driver": null,
       "team_a_note": null,
       "team_b_driver": null,
       "team_b_note": null
     },
+    "recruiting": {
+      "team_a_rating": null,
+      "team_b_rating": 87.5,
+      "rating_diff": null,
+      "score": null
+    },
     "composite": null,
     "warnings": [
-      "[Kentucky Continuity] config/rosters/Kentucky.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it",
-      "[Kentucky Continuity] config/rosters/Kentucky.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season",
-      "[Texas A&M Continuity] config/rosters/Texas A&M.yaml has no prior_season_starters block -- set once per season by a human (who started for this team last year); returning-starter count cannot be computed without it",
-      "[Texas A&M Continuity] config/rosters/Texas A&M.yaml has no continuity_note -- talent-driven vs. scheme-driven flag (DESIGN.md 4c) not set for this team/season",
-      "Composite not computed -- missing: Continuity"
+      "[Texas A&M Recruiting] no OL starter for Texas A&M has a 247Sports recruit_rating staged -- recruiting talent unavailable for this side",
+      "[Texas A&M Recruiting] no DL starter for Texas A&M has a 247Sports recruit_rating staged -- recruiting talent unavailable for this side",
+      "Composite not computed -- missing: Recruiting"
     ]
   }
 }

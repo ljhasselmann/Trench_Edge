@@ -2,12 +2,60 @@ team: Colorado State
 starters:
   OL:
   - name: Toriyan Johnson
+    position_tag: LT
+    jersey: '76'
+    class_year: JR
+    snaps_multi_year: 107
   - name: Braden Hales
+    position_tag: LG
+    jersey: '73'
+    class_year: SO
+    snaps_multi_year: 137
+    recruit_rating: 80
+    recruit_stars: 3
   - name: Phillip Ocon
+    position_tag: C
+    jersey: '65'
+    class_year: SO
+    snaps_multi_year: 252
+    recruit_rating: 84
+    recruit_stars: 3
   - name: Zach Smith
+    position_tag: RG
+    jersey: '71'
+    class_year: SO
+    snaps_multi_year: 136
+    recruit_rating: 82
+    recruit_stars: 3
   - name: John Holthaus
+    position_tag: RT
+    jersey: '63'
+    class_year: SO
+    snaps_multi_year: 148
+    recruit_rating: 81
+    recruit_stars: 3
   DL:
+  - name: Brandon Kelley
+    position_tag: DE
+    jersey: '10'
+    class_year: JR
+    snaps_multi_year: 57
   - name: Robby Harrison
+    position_tag: NT
+    jersey: '93'
+    class_year: SR
+    snaps_multi_year: 54
+    recruit_rating: 84
+    recruit_stars: 3
   - name: Jack Moran
+    position_tag: DT
+    jersey: '77'
+    class_year: SO
+    snaps_multi_year: 453
+    recruit_rating: 85
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Air Raid
+defense_scheme: 4-2-5

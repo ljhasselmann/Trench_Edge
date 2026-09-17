@@ -2,14 +2,66 @@ team: Buffalo
 starters:
   OL:
   - name: Gabriel Arena
+    position_tag: LT
+    jersey: '59'
+    class_year: SR
+    snaps_multi_year: 290
+    recruit_rating: 85
+    recruit_stars: 3
   - name: Thomas Barr
+    position_tag: LG
+    jersey: '55'
+    class_year: SO
+    snaps_multi_year: 155
+    recruit_rating: 85
+    recruit_stars: 3
   - name: Nino Francavilla
+    position_tag: C
+    jersey: '74'
+    class_year: SR
+    snaps_multi_year: 155
+    recruit_rating: 84
+    recruit_stars: 3
   - name: Jackson Bellamy
+    position_tag: RG
+    jersey: '69'
+    class_year: JR
+    snaps_multi_year: 121
+    recruit_rating: 79
+    recruit_stars: 2
   - name: Nathan Natoli
+    position_tag: RT
+    jersey: '76'
+    class_year: SR
   DL:
   - name: Logan Goodwin
+    position_tag: LDE
+    jersey: '17'
+    class_year: JR
+    snaps_multi_year: 104
   - name: Cornell Evans
+    position_tag: LDT
+    jersey: '99'
+    class_year: GR
+    snaps_multi_year: 948
+    recruit_rating: 79
+    recruit_stars: 2
   - name: Christopher Climes
+    position_tag: RDT
+    jersey: '97'
+    class_year: SO
+    snaps_multi_year: 105
+    recruit_rating: 83
+    recruit_stars: 3
   - name: Will Clark
+    position_tag: RDE
+    jersey: '11'
+    class_year: JR
+    snaps_multi_year: 92
+    recruit_rating: 84
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Multiple
+defense_scheme: Multiple

@@ -2,14 +2,70 @@ team: Penn State
 starters:
   OL:
   - name: Malachi Goodman
+    position_tag: LT
+    jersey: '78'
+    class_year: FR
+    snaps_multi_year: 115
+    recruit_rating: 98
+    recruit_stars: 5
   - name: Trevor Buhr
+    position_tag: LG
+    jersey: '70'
+    class_year: JR
+    snaps_multi_year: 103
+    recruit_rating: 86
+    recruit_stars: 3
   - name: Brock Riker
+    position_tag: C
+    jersey: '51'
+    class_year: SO
+    snaps_multi_year: 115
+    recruit_rating: 86
+    recruit_stars: 3
   - name: Cooper Cousins
+    position_tag: RG
+    jersey: '50'
+    class_year: JR
+    snaps_multi_year: 452
+    recruit_rating: 96
+    recruit_stars: 4
   - name: Anthony Donkoh
+    position_tag: RT
+    jersey: '68'
+    class_year: JR
+    snaps_multi_year: 1243
+    recruit_rating: 90
+    recruit_stars: 4
   DL:
   - name: Yvan Kemajou
+    position_tag: LDE
+    jersey: '19'
+    class_year: SO
+    snaps_multi_year: 296
+    recruit_rating: 93
+    recruit_stars: 4
   - name: Armstrong Nnodim
+    position_tag: LDT
+    jersey: '91'
+    class_year: SO
+    recruit_rating: 85
+    recruit_stars: 3
   - name: Keanu Williams
+    position_tag: RDT
+    jersey: '99'
+    class_year: SR
+    snaps_multi_year: 60
+    recruit_rating: 90
+    recruit_stars: 4
   - name: Ikenna Ezeogu
+    position_tag: RDE
+    jersey: '1'
+    class_year: SR
+    snaps_multi_year: 59
+    recruit_rating: 86
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Spread
+defense_scheme: 4-2-5

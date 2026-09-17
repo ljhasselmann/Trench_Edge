@@ -2,12 +2,56 @@ team: Troy
 starters:
   OL:
   - name: Darion Rivers
+    position_tag: LT
+    jersey: '77'
+    class_year: JR
+    snaps_multi_year: 61
+    recruit_rating: 86
+    recruit_stars: 3
   - name: Luke Petit
+    position_tag: LG
+    jersey: '51'
+    class_year: SR
+    snaps_multi_year: 138
   - name: Tyler Cappi
+    position_tag: C
+    jersey: '65'
+    class_year: SR
+    snaps_multi_year: 759
   - name: Patrick Screws Jr.
+    position_tag: RG
+    jersey: '72'
+    class_year: JR
+    snaps_multi_year: 210
+    recruit_rating: 85
+    recruit_stars: 3
   - name: Jordon Jones
+    position_tag: RT
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 138
   DL:
+  - name: Kavion Henderson
+    position_tag: DE
+    jersey: '25'
+    class_year: SO
+    snaps_multi_year: 63
+    recruit_rating: 89
+    recruit_stars: 3
   - name: Kam Curry
+    position_tag: NT
+    jersey: '00'
+    class_year: SR
+    snaps_multi_year: 721
   - name: Ty Clemons
+    position_tag: DT
+    jersey: '11'
+    class_year: SR
+    snaps_multi_year: 82
+    recruit_rating: 85
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Spread
+defense_scheme: Multiple 3-3-5

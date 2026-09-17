@@ -2,12 +2,61 @@ team: Alabama
 starters:
   OL:
   - name: Jackson Lloyd
+    position_tag: LT
+    jersey: '77'
+    class_year: SO
+    snaps_multi_year: 185
+    recruit_rating: 96
+    recruit_stars: 4
   - name: William Sanders
+    position_tag: LG
+    jersey: '70'
+    class_year: JR
+    snaps_multi_year: 293
+    recruit_rating: 89
+    recruit_stars: 3
   - name: Racin Delgatty
+    position_tag: C
+    jersey: '55'
+    class_year: SR
+    snaps_multi_year: 144
+    recruit_rating: 82
+    recruit_stars: 3
   - name: Michael Carroll
+    position_tag: RG
+    jersey: '64'
+    class_year: SO
+    snaps_multi_year: 622
+    recruit_rating: 98
+    recruit_stars: 5
   - name: Jayvin James
+    position_tag: RT
+    jersey: '54'
+    class_year: SR
+    snaps_multi_year: 144
+    recruit_rating: 82
+    recruit_stars: 3
   DL:
+  - name: Desmond Umeozulu
+    position_tag: DE
+    recruit_rating: 94
+    recruit_stars: 4
   - name: Terrance Green
+    position_tag: NT
+    jersey: '99'
+    class_year: SR
+    snaps_multi_year: 46
+    recruit_rating: 92
+    recruit_stars: 4
   - name: Kedrick Bingley-Jones
+    position_tag: DT
+    jersey: '22'
+    class_year: GR
+    snaps_multi_year: 38
+    recruit_rating: 92
+    recruit_stars: 4
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Pro Spread
+defense_scheme: 4-2-5

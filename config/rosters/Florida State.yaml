@@ -2,12 +2,59 @@ team: Florida State
 starters:
   OL:
   - name: Xavier Chaplin
+    position_tag: LT
+    jersey: '77'
+    class_year: SR
+    snaps_multi_year: 138
+    recruit_rating: 86
+    recruit_stars: 3
   - name: Paul Bowling
+    position_tag: LG
+    jersey: '51'
+    class_year: SO
+    snaps_multi_year: 33
+    recruit_rating: 84
+    recruit_stars: 3
   - name: Bradyn Welch-Joiner
+    position_tag: C
+    recruit_rating: 86
+    recruit_stars: 3
   - name: Nate Pabst
+    position_tag: RG
+    jersey: '71'
+    class_year: SR
+    snaps_multi_year: 138
+    recruit_rating: 79
+    recruit_stars: 2
   - name: Chimdia Nwaiwu
+    position_tag: RT
+    jersey: '79'
+    class_year: SR
+    snaps_multi_year: 105
   DL:
+  - name: Darryll Desir
+    position_tag: DE
+    jersey: '1'
+    class_year: SO
+    snaps_multi_year: 333
+    recruit_rating: 88
+    recruit_stars: 3
   - name: Daniel Lyons
+    position_tag: NT
+    jersey: '5'
+    class_year: SR
+    snaps_multi_year: 840
+    recruit_rating: 88
+    recruit_stars: 3
   - name: Mandrell Desir
+    position_tag: DT
+    jersey: '3'
+    class_year: SO
+    snaps_multi_year: 421
+    recruit_rating: 88
+    recruit_stars: 3
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Multiple
+defense_scheme: 4-2-5

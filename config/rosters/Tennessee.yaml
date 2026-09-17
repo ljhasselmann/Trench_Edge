@@ -2,12 +2,64 @@ team: Tennessee
 starters:
   OL:
   - name: David Sanders Jr.
+    position_tag: LT
+    jersey: '70'
+    class_year: SO
+    snaps_multi_year: 589
+    recruit_rating: 98
+    recruit_stars: 5
   - name: Wendell Moe Jr.
+    position_tag: LG
+    jersey: '75'
+    class_year: SR
+    snaps_multi_year: 794
+    recruit_rating: 84
+    recruit_stars: 3
   - name: Sam Pendleton
+    position_tag: C
+    jersey: '56'
+    class_year: SR
+    snaps_multi_year: 882
+    recruit_rating: 89
+    recruit_stars: 3
   - name: Jesse Perry
+    position_tag: RG
+    jersey: '72'
+    class_year: JR
+    snaps_multi_year: 938
+    recruit_rating: 88
+    recruit_stars: 3
   - name: Ory Williams
+    position_tag: RT
+    jersey: '77'
+    class_year: JR
+    snaps_multi_year: 53
+    recruit_rating: 87
+    recruit_stars: 3
   DL:
+  - name: Tyree Weathersby
+    position_tag: DE
+    jersey: '18'
+    class_year: SR
+    snaps_multi_year: 357
+    recruit_rating: 89
+    recruit_stars: 3
   - name: Xavier Gilliam
+    position_tag: NT
+    jersey: '2'
+    class_year: JR
+    snaps_multi_year: 80
+    recruit_rating: 89
+    recruit_stars: 3
   - name: Daevin Hobbs
+    position_tag: DT
+    jersey: '5'
+    class_year: SR
+    snaps_multi_year: 482
+    recruit_rating: 97
+    recruit_stars: 4
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Veer and Shoot
+defense_scheme: Multiple 4-2-5

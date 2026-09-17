@@ -2,14 +2,53 @@ team: Texas A&M
 starters:
   OL:
   - name: Tyree Adams
+    position_tag: LT
+    jersey: '71'
+    class_year: SR
+    snaps_multi_year: 131
   - name: Blake Ivy
+    position_tag: LG
+    jersey: '52'
+    class_year: JR
+    snaps_multi_year: 191
   - name: Mark Nabou Jr.
+    position_tag: C
+    jersey: '54'
+    class_year: GR
+    snaps_multi_year: 909
   - name: Trovon Baugh
+    position_tag: RG
+    jersey: '76'
+    class_year: GR
+    snaps_multi_year: 124
   - name: Wilkin Formby
+    position_tag: RT
+    jersey: '75'
+    class_year: GR
+    snaps_multi_year: 111
   DL:
   - name: T.J. Searcy
+    position_tag: LDE
+    jersey: '18'
+    class_year: SR
+    snaps_multi_year: 443
   - name: CJ Mims
+    position_tag: NT
+    jersey: '92'
+    class_year: SR
+    snaps_multi_year: 46
   - name: DJ Hicks
+    position_tag: DT
+    jersey: '5'
+    class_year: SR
+    snaps_multi_year: 756
   - name: Marco Jones
+    position_tag: RDE
+    jersey: '10'
+    class_year: SO
+    snaps_multi_year: 187
 updated_by_human_at: '2026-09-16'
-roster_source: ourlads.com (live fetch via run_week.py)
+roster_source: ourlads.com (depth chart) + puntandrally.com (jersey/class/snaps enrichment),
+  via run_week.py
+offense_scheme: Pro Style
+defense_scheme: Multiple
