@@ -53,11 +53,13 @@ def test_fetch_advanced_stats_sends_bearer_auth_and_never_logs_key(monkeypatch, 
             "offense": {
                 "stuffRate": 0.18,
                 "lineYards": 2.9,
+                "powerSuccess": 0.83,
                 "havoc": {"total": 0.16, "frontSeven": 0.11, "db": 0.05},
             },
             "defense": {
                 "stuffRate": 0.21,
                 "lineYards": 2.6,
+                "powerSuccess": 0.71,
                 "havoc": {"total": 0.19, "frontSeven": 0.13, "db": 0.06},
             },
         }
@@ -71,6 +73,7 @@ def test_fetch_advanced_stats_sends_bearer_auth_and_never_logs_key(monkeypatch, 
     assert "super-secret-key" not in capsys.readouterr().out
 
     assert stats.offense.stuff_rate == 0.18
+    assert stats.offense.power_success == 0.83
     assert stats.offense.havoc_front_seven == 0.11
     assert stats.defense.line_yards == 2.6
     assert stats.offense.warnings == []
@@ -87,6 +90,7 @@ def test_fetch_advanced_stats_flags_missing_fields_instead_of_crashing(monkeypat
 
     assert stats.offense.stuff_rate is None
     assert "stuffRate field not present in response" in stats.offense.warnings
+    assert "powerSuccess field not present in response" in stats.offense.warnings
     assert stats.defense.warnings == ["side payload missing entirely from API response"]
 
 
@@ -102,6 +106,58 @@ def test_fetch_advanced_stats_raises_without_key(monkeypatch):
     session = _FakeSession(_FakeResponse(200, [{}]))
     with pytest.raises(fetch_cfbd.CFBDAuthError):
         fetch_cfbd.fetch_advanced_stats("Miami", 2025, session=session)
+
+
+def test_fetch_rushing_direction_splits_computes_success_rate_per_direction(monkeypatch):
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    rows = [
+        {"offense": "Miami", "rushDirection": "left", "directionAnalysisEligible": True, "success": True},
+        {"offense": "Miami", "rushDirection": "left", "directionAnalysisEligible": True, "success": False},
+        {"offense": "Miami", "rushDirection": "middle", "directionAnalysisEligible": True, "success": True},
+        {"offense": "Miami", "rushDirection": "right", "directionAnalysisEligible": True, "success": True},
+        {"offense": "Miami", "rushDirection": "right", "directionAnalysisEligible": True, "success": True},
+        # excluded: Miami on defense, not offense
+        {"offense": "Ohio State", "defense": "Miami", "rushDirection": "left", "directionAnalysisEligible": True, "success": True},
+        # excluded: not direction-analysis-eligible
+        {"offense": "Miami", "rushDirection": "left", "directionAnalysisEligible": False, "success": True},
+        # excluded: no resolved direction
+        {"offense": "Miami", "rushDirection": None, "directionAnalysisEligible": True, "success": True},
+    ]
+    session = _FakeSession(_FakeResponse(200, rows))
+
+    splits = fetch_cfbd.fetch_rushing_direction_splits("Miami", 2025, session=session)
+
+    assert splits.left.play_count == 2
+    assert splits.left.success_rate == pytest.approx(0.5)
+    assert splits.middle.play_count == 1
+    assert splits.middle.success_rate == pytest.approx(1.0)
+    assert splits.right.play_count == 2
+    assert splits.right.success_rate == pytest.approx(1.0)
+    assert splits.warnings == []
+
+
+def test_fetch_rushing_direction_splits_no_resolved_plays_is_none_not_zero(monkeypatch):
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    rows = [
+        {"offense": "Miami", "rushDirection": None, "directionAnalysisEligible": False, "success": None},
+    ]
+    session = _FakeSession(_FakeResponse(200, rows))
+
+    splits = fetch_cfbd.fetch_rushing_direction_splits("Miami", 2025, session=session)
+
+    assert splits.left.success_rate is None
+    assert splits.left.play_count == 0
+    assert splits.middle.success_rate is None
+    assert splits.right.success_rate is None
+    assert len(splits.warnings) == 1
+    assert "direction splits unavailable" in splits.warnings[0]
+
+
+def test_fetch_rushing_direction_splits_raises_on_non_200(monkeypatch):
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    session = _FakeSession(_FakeResponse(500, {}, text="Server Error"))
+    with pytest.raises(fetch_cfbd.CFBDRequestError):
+        fetch_cfbd.fetch_rushing_direction_splits("Miami", 2025, session=session)
 
 
 def test_fetch_season_stat_map_flattens_rows(monkeypatch):

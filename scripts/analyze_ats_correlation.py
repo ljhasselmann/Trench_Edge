@@ -22,6 +22,8 @@ import argparse
 import json
 from pathlib import Path
 
+from _stats import pearson_correlation
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 HISTORY_DIR = REPO_ROOT / "history"
 
@@ -88,19 +90,6 @@ def sign_agreement(rows: list, field: str) -> dict:
         "agree": agree, "disagree": disagree, "zero": zero, "total": total,
         "pct": round(100 * agree / total, 1) if total else None,
     }
-
-
-def pearson_correlation(xs: list, ys: list) -> "float | None":
-    n = len(xs)
-    if n < 2:
-        return None
-    mean_x, mean_y = sum(xs) / n, sum(ys) / n
-    cov = sum((x - mean_x) * (y - mean_y) for x, y in zip(xs, ys))
-    var_x = sum((x - mean_x) ** 2 for x in xs)
-    var_y = sum((y - mean_y) ** 2 for y in ys)
-    if var_x == 0 or var_y == 0:
-        return None
-    return cov / (var_x ** 0.5 * var_y ** 0.5)
 
 
 def run_analysis(rows: list) -> dict:

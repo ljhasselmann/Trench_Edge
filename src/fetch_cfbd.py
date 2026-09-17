@@ -3,6 +3,9 @@
 Pulls, per team, per side of the ball:
   - Stuff rate
   - Line yards / opportunity rate
+  - Power success rate (short-yardage run conversion -- a direct
+    run-blocking signal, used by compute_ol_rank.py's Performance
+    attribute; not scored anywhere in the matchup-differential composite)
   - Front-seven havoc rate (front seven only, DB havoc excluded)
   - Adjusted sack rate (sacks per dropback)
 
@@ -10,12 +13,12 @@ Auth via Authorization: Bearer $CFBD_API_KEY, read from the environment.
 The key is never hardcoded, logged, or printed -- callers that need to
 confirm the key is present should check truthiness only, never print it.
 
-SCHEMA STATUS: `_extract_side` (stuffRate / lineYards / havoc.*) has been
-verified against live /stats/season/advanced responses for Miami and Wake
-Forest, 2025 season -- all fields present, zero warnings. It's still left
-defensive (missing keys surface as a warning, never a KeyError) because a
-provider can change a schema at any time; that's not a hedge against this
-being untested anymore.
+SCHEMA STATUS: `_extract_side` (stuffRate / lineYards / powerSuccess /
+havoc.*) has been verified against live /stats/season/advanced responses
+for Miami and Wake Forest, 2025 season -- all fields present, zero
+warnings. It's still left defensive (missing keys surface as a warning,
+never a KeyError) because a provider can change a schema at any time;
+that's not a hedge against this being untested anymore.
 
 /stats/season/advanced has no sack-rate field at all -- confirmed by
 inspecting a live response, not assumed. Adjusted sack rate instead comes
@@ -64,6 +67,7 @@ class SideStats:
 
     stuff_rate: Optional[float] = None
     line_yards: Optional[float] = None
+    power_success: Optional[float] = None
     havoc_total: Optional[float] = None
     havoc_front_seven: Optional[float] = None
     havoc_db: Optional[float] = None
@@ -113,6 +117,11 @@ def _extract_side(payload: Optional[dict]) -> SideStats:
         side.line_yards = payload["lineYards"]
     else:
         side.warnings.append("lineYards field not present in response")
+
+    if "powerSuccess" in payload:
+        side.power_success = payload["powerSuccess"]
+    else:
+        side.warnings.append("powerSuccess field not present in response")
 
     havoc = payload.get("havoc")
     if isinstance(havoc, dict):
@@ -224,6 +233,89 @@ def fetch_team_trench_stats(team: str, year: int, session: Optional[requests.Ses
     return stats
 
 
+RUSHING_PLAYS_ENDPOINT = "/rushing/plays"
+
+
+@dataclass
+class DirectionSplit:
+    success_rate: Optional[float] = None
+    play_count: int = 0
+
+
+@dataclass
+class RushingDirectionSplits:
+    team: str
+    left: DirectionSplit = field(default_factory=DirectionSplit)
+    middle: DirectionSplit = field(default_factory=DirectionSplit)
+    right: DirectionSplit = field(default_factory=DirectionSplit)
+    warnings: list[str] = field(default_factory=list)
+
+
+def fetch_rushing_direction_splits(
+    team: str, year: int, session: Optional[requests.Session] = None
+) -> RushingDirectionSplits:
+    """GET /rushing/plays -- confirmed live (2025 season, Miami) to accept
+    `year`+`team` alone for a full-season pull, no `week` required; ~59%
+    of a real team-season's rush plays resolved a `rushDirection` in that
+    check. This is CFBD parsing raw play text into `left`/`middle`/`right`
+    (`directionAnalysisEligible`/`parseStatus` flag which rows are usable),
+    NOT gap-level (no A/B/C gap exists anywhere in CFBD's API -- confirmed
+    via a full API-docs search) and NOT attributable to one specific
+    lineman -- this is a team-level, supplementary signal only. Rows are
+    filtered to `offense == team` (the endpoint also returns plays where
+    `team` was on defense) and to `directionAnalysisEligible` rows with a
+    resolved `rushDirection`, so an unparseable play is excluded, never
+    coerced into a bucket. A direction with zero resolved plays stays at
+    its default `DirectionSplit()` (success_rate=None, play_count=0) --
+    "no signal," never a fabricated 0.
+    """
+    api_key = get_api_key()
+    http = session or requests
+    try:
+        response = http.get(
+            f"{CFBD_BASE_URL}{RUSHING_PLAYS_ENDPOINT}",
+            params={"year": year, "team": team},
+            headers={"Authorization": f"Bearer {api_key}"},
+            timeout=REQUEST_TIMEOUT_SECONDS,
+        )
+    except requests.RequestException as exc:
+        raise CFBDRequestError(f"request to CFBD failed for /rushing/plays team={team!r} year={year}: {exc}") from exc
+
+    if response.status_code != 200:
+        raise CFBDRequestError(
+            f"CFBD returned HTTP {response.status_code} for /rushing/plays team={team!r} year={year}: {response.text[:500]}"
+        )
+
+    rows = response.json() or []
+    splits = RushingDirectionSplits(team=team)
+    buckets: dict[str, list[bool]] = {"left": [], "middle": [], "right": []}
+    for row in rows:
+        if row.get("offense") != team:
+            continue
+        direction = row.get("rushDirection")
+        if not row.get("directionAnalysisEligible") or direction not in buckets:
+            continue
+        success = row.get("success")
+        if success is None:
+            continue
+        buckets[direction].append(bool(success))
+
+    for direction, results in buckets.items():
+        split = DirectionSplit(
+            success_rate=sum(results) / len(results) if results else None,
+            play_count=len(results),
+        )
+        setattr(splits, direction, split)
+
+    if not any(b for b in buckets.values()):
+        splits.warnings.append(
+            f"no rushDirection-resolved offensive plays found for {team} in {year} -- "
+            "direction splits unavailable (CFBD's play-text parsing didn't resolve a direction for any play)"
+        )
+
+    return splits
+
+
 CALENDAR_ENDPOINT = "/calendar"
 
 
@@ -291,7 +383,10 @@ def fetch_fbs_teams(year: int, session: Optional[requests.Session] = None) -> li
     ourlads) -- see scripts/check_team_name_coverage.py, which is where
     this actually gets used; the production render path doesn't do live
     name resolution (too much risk of silently picking the wrong alternate
-    name on every run for a rare problem)."""
+    name on every run for a rare problem). Also carries `color`/
+    `alternateColor` (real hex strings, confirmed live -- e.g. Miami
+    "#f47321", Wake Forest "#ceb888") -- see team_colors_from_fbs_teams,
+    which reuses this same response rather than fetching it again."""
     api_key = get_api_key()
     http = session or requests
     try:
@@ -308,6 +403,19 @@ def fetch_fbs_teams(year: int, session: Optional[requests.Session] = None) -> li
         raise CFBDRequestError(f"CFBD returned HTTP {response.status_code} for /teams/fbs year={year}: {response.text[:500]}")
 
     return response.json() or []
+
+
+def team_colors_from_fbs_teams(teams: list[dict]) -> dict:
+    """{school: {"color", "alt_color"}} from an already-fetched
+    fetch_fbs_teams() list -- pure, no network, so a caller that already
+    fetched the FBS team list for name-coverage/FCS-filtering purposes
+    (see run_week.py) gets real team colors for free instead of a second
+    fetch. A team missing either field (rare, but not guaranteed by CFBD)
+    gets None for that field, never a fabricated color."""
+    return {
+        t["school"]: {"color": t.get("color"), "alt_color": t.get("alternateColor")}
+        for t in teams if "school" in t
+    }
 
 
 if __name__ == "__main__":
