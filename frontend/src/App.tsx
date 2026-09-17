@@ -1,32 +1,16 @@
 import { useState } from 'react'
 import { useCSV } from './hooks/useCSV'
-import { MatchupSelector } from './components/MatchupSelector'
-import { SubscoreChart } from './components/SubscoreChart'
-import { CompositeBar } from './components/CompositeBar'
-import { StatTile } from './components/StatTile'
 import { OlRankTable } from './components/OlRankTable'
 import { LinemanStats } from './components/LinemanStats'
-import type { MatchupScore, OlRankRow, LinemanStat } from './types'
+import { TeamCard } from './components/TeamCard'
+import type { OlRankRow, LinemanStat } from './types'
 
-type Tab = 'matchup' | 'ol-rank' | 'lineman'
-
-function fmtWeight(s: string): string | null {
-  const n = parseFloat(s)
-  return isNaN(n) ? null : `${Math.round(n)} lbs`
-}
-
-function fmtDiff(s: string): string | null {
-  const n = parseFloat(s)
-  return isNaN(n) ? null : `${n > 0 ? '+' : ''}${Math.round(n)} lbs`
-}
+type Tab = 'ol-rank' | 'lineman'
 
 export default function App() {
-  const [tab, setTab] = useState<Tab>('matchup')
-  const [selectedGame, setSelectedGame] = useState<string | null>(null)
+  const [tab, setTab] = useState<Tab>('ol-rank')
+  const [selectedTeam, setSelectedTeam] = useState<string | null>(null)
 
-  const { data: matchups, loading: mlLoading, error: mlError } = useCSV<MatchupScore>(
-    '/data/matchup_scores.csv'
-  )
   const { data: olRank, loading: olLoading, error: olError } = useCSV<OlRankRow>(
     '/data/ol_rank_table.csv'
   )
@@ -34,113 +18,44 @@ export default function App() {
     '/data/lineman_stats.csv'
   )
 
-  const selectedMatchups = selectedGame
-    ? matchups.filter((m) => m.matchup_label.replace(/-[ab]$/, '') === selectedGame)
-    : []
+  const selectedRow = selectedTeam ? olRank.find((r) => r.team === selectedTeam) : undefined
+  const selectedLinemen = selectedTeam ? linemen.filter((l) => l.team === selectedTeam) : []
+
+  const handleTabChange = (t: Tab) => {
+    setTab(t)
+    setSelectedTeam(null)
+  }
 
   return (
     <div className="min-h-screen bg-white">
-      <header className="border-b border-gray-200 px-6 py-4">
-        <h1 className="text-xl font-bold tracking-tight text-gray-900">TrenchEdge</h1>
-        <p className="text-xs text-gray-500 mt-0.5">OL vs DL matchup analysis</p>
+      <header className="bg-[#181512] px-6 py-10 text-center">
+        <p className="text-[11px] uppercase tracking-[0.2em] text-neutral-500 mb-3">
+          Offensive Line Performance Rankings &middot; {olRank.length || 138} FBS Teams
+        </p>
+        <h1 className="text-4xl sm:text-5xl font-black tracking-tight leading-none">
+          <span className="text-white">TRENCH</span>
+          <span className="text-red-600">EDGE</span>
+        </h1>
+        <p className="text-sm italic text-neutral-400 mt-3">Mass kicks Ass</p>
       </header>
 
       <div className="flex gap-1 px-6 pt-4 border-b border-gray-100 pb-0">
-        {(['matchup', 'ol-rank', 'lineman'] as Tab[]).map((t) => (
+        {(['ol-rank', 'lineman'] as Tab[]).map((t) => (
           <button
             key={t}
-            onClick={() => setTab(t)}
+            onClick={() => handleTabChange(t)}
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
               tab === t
                 ? 'border-gray-900 text-gray-900'
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
-            {t === 'matchup' ? 'Matchup' : t === 'ol-rank' ? 'OL Rankings' : 'Linemen'}
+            {t === 'ol-rank' ? 'OL Rankings' : 'Linemen'}
           </button>
         ))}
       </div>
 
-      <main className="px-6 py-6 max-w-3xl">
-        {tab === 'matchup' && (
-          <>
-            {mlError && (
-              <p className="text-sm text-red-500 mb-4">
-                Could not load matchup_scores.csv — run the Python pipeline first.
-              </p>
-            )}
-            {mlLoading ? (
-              <p className="text-sm text-gray-400">Loading…</p>
-            ) : (
-              <>
-                <MatchupSelector
-                  matchups={matchups}
-                  selected={selectedGame}
-                  onSelect={setSelectedGame}
-                />
-                {selectedMatchups.length === 0 && selectedGame && (
-                  <p className="text-sm text-gray-400">No data for this game.</p>
-                )}
-                {selectedMatchups.map((m) => (
-                  <div key={m.matchup_label} className="mb-10">
-                    <div
-                      className="h-0.5 rounded mb-4"
-                      style={{
-                        background: `linear-gradient(90deg, ${m.team_ol_color || '#2a78d6'} 50%, ${m.team_dl_color || '#e34948'} 50%)`,
-                      }}
-                    />
-                    <h2 className="text-base font-bold mb-1 text-gray-900">
-                      {m.team_ol} OL vs {m.team_dl} DL
-                    </h2>
-                    {(m.ol_offense_scheme || m.dl_defense_scheme) && (
-                      <p className="text-xs text-gray-500 mb-4">
-                        {m.ol_offense_scheme || 'Scheme unknown'} vs{' '}
-                        {m.dl_defense_scheme || 'scheme unknown'}
-                      </p>
-                    )}
-
-                    <div className="grid grid-cols-3 gap-2.5 mb-6">
-                      <StatTile
-                        label={`${m.team_ol} OL avg wt`}
-                        value={fmtWeight(m.ol_avg_weight)}
-                      />
-                      <StatTile
-                        label={`${m.team_dl} DL avg wt`}
-                        value={fmtWeight(m.dl_avg_weight)}
-                      />
-                      <StatTile
-                        label="Wt differential"
-                        value={fmtDiff(m.weight_diff_lbs)}
-                        color={
-                          m.weight_diff_lbs !== ''
-                            ? parseFloat(m.weight_diff_lbs) >= 0
-                              ? m.team_ol_color
-                              : m.team_dl_color
-                            : undefined
-                        }
-                      />
-                    </div>
-
-                    <section className="mb-6">
-                      <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">
-                        Subscores
-                      </h3>
-                      <SubscoreChart matchup={m} />
-                    </section>
-
-                    <section>
-                      <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">
-                        Composite
-                      </h3>
-                      <CompositeBar matchup={m} />
-                    </section>
-                  </div>
-                ))}
-              </>
-            )}
-          </>
-        )}
-
+      <main className={`px-6 py-6 ${tab === 'ol-rank' && !selectedRow ? 'max-w-6xl' : 'max-w-3xl'}`}>
         {tab === 'ol-rank' && (
           <>
             {olError && (
@@ -150,8 +65,14 @@ export default function App() {
             )}
             {olLoading ? (
               <p className="text-sm text-gray-400">Loading…</p>
+            ) : selectedRow ? (
+              <TeamCard
+                row={selectedRow}
+                linemen={selectedLinemen}
+                onBack={() => setSelectedTeam(null)}
+              />
             ) : (
-              <OlRankTable rows={olRank} />
+              <OlRankTable rows={olRank} onSelectTeam={setSelectedTeam} />
             )}
           </>
         )}

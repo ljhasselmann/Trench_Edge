@@ -72,6 +72,9 @@ class SideStats:
     havoc_front_seven: Optional[float] = None
     havoc_db: Optional[float] = None
     adjusted_sack_rate: Optional[float] = None
+    tfl_rate_allowed: Optional[float] = None  # TFLs-against / rush attempts -- available data, not scored (subset of stuff_rate)
+    rushing_ppa: Optional[float] = None       # opponent-adjusted rushing EPA per play from /ppa/teams
+    passing_ppa: Optional[float] = None       # opponent-adjusted passing EPA per play from /ppa/teams
     warnings: list[str] = field(default_factory=list)
 
 
@@ -162,10 +165,11 @@ def fetch_season_stat_map(team: str, year: int, session: Optional[requests.Sessi
     return {row["statName"]: row["statValue"] for row in rows}
 
 
-def _apply_sack_rates(offense: SideStats, defense: SideStats, stat_map: dict) -> None:
-    """Adjusted sack rate isn't in /stats/season/advanced; derive it from
-    /stats/season raw counts. See module docstring for the formula and the
-    offense/defense naming convention it relies on."""
+def _apply_season_stats(offense: SideStats, defense: SideStats, stat_map: dict) -> None:
+    """Derive fields not in /stats/season/advanced from /stats/season raw
+    counts. See module docstring for the offense/defense naming convention
+    (bare name = team's own offense, ...Opponent = what the defense gave up)."""
+    # Adjusted sack rate -- see module docstring for formula.
     pass_attempts = stat_map.get("passAttempts")
     sacks_allowed = stat_map.get("sacksOpponent")
     if pass_attempts is not None and sacks_allowed is not None:
@@ -181,6 +185,24 @@ def _apply_sack_rates(offense: SideStats, defense: SideStats, stat_map: dict) ->
         defense.adjusted_sack_rate = sacks_forced / dropbacks_faced if dropbacks_faced else None
     else:
         defense.warnings.append("passAttemptsOpponent/sacks not present -- adjusted sack rate unavailable")
+
+    # TFL rate -- TFLs-against / rush attempts. Stored as available data;
+    # NOT included in compute_performance_score because TFLs are a subset of
+    # stuffed runs (already captured by stuff_rate), so scoring both would
+    # double-count the same phenomenon.
+    tfl_against = stat_map.get("tacklesForLossOpponent")
+    rush_attempts = stat_map.get("rushingAttempts")
+    if tfl_against is not None and rush_attempts:
+        offense.tfl_rate_allowed = tfl_against / rush_attempts
+    else:
+        offense.warnings.append("tacklesForLossOpponent/rushingAttempts not present -- TFL rate unavailable")
+
+    tfl_forced = stat_map.get("tacklesForLoss")
+    rush_attempts_faced = stat_map.get("rushingAttemptsOpponent")
+    if tfl_forced is not None and rush_attempts_faced:
+        defense.tfl_rate_allowed = tfl_forced / rush_attempts_faced
+    else:
+        defense.warnings.append("tacklesForLoss/rushingAttemptsOpponent not present -- TFL rate unavailable")
 
 
 def fetch_advanced_stats(team: str, year: int, session: Optional[requests.Session] = None) -> TeamAdvancedStats:
@@ -223,14 +245,77 @@ def fetch_advanced_stats(team: str, year: int, session: Optional[requests.Sessio
 
 
 def fetch_team_trench_stats(team: str, year: int, session: Optional[requests.Session] = None) -> TeamAdvancedStats:
-    """Full Section 4a fetch: advanced stats plus the derived adjusted sack
-    rate, since no single CFBD endpoint carries everything DESIGN.md 4a
-    asks for. This is the function the pipeline (and the CLI below) should
-    call; `fetch_advanced_stats` alone is missing sack rate."""
+    """Full Section 4a fetch: advanced stats, derived season-stat metrics
+    (sack rate, TFL rate), and opponent-adjusted PPA from three endpoints.
+    This is the function the pipeline (and the CLI below) should call;
+    `fetch_advanced_stats` alone is missing these derived and PPA fields."""
     stats = fetch_advanced_stats(team, year, session=session)
     stat_map = fetch_season_stat_map(team, year, session=session)
-    _apply_sack_rates(stats.offense, stats.defense, stat_map)
+    _apply_season_stats(stats.offense, stats.defense, stat_map)
+    _apply_ppa(stats.offense, stats.defense, team, year, session=session)
     return stats
+
+
+PPA_TEAMS_ENDPOINT = "/ppa/teams"
+
+
+def _apply_ppa(
+    offense: SideStats, defense: SideStats, team: str, year: int, session: Optional[requests.Session] = None
+) -> None:
+    """Fetch /ppa/teams and apply offense/defense rushing + passing PPA to
+    the already-populated SideStats objects. Called by fetch_team_trench_stats().
+
+    `excludeGarbageTime=true` is passed to match the convention used across
+    CFBD's advanced metrics -- blowout garbage-time snaps would dilute the
+    signal for a team that was dominant enough to coast in the 4th quarter.
+    PPA is signed (positive = scoring-favorable, negative = unfavorable), so
+    offense.rushing_ppa > 0 means the team's run game added expected points.
+    """
+    api_key = get_api_key()
+    http = session or requests
+    try:
+        response = http.get(
+            f"{CFBD_BASE_URL}{PPA_TEAMS_ENDPOINT}",
+            params={"year": year, "team": team, "excludeGarbageTime": "true"},
+            headers={"Authorization": f"Bearer {api_key}"},
+            timeout=REQUEST_TIMEOUT_SECONDS,
+        )
+    except requests.RequestException as exc:
+        msg = f"PPA fetch failed for team={team!r} year={year}: {exc}"
+        offense.warnings.append(msg)
+        defense.warnings.append(msg)
+        return
+
+    if response.status_code != 200:
+        msg = f"PPA endpoint returned HTTP {response.status_code} for team={team!r} year={year}: {response.text[:200]}"
+        offense.warnings.append(msg)
+        defense.warnings.append(msg)
+        return
+
+    rows = response.json() or []
+    if not rows:
+        msg = f"PPA endpoint returned empty result for team={team!r} year={year}"
+        offense.warnings.append(msg)
+        defense.warnings.append(msg)
+        return
+
+    row = rows[0] if isinstance(rows, list) else rows
+    off = row.get("offense") or {}
+    def_ = row.get("defense") or {}
+
+    offense.rushing_ppa = off.get("rushing")
+    offense.passing_ppa = off.get("passing")
+    if offense.rushing_ppa is None:
+        offense.warnings.append("offense.rushing not present in PPA response")
+    if offense.passing_ppa is None:
+        offense.warnings.append("offense.passing not present in PPA response")
+
+    defense.rushing_ppa = def_.get("rushing")
+    defense.passing_ppa = def_.get("passing")
+    if defense.rushing_ppa is None:
+        defense.warnings.append("defense.rushing not present in PPA response")
+    if defense.passing_ppa is None:
+        defense.warnings.append("defense.passing not present in PPA response")
 
 
 RUSHING_PLAYS_ENDPOINT = "/rushing/plays"
@@ -431,6 +516,8 @@ if __name__ == "__main__":
     print(json.dumps({
         "team": stats.team,
         "year": stats.year,
-        "offense": vars(stats.offense),
-        "defense": vars(stats.defense),
+        "offense": {k: v for k, v in vars(stats.offense).items() if k != "warnings"},
+        "defense": {k: v for k, v in vars(stats.defense).items() if k != "warnings"},
+        "offense_warnings": stats.offense.warnings,
+        "defense_warnings": stats.defense.warnings,
     }, indent=2))

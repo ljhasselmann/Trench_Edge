@@ -363,7 +363,6 @@ def render_all_games(
 
     index_entries = []
     failures = []
-    all_contexts: list = []
     for m in matchups:
         label = m["label"]
 
@@ -384,13 +383,8 @@ def render_all_games(
             render_widget.write_game_history_snapshot(label, m["team_a"], m["team_b"], year, ctx_a, ctx_b, hist_dir)
             href = f"{label}.html"
             index_entries.append(render_widget.game_index_entry(label, m["team_a"], m["team_b"], href, top25, ctx_a, ctx_b))
-            all_contexts.extend([ctx_a, ctx_b])
         except Exception as exc:  # noqa: BLE001 -- one bad matchup must not abort the run
             failures.append({"label": label, "error": str(exc)})
-
-    if all_contexts:
-        render_widget.export_matchup_scores_csv(all_contexts, hist_dir / "matchup_scores.csv", week, year)
-        _copy_csv_to_frontend(hist_dir / "matchup_scores.csv")
 
     return index_entries, failures
 

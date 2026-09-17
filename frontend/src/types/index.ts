@@ -1,25 +1,3 @@
-export interface MatchupScore {
-  week: string
-  year: string
-  matchup_label: string
-  direction: string
-  team_ol: string
-  team_dl: string
-  team_ol_color: string
-  team_dl_color: string
-  mass_score: string
-  push_score: string
-  experience_score: string
-  recruiting_score: string
-  composite_score: string
-  composite_verdict: string
-  ol_avg_weight: string
-  dl_avg_weight: string
-  weight_diff_lbs: string
-  ol_offense_scheme: string
-  dl_defense_scheme: string
-}
-
 export interface OlRankRow {
   rank: string
   of: string

@@ -67,6 +67,39 @@ def test_compute_performance_score_ignores_direction_splits_entirely():
     assert compute_performance_score(offense) == pytest.approx((0.90 + 3.2 + 0.80) / 3)
 
 
+def test_compute_performance_score_includes_adjusted_sack_rate_inverted():
+    # adjusted_sack_rate is LOWER = better for the offense (inverted before scoring).
+    offense = SideStats(stuff_rate=0.10, line_yards=3.2, power_success=0.80, adjusted_sack_rate=0.05)
+    score = compute_performance_score(offense)
+    # four inputs: (1-0.10) + 3.2 + 0.80 + (1-0.05) = 0.90 + 3.2 + 0.80 + 0.95
+    assert score == pytest.approx((0.90 + 3.2 + 0.80 + 0.95) / 4)
+
+
+def test_compute_performance_score_includes_rushing_ppa():
+    # rushing_ppa is signed EPA per rush (positive = good); used directly, not inverted.
+    offense = SideStats(stuff_rate=0.10, line_yards=3.2, power_success=0.80, rushing_ppa=0.18)
+    score = compute_performance_score(offense)
+    assert score == pytest.approx((0.90 + 3.2 + 0.80 + 0.18) / 4)
+
+
+def test_compute_performance_score_all_five_inputs():
+    offense = SideStats(
+        stuff_rate=0.15, line_yards=3.0, power_success=0.75,
+        adjusted_sack_rate=0.04, rushing_ppa=0.12,
+    )
+    score = compute_performance_score(offense)
+    expected = ((1 - 0.15) + 3.0 + 0.75 + (1 - 0.04) + 0.12) / 5
+    assert score == pytest.approx(expected)
+
+
+def test_compute_performance_score_tfl_rate_allowed_not_scored():
+    # tfl_rate_allowed is stored on SideStats but intentionally excluded
+    # from the performance score (it's a subset of what stuff_rate captures).
+    offense_with = SideStats(stuff_rate=0.15, line_yards=3.0, power_success=0.75, tfl_rate_allowed=0.08)
+    offense_without = SideStats(stuff_rate=0.15, line_yards=3.0, power_success=0.75)
+    assert compute_performance_score(offense_with) == compute_performance_score(offense_without)
+
+
 def _team(team, weight=None, snap_pct=None, rating=None, perf=None):
     return TeamOLAttributes(
         team=team, avg_ol_weight=weight, returning_ol_snap_pct=snap_pct,

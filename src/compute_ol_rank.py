@@ -54,28 +54,34 @@ class TeamOLAttributes:
 
 
 def compute_performance_score(offense: "fetch_cfbd.SideStats") -> Optional[float]:
-    """Average of three real run-blocking signals from CFBD's advanced
-    stats, offense side only (this is an OL rank, not a matchup): stuff
-    rate (inverted -- LOWER is better for the offense, unlike the other
-    two), line yards, and power success. secondLevelYards/openFieldYards
-    are excluded -- those describe how far a run gets AFTER the line,
-    which is more a running back's doing than the offensive line's; a
-    future refinement could weigh them in separately, not folded into this
-    same average.
+    """Average of five OL-specific signals from CFBD, offense side only
+    (this is an OL rank, not a matchup):
 
-    Each of the three inputs is on its own native scale (a 0-1 rate for
-    stuff rate/power success, a yards figure for line yards) -- this
-    function does not normalize them against each other; percentile_rank
-    handles cross-team comparability, not this function.
+    Run blocking (from /stats/season/advanced):
+      - stuff_rate inverted (1 - rate): LOWER is better; stopped runs penalize
+      - line_yards: avg yards attributable to OL blocking (0-5 yd zone)
+      - power_success: short-yardage conversion rate (3rd/4th and short)
 
-    Deliberately does NOT take rushDirection splits (fetch_cfbd.
-    fetch_rushing_direction_splits/TeamOLAttributes.direction_splits) as a
-    fourth input -- per-direction coverage is inconsistent (confirmed live
-    to be null-for-every-play in some real games) and it's CFBD parsing
-    raw play text, not an official stat. It's captured as raw data on
-    TeamOLAttributes for a future chart, not scored here; folding it into
-    this average is an explicit future decision, not made by this
-    function.
+    Pass protection (from /stats/season):
+      - adjusted_sack_rate inverted (1 - rate): sacks allowed per dropback;
+        LOWER is better; covers pass blocking, absent from the original three
+
+    Opponent-adjusted run efficiency (from /ppa/teams):
+      - rushing_ppa: predicted points added per rush play, opponent-adjusted;
+        positive = scoring-favorable; the only signal here that accounts for
+        who the team faced
+
+    secondLevelYards/openFieldYards excluded: those describe yards AFTER the
+    OL's zone (5+ yards), which is more a running back's doing.
+    tfl_rate_allowed excluded: TFLs are a subset of stuffed runs already
+    captured by stuff_rate; scoring both double-counts the same phenomenon.
+    rushDirection splits excluded: CFBD's play-text parsing leaves ~40% of
+    plays with no resolved direction; inconsistent coverage would introduce
+    noise into a scored metric.
+
+    Inputs are on different native scales (a 0-1 rate, a yards figure, a
+    signed EPA value) -- this function does not normalize; percentile_rank
+    in compute_ol_rank handles cross-team comparability.
     """
     values = []
     if offense.stuff_rate is not None:
@@ -84,6 +90,10 @@ def compute_performance_score(offense: "fetch_cfbd.SideStats") -> Optional[float
         values.append(offense.line_yards)
     if offense.power_success is not None:
         values.append(offense.power_success)
+    if offense.adjusted_sack_rate is not None:
+        values.append(1.0 - offense.adjusted_sack_rate)
+    if offense.rushing_ppa is not None:
+        values.append(offense.rushing_ppa)
     if not values:
         return None
     return sum(values) / len(values)

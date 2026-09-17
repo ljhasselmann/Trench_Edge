@@ -171,7 +171,7 @@ def test_fetch_season_stat_map_flattens_rows(monkeypatch):
     assert stat_map == {"sacks": 50, "passAttempts": 496}
 
 
-def test_apply_sack_rates_matches_worked_example():
+def test_apply_season_stats_sack_rates_match_worked_example():
     # Real values pulled live for Miami, 2025 season (see fetch_cfbd.py
     # module docstring for the offense/defense naming convention).
     stat_map = {
@@ -179,24 +179,75 @@ def test_apply_sack_rates_matches_worked_example():
         "sacksOpponent": 20,
         "passAttemptsOpponent": 521,
         "sacks": 50,
+        "tacklesForLossOpponent": 45,
+        "rushingAttempts": 400,
+        "tacklesForLoss": 55,
+        "rushingAttemptsOpponent": 380,
     }
     offense, defense = fetch_cfbd.SideStats(), fetch_cfbd.SideStats()
-    fetch_cfbd._apply_sack_rates(offense, defense, stat_map)
+    fetch_cfbd._apply_season_stats(offense, defense, stat_map)
 
     assert round(offense.adjusted_sack_rate, 4) == round(20 / (496 + 20), 4)
     assert round(defense.adjusted_sack_rate, 4) == round(50 / (521 + 50), 4)
+    assert round(offense.tfl_rate_allowed, 4) == round(45 / 400, 4)
+    assert round(defense.tfl_rate_allowed, 4) == round(55 / 380, 4)
     assert offense.warnings == []
     assert defense.warnings == []
 
 
-def test_apply_sack_rates_flags_missing_inputs():
+def test_apply_season_stats_flags_missing_inputs():
     offense, defense = fetch_cfbd.SideStats(), fetch_cfbd.SideStats()
-    fetch_cfbd._apply_sack_rates(offense, defense, {})
+    fetch_cfbd._apply_season_stats(offense, defense, {})
 
     assert offense.adjusted_sack_rate is None
     assert defense.adjusted_sack_rate is None
+    assert offense.tfl_rate_allowed is None
+    assert defense.tfl_rate_allowed is None
     assert "adjusted sack rate unavailable" in offense.warnings[0]
     assert "adjusted sack rate unavailable" in defense.warnings[0]
+    assert "TFL rate unavailable" in offense.warnings[1]
+    assert "TFL rate unavailable" in defense.warnings[1]
+
+
+def test_apply_ppa_sets_rushing_and_passing_ppa(monkeypatch):
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    ppa_payload = [{
+        "season": 2025,
+        "team": "Miami",
+        "offense": {"overall": 0.21, "rushing": 0.14, "passing": 0.35},
+        "defense": {"overall": -0.18, "rushing": -0.09, "passing": -0.25},
+    }]
+    session = _FakeSession(_FakeResponse(200, ppa_payload))
+    offense, defense = fetch_cfbd.SideStats(), fetch_cfbd.SideStats()
+    fetch_cfbd._apply_ppa(offense, defense, "Miami", 2025, session=session)
+
+    assert offense.rushing_ppa == pytest.approx(0.14)
+    assert offense.passing_ppa == pytest.approx(0.35)
+    assert defense.rushing_ppa == pytest.approx(-0.09)
+    assert defense.passing_ppa == pytest.approx(-0.25)
+    assert offense.warnings == []
+    assert defense.warnings == []
+
+
+def test_apply_ppa_degrades_on_non_200(monkeypatch):
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    session = _FakeSession(_FakeResponse(500, [], text="Server Error"))
+    offense, defense = fetch_cfbd.SideStats(), fetch_cfbd.SideStats()
+    fetch_cfbd._apply_ppa(offense, defense, "Miami", 2025, session=session)
+
+    assert offense.rushing_ppa is None
+    assert defense.rushing_ppa is None
+    assert any("500" in w for w in offense.warnings)
+
+
+def test_apply_ppa_degrades_on_empty_response(monkeypatch):
+    monkeypatch.setenv("CFBD_API_KEY", "k")
+    session = _FakeSession(_FakeResponse(200, []))
+    offense, defense = fetch_cfbd.SideStats(), fetch_cfbd.SideStats()
+    fetch_cfbd._apply_ppa(offense, defense, "Miami", 2025, session=session)
+
+    assert offense.rushing_ppa is None
+    assert any("empty" in w for w in offense.warnings)
 
 
 def test_fetch_fbs_teams_returns_school_and_alternate_names(monkeypatch):
